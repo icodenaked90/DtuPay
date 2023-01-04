@@ -16,3 +16,10 @@ Feature: Payment
     When the merchant initiates a payment for "10" kr by the customer
     Then the payment is not successful
     And an error message is returned saying "customer with id cid2 is unknown"
+
+  Scenario: Merchant is not known
+    Given a customer with id "cid1"
+    And a merchant with id "mid2"
+    When the merchant initiates a payment for "10" kr by the customer
+    Then the payment is not successful
+    And an error message is returned saying "merchant with id mid2 is unknown"
