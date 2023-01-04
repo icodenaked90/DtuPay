@@ -4,7 +4,7 @@
 	<groupId>dtu</groupId>
 	<artifactId>demo-client</artifactId>
 	<name>demo-client</name>
-	<version>SNAPSHOT 0.0.1</version>
+	<version>SNAPSHOT-0.0.1</version>
 
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>

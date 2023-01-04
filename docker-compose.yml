@@ -1,0 +1,26 @@
+version: '3'
+services:
+  server:
+    image: server
+    build: ./server
+    container_name: server
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://host.docker.internal:8080"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  client:
+    image: client
+    build: ./demo_client
+    container_name: client
+    depends_on:
+      server:
+        condition: service_healthy
