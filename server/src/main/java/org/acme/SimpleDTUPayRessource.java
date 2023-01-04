@@ -1,12 +1,9 @@
 package org.acme;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import javax.ws.rs.core.Response;
 
 @Path("/dtupay")
 public class SimpleDTUPayRessource {
@@ -22,7 +19,11 @@ public class SimpleDTUPayRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public PaymentLogEntry makePayment(PaymentLogEntry payment) {
-        dtuPay.pay(payment.amount, payment.cid, payment.mid);
-        return payment;
+        try {
+            dtuPay.pay(payment.amount, payment.cid, payment.mid);
+            return payment;
+        } catch (NotFoundException e) {
+            throw new WebApplicationException("akjhsdasd", 404);
+        }
     }
 }

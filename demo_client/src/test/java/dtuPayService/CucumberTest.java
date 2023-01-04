@@ -1,4 +1,4 @@
-package org.acme;
+package dtuPayService;
 
 
 import org.junit.runner.RunWith;

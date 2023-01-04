@@ -1,7 +1,9 @@
 package org.acme;
 
+import javax.ws.rs.NotFoundException;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.cucumber.java.mk_latn.No;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,15 +21,18 @@ public class SimpleDTUPay {
 
     private ArrayList<PaymentLogEntry> paymentLog = new ArrayList<PaymentLogEntry>();
 
-    public boolean pay(int amount, String cid, String mid) {
-        if (Objects.equals(cid, this.cid) && Objects.equals(mid, this.mid)) {
-            paymentLog.add(new PaymentLogEntry(amount, cid, mid));
-            return true;
-        }
-        return false;
-    }
+    public void pay(int amount, String cid, String mid) {
 
-    public void testFunction() {
-        paymentLog.add(new PaymentLogEntry(2, "cid1", "mid1"));
+        // check for cid
+        if (!Objects.equals(cid, this.cid)) {
+            throw new NotFoundException("customer with id " + cid + " is unknown");
+        }
+
+        // check for mid
+        if (!Objects.equals(mid, this.mid)) {
+            throw new NotFoundException("merchant with id " + mid + " is unknown");
+        }
+        paymentLog.add(new PaymentLogEntry(amount, cid, mid));
+
     }
 }
