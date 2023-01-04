@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @XmlRootElement // Needed for XML serialization and deserialization
 @Data // Automatic getter and setters and equals etc
@@ -19,7 +20,7 @@ public class SimpleDTUPay {
     private ArrayList<PaymentLogEntry> paymentLog = new ArrayList<PaymentLogEntry>();
 
     public boolean pay(int amount, String cid, String mid) {
-        if (cid == this.cid && mid == this.mid) {
+        if (Objects.equals(cid, this.cid) && Objects.equals(mid, this.mid)) {
             paymentLog.add(new PaymentLogEntry(amount, cid, mid));
             return true;
         }
