@@ -1,5 +1,7 @@
 package org.acme;
 
+import dtu.ws.fastmoney.BankServiceException_Exception;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -22,8 +24,8 @@ public class SimpleDTUPayRessource {
         try {
             dtuPay.pay(payment.amount, payment.cid, payment.mid);
             return payment;
-        } catch (NotFoundException e) {
-            throw new WebApplicationException("akjhsdasd", 404);
+        } catch (BankServiceException_Exception e) {
+            throw new WebApplicationException(e.getMessage(), 500);
         }
     }
 }
