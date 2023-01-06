@@ -1,13 +1,14 @@
 package dtuPayService;
 
+import dtu.ws.fastmoney.AccountInfo;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import org.acme.PaymentLog;
 import org.acme.PaymentLogEntry;
 import org.acme.ResponseStatus;
+import org.acme.SimpleDTUPayAccount;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,11 @@ public class SimpleDTUPayService {
         return setNewPayment(entry, MediaType.APPLICATION_JSON);
     }
 
+    public String register(String name, String cpr, String bankAccount) {
+        SimpleDTUPayAccount account = new SimpleDTUPayAccount(name, cpr, bankAccount);
+        return registerNewAccount(account);
+    }
+
     private PaymentLogEntry[] getLog(String mediaType) {
 
         return baseUrl.path("dtupay")
@@ -49,5 +55,19 @@ public class SimpleDTUPayService {
         }
 
         return new ResponseStatus(false,response.readEntity(String.class));
+    }
+
+    private String registerNewAccount(SimpleDTUPayAccount account) {
+
+        var response = baseUrl.path("dtupay/register")
+                .request()
+                .post(Entity.entity(account, MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() == 200) {
+            String output = response.readEntity(String.class);
+            return output;
+        }
+
+        return "";
     }
 }

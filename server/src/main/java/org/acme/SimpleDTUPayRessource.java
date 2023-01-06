@@ -29,6 +29,20 @@ public class SimpleDTUPayRessource {
             // We have a cid or mid error
             return Response.status(404).entity(e.getMessage()).build();
         }
+    }
 
+    @POST
+    @Path("register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response registerAccount(String name, String CPR, String bankAccount) {
+        try {
+            String id = dtuPay.register(name, CPR, bankAccount);
+            // Everything went well
+            return Response.ok(id).build();
+        } catch (NotFoundException e) {
+            // We have a cid or mid error
+            return Response.status(404).entity(e.getMessage()).build();
+        }
     }
 }

@@ -10,6 +10,8 @@ import io.cucumber.java.en.Given;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.ArrayList;
+
+import jakarta.ws.rs.core.MediaType;
 import org.acme.PaymentLogEntry;
 import org.acme.ResponseStatus;
 
@@ -18,12 +20,13 @@ import static org.junit.Assert.*;
 public class SimpleDTUPaySteps {
     User customer = new User();
     User merchant = new User();
-    String cid, mid;
+    String cid, mid, mAccount, cAccount;
     int amount;
     SimpleDTUPayService dtuPay = new SimpleDTUPayService();
     BankService bank = new BankServiceService().getBankServicePort();
     ResponseStatus responseStatus;
     PaymentLogEntry[] paymentLogEntryList;
+
     @Given("a customer with id {string}")
     public void aCustomerWithId(String cid) {
         this.cid = cid;
@@ -38,6 +41,7 @@ public class SimpleDTUPaySteps {
     }
     @Then("the payment is successful")
     public void thePaymentIsSuccessful() {
+        System.out.println("Hejsa status:"+responseStatus.status+"     error:"+responseStatus.errorMessage);
         assertTrue(responseStatus.status);
     }
 
@@ -87,11 +91,12 @@ public class SimpleDTUPaySteps {
 
     @Given("a customer with a bank account with balance {int}")
     public void aCustomerWithABankAccountWithBalance(int arg0) {
-        customer.setFirstName("John");
-        customer.setLastName("Doe");
-        customer.setCprNumber("010170-1099");
+        customer.setFirstName("Johnny");
+        customer.setLastName("Doeluxe");
+        customer.setCprNumber("010170-1999");
+        System.out.println("CUSTOMER:"+customer.toString());
         try {
-            cid = bank.createAccountWithBalance(customer, BigDecimal.valueOf(arg0));
+            cAccount = bank.createAccountWithBalance(customer, BigDecimal.valueOf(arg0));
         } catch (BankServiceException_Exception e) {
             fail("Failed to create customer account.");
         }
@@ -99,16 +104,18 @@ public class SimpleDTUPaySteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        // TODO
+        System.out.println(customer.getFirstName() + " " + customer.getLastName()+"    "+ customer.getCprNumber()+ "    "+ cAccount);
+        cid = dtuPay.register(customer.getFirstName() + " " + customer.getLastName(), customer.getCprNumber(), cAccount);
+        System.out.println("What the fuck?"+cid);
     }
 
     @Given("a merchant with a bank account with balance {int}")
     public void aMerchantWithABankAccountWithBalance(int arg0) {
-        merchant.setFirstName("Mark");
-        merchant.setLastName("Twain");
-        merchant.setCprNumber("121278-2889");
+        merchant.setFirstName("Markkk");
+        merchant.setLastName("Twainnnn");
+        merchant.setCprNumber("121278-2999");
         try {
-            mid = bank.createAccountWithBalance(merchant, BigDecimal.valueOf(arg0));
+            mAccount = bank.createAccountWithBalance(merchant, BigDecimal.valueOf(arg0));
         } catch (BankServiceException_Exception e) {
             fail("Failed to create merchant account.");
         }
@@ -116,7 +123,7 @@ public class SimpleDTUPaySteps {
 
     @And("that the merchant is registered with DTU Pay")
     public void thatTheMerchantIsRegisteredWithDTUPay() {
-        // TODO
+        mid = dtuPay.register(merchant.getFirstName()+" "+merchant.getLastName(), merchant.getCprNumber(), mAccount);
     }
 
     @And("the balance of the customer at the bank is {int} kr")
@@ -138,22 +145,23 @@ public class SimpleDTUPaySteps {
     }
 
     @After()
-    public void Cleanup()
-    {
-        if (cid != null) {
-            try {
-                bank.retireAccount(cid);
-                cid = null;
-            } catch (BankServiceException_Exception e) {
+    public void Cleanup() {
+        if(cAccount != null){
 
+            try {
+                bank.retireAccount(cAccount);
+                cAccount = null;
+            } catch (BankServiceException_Exception e) {
+                fail("Failed cleanup cAc):");
             }
         }
-        if (mid != null) {
-            try {
-                bank.retireAccount(mid);
-                mid = null;
-            } catch (BankServiceException_Exception e) {
+        if(mAccount != null){
 
+            try {
+                bank.retireAccount(mAccount);
+                mAccount = null;
+            } catch (BankServiceException_Exception e) {
+                fail("Failed cleanup ):");
             }
         }
     }
