@@ -30,22 +30,18 @@ public class SimpleDTUPay {
 
     private BankService bank = new BankServiceService().getBankServicePort();
 
-    public void pay(int amount, String cid, String mid) {//throws BankServiceException_Exception {
+    public void pay(int amount, String cid, String mid) throws BankServiceException_Exception {
         // check for cid
-        if (!userAccounts.keySet().contains(cid)) {
+        if (!userAccounts.containsKey(cid)) {
             throw new NotFoundException("customer with id " + cid + " is unknown");
         }
 
         // check for mid
-        if (!userAccounts.keySet().contains(mid)) {
+        if (!userAccounts.containsKey(mid)) {
             throw new NotFoundException("merchant with id " + mid + " is unknown");
         }
 
-        try {
-            bank.transferMoneyFromTo(userAccounts.get(cid), userAccounts.get(mid), BigDecimal.valueOf(amount), "DTUPay");
-        } catch (BankServiceException_Exception e) {
-            throw new RuntimeException(e);
-        }
+        bank.transferMoneyFromTo(userAccounts.get(cid), userAccounts.get(mid), BigDecimal.valueOf(amount), "DTUPay");
 
         paymentLog.add(new PaymentLogEntry(amount, cid, mid));
     }
@@ -60,7 +56,7 @@ public class SimpleDTUPay {
     private String generateId(){
         while(true) {
             String uuid = UUID.randomUUID().toString();
-            if (!userAccounts.keySet().contains(uuid)) return uuid;
+            if (!userAccounts.containsKey(uuid)) return uuid;
         }
     }
 }

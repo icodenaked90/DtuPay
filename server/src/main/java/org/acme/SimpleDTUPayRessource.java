@@ -5,6 +5,7 @@ import dtu.ws.fastmoney.BankServiceException_Exception;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.ws.rs.core.Response;
 
 @Path("/dtupay")
@@ -28,6 +29,8 @@ public class SimpleDTUPayRessource {
         } catch (NotFoundException e) {
             // We have a cid or mid error
             return Response.status(404).entity(e.getMessage()).build();
+        } catch (BankServiceException_Exception e) {
+            return Response.status(404).entity(e.getMessage()).build();
         }
     }
 
@@ -35,9 +38,9 @@ public class SimpleDTUPayRessource {
     @Path("register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response registerAccount(String name, String CPR, String bankAccount) {
+    public Response registerAccount(SimpleDTUPayAccount account) {
         try {
-            String id = dtuPay.register(name, CPR, bankAccount);
+            String id = dtuPay.register(account.name, account.CPR, account.bankAccount);
             // Everything went well
             return Response.ok(id).build();
         } catch (NotFoundException e) {

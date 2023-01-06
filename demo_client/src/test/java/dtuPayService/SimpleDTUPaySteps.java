@@ -41,16 +41,15 @@ public class SimpleDTUPaySteps {
     }
     @Then("the payment is successful")
     public void thePaymentIsSuccessful() {
-        System.out.println("Hejsa status:"+responseStatus.status+"     error:"+responseStatus.errorMessage);
         assertTrue(responseStatus.status);
     }
 
     @Given("a successful payment of {string} kr from customer {string} to merchant {string}")
     public void aSuccessfulPaymentOfKrFromCustomerToMerchant(String amount, String cid, String mid) {
-        this.cid = cid;
-        this.mid = mid;
+        this.cid = dtuPay.register(cid, cid, "cbank");
+        this.mid = dtuPay.register(mid, mid, "mbank");
         this.amount = Integer.parseInt(amount);
-        responseStatus = dtuPay.pay(this.amount,cid,mid);
+        responseStatus = dtuPay.pay(this.amount,this.cid,this.mid);
     }
 
     @When("the manager asks for a list of payments")
@@ -59,18 +58,11 @@ public class SimpleDTUPaySteps {
 
     }
 
-    @Then("the list contains a payment where customer {string} paid {string} kr to merchant {string}")
-    public void theListContainsAPaymentWhereCustomerPaidKrToMerchant(String cid, String amount, String mid) {
+    @Then("the list contains a payment where the customer paid {string} kr to the merchant")
+    public void theListContainsAPaymentWhereCustomerPaidKrToMerchant(String amount) {
         int newAmount = Integer.parseInt(amount);
         PaymentLogEntry goal = new PaymentLogEntry(newAmount, cid, mid);
-
-        for (PaymentLogEntry payment:paymentLogEntryList) {
-            if(goal.equals(payment)){
-                assertTrue(true);
-                return;
-            }
-        }
-        fail();
+        assertTrue(Arrays.asList(paymentLogEntryList).contains(goal));
     }
 
     @When("the merchant initiates a payment for {string} kr by the customer")
@@ -94,7 +86,7 @@ public class SimpleDTUPaySteps {
         customer.setFirstName("Johnny");
         customer.setLastName("Doeluxe");
         customer.setCprNumber("010170-1999");
-        System.out.println("CUSTOMER:"+customer.toString());
+
         try {
             cAccount = bank.createAccountWithBalance(customer, BigDecimal.valueOf(arg0));
         } catch (BankServiceException_Exception e) {
@@ -104,9 +96,7 @@ public class SimpleDTUPaySteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        System.out.println(customer.getFirstName() + " " + customer.getLastName()+"    "+ customer.getCprNumber()+ "    "+ cAccount);
         cid = dtuPay.register(customer.getFirstName() + " " + customer.getLastName(), customer.getCprNumber(), cAccount);
-        System.out.println("What the fuck?"+cid);
     }
 
     @Given("a merchant with a bank account with balance {int}")
@@ -129,7 +119,7 @@ public class SimpleDTUPaySteps {
     @And("the balance of the customer at the bank is {int} kr")
     public void theBalanceOfTheCustomerAtTheBankIsKr(int arg0) {
         try {
-            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(cid).getBalance());
+            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(cAccount).getBalance());
         } catch (BankServiceException_Exception e) {
             fail("Failed to get balance of customer account.");
         }
@@ -138,7 +128,7 @@ public class SimpleDTUPaySteps {
     @And("the balance of the merchant at the bank is {int} kr")
     public void theBalanceOfTheMerchantAtTheBankIsKr(int arg0) {
         try {
-            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(mid).getBalance());
+            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(mAccount).getBalance());
         } catch (BankServiceException_Exception e) {
             fail("Failed to get balance of merchant account.");
         }
