@@ -20,12 +20,15 @@ public class SimpleDTUPayRessource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public PaymentLogEntry makePayment(PaymentLogEntry payment) {
+    public Response makePayment(PaymentLogEntry payment) {
         try {
             dtuPay.pay(payment.amount, payment.cid, payment.mid);
-            return payment;
-        } catch (BankServiceException_Exception e) {
-            throw new WebApplicationException(e.getMessage(), 500);
+            // Everything went well
+            return Response.ok(payment).build();
+        } catch (NotFoundException e) {
+            // We have a cid or mid error
+            return Response.status(404).entity(e.getMessage()).build();
         }
+
     }
 }

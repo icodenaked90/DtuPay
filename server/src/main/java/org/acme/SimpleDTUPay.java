@@ -28,12 +28,10 @@ public class SimpleDTUPay {
 
     private BankService bank = new BankServiceService().getBankServicePort();
 
-    public void pay(int amount, String cid, String mid) throws BankServiceException_Exception {
-        bank.transferMoneyFromTo(cid, mid, BigDecimal.valueOf(amount), "DTUPay");
+    public void pay(int amount, String cid, String mid) {//throws BankServiceException_Exception {
+        //bank.transferMoneyFromTo(cid, mid, BigDecimal.valueOf(amount), "DTUPay");
 
 
-
-        /*
         // check for cid
         if (!Objects.equals(cid, this.cid)) {
             throw new NotFoundException("customer with id " + cid + " is unknown");
@@ -43,7 +41,7 @@ public class SimpleDTUPay {
         if (!Objects.equals(mid, this.mid)) {
             throw new NotFoundException("merchant with id " + mid + " is unknown");
         }
-         */
+
         paymentLog.add(new PaymentLogEntry(amount, cid, mid));
 
     }

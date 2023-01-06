@@ -18,7 +18,7 @@ public class SimpleDTUPayService {
 
     public SimpleDTUPayService() {
         Client client = ClientBuilder.newClient();
-        baseUrl = client.target("http://host.docker.internal:8080/");
+        baseUrl = client.target("http://localhost:8080/");
     }
 
     public PaymentLogEntry[] getPaymentLog() {
@@ -45,12 +45,9 @@ public class SimpleDTUPayService {
                 .post(Entity.entity(payment, mediaType));
 
         if (response.getStatus() == 200) {
-            return new ResponseStatus(true, response.getStatusInfo().toString());
+            return new ResponseStatus(true, response.readEntity(String.class));
         }
-        System.out.println("Status code:"+response.getStatus());
-        System.out.println("Status info:"+response.getStatusInfo());
-        System.out.println("Status string:");
-        return new ResponseStatus(false,response.getStatusInfo().toString());
-    }
 
+        return new ResponseStatus(false,response.readEntity(String.class));
+    }
 }
