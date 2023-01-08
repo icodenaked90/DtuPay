@@ -19,7 +19,7 @@ public class SimpleDTUPayService {
 
     public SimpleDTUPayService() {
         Client client = ClientBuilder.newClient();
-        baseUrl = client.target("http://localhost:8080/");
+        baseUrl = client.target("http://host.docker.internal:8080/");
     }
 
     public PaymentLogEntry[] getPaymentLog() {

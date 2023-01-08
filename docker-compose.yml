@@ -6,6 +6,8 @@ services:
     container_name: server
     ports:
       - "8080:8080"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
     healthcheck:
       test:
         [
@@ -17,10 +19,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  
   client:
     image: client
     build: ./demo_client
     container_name: client
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
     depends_on:
       server:
         condition: service_healthy
