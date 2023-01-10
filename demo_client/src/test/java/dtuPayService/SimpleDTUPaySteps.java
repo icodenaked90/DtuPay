@@ -30,9 +30,9 @@ public class SimpleDTUPaySteps {
     //Scenario Successful Payment:
     @Given("a customer with a bank account with balance {int}")
     public void aCustomerWithABankAccountWithBalance(int arg0) {
-        customer.setFirstName("Johnny");
-        customer.setLastName("Doeluxe");
-        customer.setCprNumber("010170-1999");
+        customer.setFirstName("Johnnasdasdy");
+        customer.setLastName("Doelasdasduxe");
+        customer.setCprNumber("12312323-1999");
 
         try {
             cAccount = bank.createAccountWithBalance(customer, BigDecimal.valueOf(arg0));
@@ -48,9 +48,9 @@ public class SimpleDTUPaySteps {
 
     @Given("a merchant with a bank account with balance {int}")
     public void aMerchantWithABankAccountWithBalance(int arg0) {
-        merchant.setFirstName("Markkk");
-        merchant.setLastName("Twainnnn");
-        merchant.setCprNumber("121278-2999");
+        merchant.setFirstName("Maasdasdrkkk");
+        merchant.setLastName("Twaasdasdinnnn");
+        merchant.setCprNumber("1212999-2999");
         try {
             mAccount = bank.createAccountWithBalance(merchant, BigDecimal.valueOf(arg0));
         } catch (BankServiceException_Exception e) {
