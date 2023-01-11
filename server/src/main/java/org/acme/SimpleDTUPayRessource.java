@@ -4,9 +4,8 @@ import dtu.ws.fastmoney.BankServiceException_Exception;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @Path("/dtupay")
 public class SimpleDTUPayRessource {
@@ -23,7 +22,7 @@ public class SimpleDTUPayRessource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response makePayment(PaymentLogEntry payment) {
         try {
-            dtuPay.pay(payment.amount, payment.cid, payment.mid);
+            dtuPay.pay(payment.amount, payment.token, payment.mid);
             // Everything went well
             return Response.ok(payment).build();
         } catch (NotFoundException e) {

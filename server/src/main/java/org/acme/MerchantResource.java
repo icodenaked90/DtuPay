@@ -5,9 +5,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
-@Path("/customer")
-public class CustomerResource {
-    SimpleDTUPay dtuPay = new SimpleDTUPay();
+@Path("/merchant")
+public class MerchantResource {
+    SimpleDTUPay dtuPay = new SimpleDTUPay();//TODO:
 /*
     @GET
     @Path("/report")
@@ -16,15 +16,24 @@ public class CustomerResource {
         return dtuPay.getPaymentLog();
     }
 
-    @GET
-    @Path("/token")
+    @POST
+    @Path("/payment")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return dtuPay.getPaymentLog();
+    public Response makePayment(PaymentLogEntry payment) {
+        try {
+            dtuPay.pay(payment.amount, payment.token, payment.mid); //
+            // Everything went well
+            return Response.ok(payment).build();
+        } catch (NotFoundException e) {
+            // We have a cid or mid error
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (BankServiceException_Exception e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
     }
+    */
 
- */
-        
     @POST
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
