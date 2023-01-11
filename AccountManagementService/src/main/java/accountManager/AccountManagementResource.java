@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class StudentRegistrationService {
+public class AccountManagementResource {
 
     public static final String STUDENT_REGISTRATION_REQUESTED = "StudentRegistrationRequested";
     public static final String STUDENT_ID_ASSIGNED = "StudentIdAssigned";
