@@ -5,12 +5,13 @@ public class DTUPayService {
 
     public DTUPayService(MessageQueue q) {
         queue = q;
-        queue.addHandler("StudentIdAssigned", this::handleStudentIdAssigned);
+        queue.addHandler("registrationIDAssigned", this::handleStudentIdAssigned);
+
     }
 
-    public Student register(Student s) {
+    public Account register(Account a) {
         registeredStudent = new CompletableFuture<>();
-        Event event = new Event("StudentRegistrationRequested", new Object[] { s });
+        Event event = new Event("StudentRegistrationRequested", new Object[] { a });
         queue.publish(event);
         return registeredStudent.join();
     }
