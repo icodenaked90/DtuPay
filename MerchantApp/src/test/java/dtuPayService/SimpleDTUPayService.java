@@ -40,14 +40,14 @@ public class SimpleDTUPayService {
 
     private PaymentLogEntry[] getLog(String mediaType) {
 
-        return baseUrl.path("dtupay")
+        return baseUrl.path("merchant/report")
                 .request()
                 .accept(mediaType)
                 .get(PaymentLogEntry[].class);
     }
 
     private ResponseStatus setNewPayment(PaymentLogEntry payment,String mediaType) {
-        var response = baseUrl.path("dtupay")
+        var response = baseUrl.path("merchant/payment")
                 .request()
                 .post(Entity.entity(payment, mediaType));
 
@@ -60,7 +60,7 @@ public class SimpleDTUPayService {
 
     private String registerNewAccount(SimpleDTUPayAccount account) {
 
-        var response = baseUrl.path("dtupay/register")
+        var response = baseUrl.path("merchant/account")
                 .request()
                 .post(Entity.entity(account, MediaType.APPLICATION_JSON));
 

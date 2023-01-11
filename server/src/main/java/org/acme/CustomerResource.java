@@ -3,19 +3,20 @@ package org.acme;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 
 @Path("/customer")
 public class CustomerResource {
     SimpleDTUPay dtuPay = new SimpleDTUPay();
-/*
+
     @GET
     @Path("/report")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<PaymentLogEntry> getPaymentList() {
         return dtuPay.getPaymentLog();
     }
-
+/*
     @GET
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)

@@ -1,14 +1,17 @@
 package org.acme;
 
+import dtu.ws.fastmoney.BankServiceException_Exception;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 
 @Path("/merchant")
 public class MerchantResource {
     SimpleDTUPay dtuPay = new SimpleDTUPay();//TODO:
-/*
+
     @GET
     @Path("/report")
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +35,7 @@ public class MerchantResource {
             return Response.status(404).entity(e.getMessage()).build();
         }
     }
-    */
+
 
     @POST
     @Path("/account")
