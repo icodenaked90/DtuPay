@@ -1,3 +1,6 @@
+# This file is copied from the "Correlation Student Registration Example" zip file.
+# Created by Hubert Baumeister. 
+# Accessed on 2023-01-11
 FROM adoptopenjdk:11-jre-hotspot
 COPY target/lib /usr/src/lib
 COPY target/account-management-service-1.0.0.jar /usr/src/

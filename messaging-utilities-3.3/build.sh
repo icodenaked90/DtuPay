@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
-mvn clean package
-docker-compose build AccountManagementService
+mvn clean install
 
 # This file is copied from the "Correlation Student Registration Example" zip file.
 # Created by Hubert Baumeister. 
