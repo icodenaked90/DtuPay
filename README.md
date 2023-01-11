@@ -1,12 +1,12 @@
-## DTU Pay Version 1
-Made for the 02267 Software Development of Web Services course at DTU. 
-Can be compiled and run with:
+# Message Queue Example
 
-```
-docker-compose up -d
-```
+The project consists of 4 projects
 
-## Services
-Jenkins can be accesed at: http://fm-02.compute.dtu.dk:8282/job/DTU%20pay/
+- A Maven library for some utilities providing an abstraction to accessing the message queue in `libraries/messaging-utilities-3.2` which are installled using `mvn install` through the build script
+- The student registration microservice in `student-registration-service` which calls the service in the student id microservice 
+- The student id microservice in `student-id-service` 
+- The end-to-end tests in `end_to_end_tests`
 
-REST API can be accesed at: http://fm-02.compute.dtu.dk:8080/
+The main `docker-compose.yml` file is in the `end_to_end_tests`.
+
+To know how the project is build, deployed, and tested, inspect `build_and_run.sh`.
