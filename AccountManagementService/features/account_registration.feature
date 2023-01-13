@@ -3,7 +3,7 @@
 */
 Feature: Account Registration Feature
   Scenario: Account Registration Success
-    Given a user with an empty account id
+    Given an unregistered user
     When a "AccountRegistrationRequested" event is received
     Then a "AccountIdAssigned" event is sent
-    And the customer receives an account id
+    And the customer is registered

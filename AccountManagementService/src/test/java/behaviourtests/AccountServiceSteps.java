@@ -6,8 +6,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class AccountServiceSteps {
-    @Given("a user with an empty account id")
-    public void aUserWithAnEmptyAccountId() {
+
+    @Given("an unregistered user")
+    public void anUnregisteredUser() {
     }
 
     @When("a {string} event is received")
@@ -20,9 +21,7 @@ public class AccountServiceSteps {
 
     }
 
-    @And("the customer receives an account id")
-    public void theCustomerReceivesAnAccountId() {
-        
+    @And("the customer is registered")
+    public void theCustomerIsRegistered() {
     }
-
 }
