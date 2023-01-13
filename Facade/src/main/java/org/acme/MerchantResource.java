@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //Author: Adin s164432
 @Path("/merchant")
 public class MerchantResource {
-    DTUPayService dtuPay = new DTUPayFactory().getService();
+    //DTUPayService dtuPay = new DTUPayFactory().getService();
 
     @GET
     @Path("/report")
@@ -39,9 +39,9 @@ public class MerchantResource {
     public Response registerAccount(Account account) {
 
         //TODO: Delete the account using service
-        String id = dtuPay.register(account);
+        String mid = "test mid";
         // Everything went well
-        return Response.ok(id).build(); //TODO: write correct response
+        return Response.ok(mid).build(); //TODO: write correct response
     }
     /*
     @DELETE

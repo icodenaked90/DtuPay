@@ -3,11 +3,14 @@ package clientApp;
 import clientApp.models.Account;
 import clientApp.models.PaymentLogEntry;
 import clientApp.models.ResponseStatus;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 
 public class MerchantAppService {
     WebTarget baseUrl;
@@ -43,7 +46,7 @@ public class MerchantAppService {
         var response = baseUrl.path("merchant/account")
                 .request()
                 .post(Entity.entity(account, MediaType.APPLICATION_JSON));
-
+        System.out.println(response.getStatus());
         if (response.getStatus() == 200) {
             String output = response.readEntity(String.class);
             return output;
