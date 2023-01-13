@@ -39,9 +39,9 @@ public class MerchantResource {
     public Response registerAccount(Account account) {
 
         //TODO: Delete the account using service
-
+        String id = dtuPay.register(account);
         // Everything went well
-        return Response.ok("0101").build(); //TODO: write correct response
+        return Response.ok(id).build(); //TODO: write correct response
     }
     /*
     @DELETE
