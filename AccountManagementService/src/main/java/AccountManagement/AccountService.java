@@ -9,7 +9,7 @@ import messaging.Event;
 import messaging.MessageQueue;
 import java.util.UUID;
 
-public class AccountHandler {
+public class AccountService {
 
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
