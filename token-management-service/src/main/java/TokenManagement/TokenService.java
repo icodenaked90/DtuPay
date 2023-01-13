@@ -33,7 +33,7 @@ public class TokenService {
     // Map from Token to AccountId
     private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
     // Map from account id to unused tokens
-    private Map<String, ArrayList<Token>> unusedTokens = new ConcurrentHashMap<>(); // Equivalent to database SQL query on tok
+    private Map<String, ArrayList<Token>> unusedTokens = new ConcurrentHashMap<>();
     // Map from account id to used tokens (for reporting purposes)
     private Map<String, ArrayList<Token>> usedTokens = new ConcurrentHashMap<>();
 

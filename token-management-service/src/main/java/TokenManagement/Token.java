@@ -37,4 +37,22 @@ public class Token {
             return token;
         }
     }
+    public ArrayList<String> currentValidTokens = new ArrayList<String>();
+
+    public boolean validateToken(String token) {
+        for (String tok : currentValidTokens) {
+            if (token.equals(tok)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean consumeToken(String token) {
+        if (validateToken(token)) {
+            currentValidTokens.remove(token);
+            return true;
+        }
+        return false;
+    }
 }
