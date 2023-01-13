@@ -14,14 +14,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class AccountHandler {
 
+public class AccountService {
+
+    private MessageQueue queue;
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
-    private MessageQueue queue;
+
     private Map<CorrelationId, CompletableFuture<Account>> correlations = new ConcurrentHashMap<>();
 
-    public AccountHandler(MessageQueue q) {
+    public AccountService(MessageQueue q) {
         queue = q;
         queue.addHandler(ACCOUNT_REGISTRATION_REQUESTED, this::handleAccountRegistrationRequested);
         queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIdAssigned);
