@@ -1,6 +1,0 @@
-version: '3'
-services:
-  student-id-service:
-    image: student-id 
-    build: .
- 
