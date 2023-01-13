@@ -19,6 +19,7 @@ public class CustomerAppService {
 
     public ResponseStatus pay(int amount, String cid, String mid) {
         //Accept the payment and send the token to the merchatn
+        return new ResponseStatus(true, "hej");
     }
 
     public String getToken(TokenRequestCommand tokencommand) {
