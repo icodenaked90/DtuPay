@@ -1,4 +1,4 @@
-package org.example;
+package clientApp.models;
 
 
 import lombok.Data;
