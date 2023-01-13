@@ -7,10 +7,10 @@ import javax.ws.rs.client.WebTarget;
 
 public class StudentRegistrationService {
 
-	public Student register(Student c) {
+	public Merchant register(Merchant c) {
 		Client client = ClientBuilder.newClient();
 		WebTarget r = client.target("http://localhost:8080/");
-		var response = r.path("students").request().post(Entity.json(c), Student.class);
+		var response = r.path("students").request().post(Entity.json(c), Merchant.class);
 		return response;
 	}
 }

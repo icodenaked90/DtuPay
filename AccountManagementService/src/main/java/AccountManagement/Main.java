@@ -9,7 +9,7 @@ public class Main {
 
     private void startUp() throws Exception {
         var mq = new RabbitMqQueue("rabbitMq");
-        new AccountHandler(mq);
+        new AccountIdService(mq);
     }
 }
 
