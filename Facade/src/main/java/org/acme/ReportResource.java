@@ -9,14 +9,13 @@ import java.util.ArrayList;
 //Author: Adin s164432
 @Path("/report")
 public class ReportResource {
-
-    SimpleDTUPay dtuPay = new SimpleDTUPay();//TODO:
-
+    DTUPayService dtuPay = new DTUPayFactory().getService();
+    
     @GET
     @Path("/report")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<PaymentLogEntry> getPaymentList() {
-        return dtuPay.getPaymentLog();
+        return null;
     }
 
 }
