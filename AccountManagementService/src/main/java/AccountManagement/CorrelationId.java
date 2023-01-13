@@ -1,4 +1,4 @@
-package accountManager;
+package AccountManagement;
 
 import java.util.UUID;
 
