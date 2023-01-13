@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.Value;
 
 @Value
-public class CorrelationID {
+public class CorrelationId {
     private UUID id;
 
     public static CorrelationId randomId() {
