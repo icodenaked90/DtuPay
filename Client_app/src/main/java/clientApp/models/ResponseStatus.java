@@ -1,4 +1,4 @@
-package org.example;
+package clientApp.models;
 
 
 public class ResponseStatus {
@@ -9,5 +9,4 @@ public class ResponseStatus {
         this.status = status;
         this.errorMessage = errorMessage;
     }
-}
 }

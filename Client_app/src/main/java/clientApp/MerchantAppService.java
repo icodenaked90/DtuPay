@@ -1,13 +1,13 @@
-package org.example;
+package clientApp;
 
+import clientApp.models.Account;
+import clientApp.models.PaymentLogEntry;
+import clientApp.models.ResponseStatus;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import org.example.PaymentLogEntry;
-import org.example.ResponseStatus;
-import org.example.Account;
 
 public class MerchantAppService {
     WebTarget baseUrl;
