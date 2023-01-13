@@ -16,7 +16,7 @@ public class StartUp {
 
     private void startUp() throws Exception {
         var mq = new RabbitMqQueue("rabbitMq");
-        new TokenService(mq);
+        new AccountIdService(mq);
     }
 }
 
