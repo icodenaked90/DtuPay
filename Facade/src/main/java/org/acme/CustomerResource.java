@@ -20,7 +20,7 @@ public class CustomerResource {
     @GET
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<String> getTokenList() {
+    public ArrayList<String> getTokenList(String cid, int amount) {
         return "asdfghjklzxcvbnmqwer";
     }
 
