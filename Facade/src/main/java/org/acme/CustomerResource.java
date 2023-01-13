@@ -10,7 +10,7 @@ import static org.eclipse.persistence.config.ResultType.Array;
 //Author: Adin s164432
 @Path("/customer")
 public class CustomerResource {
-    //DTUPayService dtuPay = new DTUPayFactory().getService();
+    DTUPayService dtuPay = new DTUPayFactory().getService();
 
     @GET
     @Path("/report")
@@ -38,7 +38,7 @@ public class CustomerResource {
     public Response registerAccount(Account account) {
 
         //TODO: Delete the account using service
-        String id = ""; //= dtuPay.register(account);
+        String id = dtuPay.register(account); //= dtuPay.register(account);
         // Everything went well
         return Response.ok(id).build(); //TODO: Send correct message
     }

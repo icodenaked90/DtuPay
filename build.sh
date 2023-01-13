@@ -8,11 +8,19 @@ pushd messaging-utilities-3.3
 ./build.sh
 popd 
 
+pushd Client_app
+./build.sh
+popd
+
+pushd messaging-utilities-3.3
+./build.sh
+popd
+
 # Build the services
-pushd student-id-service 
+pushd AccountManagementService
 ./build.sh
 popd 
 
-pushd student-registration-service
+pushd Facade
 ./build.sh
 popd 

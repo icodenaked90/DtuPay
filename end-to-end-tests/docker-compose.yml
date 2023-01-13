@@ -4,14 +4,13 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitMq_container
     
-  student-registration-service:
-    image: student-registration 
-    container_name: student-registration 
+  facade-service:
+    image: facade-service
+    container_name: facade-service
     ports:
      - "8080:8080"
     
-  student-id-service:
-    image: student-id 
-    container_name: student-id 
+  account-management-service:
+    image: account-management-service
+    container_name: account-management-service
 
- 
