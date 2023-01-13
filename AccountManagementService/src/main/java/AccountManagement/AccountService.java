@@ -1,6 +1,13 @@
+/* @Author: Mila (s223313)
+   @Author: ...
+   @Author: ...
+   @Author: ...
+ */
+
 package AccountManagement;
 
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,7 +23,8 @@ public class AccountHandler {
 
     public AccountHandler(MessageQueue q) {
         queue = q;
-        queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountRegistrantion);
+        queue.addHandler(ACCOUNT_REGISTRATION_REQUESTED, this::handleAccountRegistrationRequested);
+        queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIdAssigned);
     }
 
     public Account register(Account a) {
@@ -27,9 +35,13 @@ public class AccountHandler {
         return correlations.get(correlationId).join();
     }
 
-    public void handleAccountRegistrantion(Event e) {
+    public void handleAccountRegistrationRequested(Event e) {
         var a = e.getArgument(0, Account.class);
-        var correlationid = e.getArgument(1, CorrelationId.class);
-        correlations.get(correlationid).complete(a);
+        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
+        correlations.get(eventCorrelationId).complete(a);
+    }
+
+    public void handleAccountIdAssigned(Event e) {
+        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
     }
 }
