@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 //Author: Adin s164432
+//Author: Jonathan s194134
 public class DTUPayService {
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";

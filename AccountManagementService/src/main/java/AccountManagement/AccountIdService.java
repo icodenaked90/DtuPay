@@ -9,6 +9,8 @@ import messaging.Event;
 import messaging.MessageQueue;
 import java.util.UUID;
 
+//Author: Adin s164432
+//Author: Jonathan s194134
 public class AccountIdService {
 
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
