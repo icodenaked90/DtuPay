@@ -13,15 +13,15 @@ public class DTUPayService {
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
     private MessageQueue queue;
-    private Map<CorrelationId, CompletableFuture<Account>> correlations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 
     public DTUPayService(MessageQueue q) {
         queue = q;
-        queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountRegistrantion);
+        queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIDAssigned);
 
     }
 
-    public Account register(Account a) {
+    public String register(Account a) {
         var correlationId = CorrelationId.randomId();
         correlations.put(correlationId, new CompletableFuture<>());
         Event event = new Event(ACCOUNT_REGISTRATION_REQUESTED, new Object[]{a, correlationId});
@@ -29,8 +29,8 @@ public class DTUPayService {
         return correlations.get(correlationId).join();
     }
 
-    public void handleAccountRegistrantion(Event e) {
-        var a = e.getArgument(0, Account.class);
+    public void handleAccountIDAssigned(Event e) {
+        var a = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(a);
     }
