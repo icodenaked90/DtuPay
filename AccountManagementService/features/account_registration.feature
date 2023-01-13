@@ -1,6 +1,6 @@
-/* @Author: Mila (s223313)
-   @Author: Hildibjørg (s164539)
-*/
+#   @Author: Mila (s223313)
+#   @Author: Hildibjørg (s164539)
+
 Feature: Account Registration Feature
   Scenario: Account Registration Success
     Given an unregistered user
