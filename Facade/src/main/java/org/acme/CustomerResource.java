@@ -8,13 +8,13 @@ import java.util.ArrayList;
 //Author: Adin s164432
 @Path("/customer")
 public class CustomerResource {
-    SimpleDTUPay dtuPay = new SimpleDTUPay();
+    DTUPayService dtuPay = new DTUPayFactory().getService();
 
     @GET
     @Path("/report")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<PaymentLogEntry> getPaymentList() {
-        return dtuPay.getPaymentLog();
+        return null;
     }
 /*
     @GET
@@ -30,16 +30,12 @@ public class CustomerResource {
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response registerAccount(SimpleDTUPayAccount account) {
-        try {
-            //TODO: Delete the account using service
-            String id = dtuPay.register(account.name, account.CPR, account.bankAccount);
-            // Everything went well
-            return Response.ok(id).build();
-        } catch (NotFoundException e) {
-            // We have a cid or mid error
-            return Response.status(404).entity(e.getMessage()).build();
-        }
+    public Response registerAccount(Account account) {
+
+        //TODO: Delete the account using service
+
+        // Everything went well
+        return Response.ok("1010").build(); //TODO: Send correct message
     }
     /*
     @DELETE
