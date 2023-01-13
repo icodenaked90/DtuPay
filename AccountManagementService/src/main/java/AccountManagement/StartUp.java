@@ -9,14 +9,14 @@ package AccountManagement;
 
 import messaging.implementations.RabbitMqQueue;
 
-public class Main {
+public class StartUp {
     public static void main(String[] args) throws Exception {
-        new Main().startUp();
+        new StartUp().startUp();
     }
 
     private void startUp() throws Exception {
         var mq = new RabbitMqQueue("rabbitMq");
-        new AccountHandler(mq);
+        new TokenService(mq);
     }
 }
 
