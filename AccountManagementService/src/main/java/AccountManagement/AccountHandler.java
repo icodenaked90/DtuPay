@@ -24,13 +24,14 @@ public class AccountHandler {
 
     public String register(Account a) {
         String id = generateId();
-        userAccounts.put(id,bankAccount);
+        userAccounts.put(id,a.bankAccount);
         return id;
     }
 
     public void handleAccountRegistrationRequested(Event e) {
         var a = e.getArgument(0, Account.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
+        //TODO:
         correlations.get(correlationid).complete(a);
     }
 
