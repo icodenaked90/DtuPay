@@ -16,15 +16,14 @@ public class CustomerResource {
     public ArrayList<PaymentLogEntry> getPaymentList() {
         return null;
     }
-/*
+
     @GET
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return dtuPay.getPaymentLog();
+    public ArrayList<String> getTokenList() {
+        return "asdfghjklzxcvbnmqwer";
     }
 
- */
         
     @POST
     @Path("/account")
