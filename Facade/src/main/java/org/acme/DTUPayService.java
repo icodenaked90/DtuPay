@@ -1,4 +1,12 @@
 package org.acme;
+
+
+import AccountManagement.Account;
+import messaging.Event;
+import messaging.MessageQueue;
+
+import java.util.concurrent.CompletableFuture;
+
 //Author: Adin s164432
 public class DTUPayService {
     private MessageQueue queue;
