@@ -23,6 +23,7 @@ public class MerchantRegistrationSteps {
     @When("the merchant is being registered")
     public void theMerchantIsBeingRegistered() {
         this.mid = merchantClient.registerNewMerchantAccount(merchant);
+        System.out.println(mid);
     }
 
     @Then("the merchant is registered")

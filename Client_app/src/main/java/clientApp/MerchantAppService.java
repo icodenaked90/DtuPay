@@ -9,6 +9,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 
 public class MerchantAppService {
@@ -45,7 +46,7 @@ public class MerchantAppService {
         var response = baseUrl.path("merchant/account")
                 .request()
                 .post(Entity.entity(account, MediaType.APPLICATION_JSON));
-
+        System.out.println(response.getStatus());
         if (response.getStatus() == 200) {
             String output = response.readEntity(String.class);
             return output;

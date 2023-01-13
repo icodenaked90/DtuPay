@@ -5,10 +5,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
+import static org.eclipse.persistence.config.ResultType.Array;
+
 //Author: Adin s164432
 @Path("/customer")
 public class CustomerResource {
-    DTUPayService dtuPay = new DTUPayFactory().getService();
+    //DTUPayService dtuPay = new DTUPayFactory().getService();
 
     @GET
     @Path("/report")
@@ -17,11 +19,15 @@ public class CustomerResource {
         return null;
     }
 
-    @GET
+    @POST
     @Path("/token")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<String> getTokenList(String cid, int amount) {
-        return "asdfghjklzxcvbnmqwer";
+    public Response getTokenList(TokenRequestCommand tokenRequestCommand) {
+        ArrayList<String> tokenList =new ArrayList<String>();
+        tokenList.add("hsauigjahgfjghsiufh");
+        System.out.println(tokenRequestCommand.cid);
+        return Response.ok(tokenList).build(); //TODO: Send correct message
     }
 
         
@@ -32,7 +38,7 @@ public class CustomerResource {
     public Response registerAccount(Account account) {
 
         //TODO: Delete the account using service
-        String id = dtuPay.register(account);
+        String id = ""; //= dtuPay.register(account);
         // Everything went well
         return Response.ok(id).build(); //TODO: Send correct message
     }

@@ -1,4 +1,4 @@
-package clientApp.models;
+package org.acme;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,3 +16,4 @@ public class TokenRequestCommand {
         amount = _amount;
     }
 }
+

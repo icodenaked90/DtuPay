@@ -2,11 +2,13 @@ package clientApp;
 
 import clientApp.models.ResponseStatus;
 import clientApp.models.TokenRequestCommand;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 
 public class CustomerAppService {
     WebTarget baseUrl;
@@ -22,11 +24,11 @@ public class CustomerAppService {
         return new ResponseStatus(true, "hej");
     }
 
-    public String getToken(TokenRequestCommand tokencommand) {
-        var response = baseUrl.path("Token")
+    public String getToken(String cid, Integer amount) {
+        var response = baseUrl.path("customer/token")
                 .request()
-                .post(Entity.entity(tokencommand, MediaType.APPLICATION_JSON));
-
+                .post(Entity.entity(new TokenRequestCommand(cid, amount) , MediaType.APPLICATION_JSON));
+        System.out.println(response.getStatus());
         if (response.getStatus() == 200) {
             String output = response.readEntity(String.class);
             return output;
