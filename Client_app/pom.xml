@@ -26,6 +26,11 @@
             <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.xml.bind</groupId>
+            <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
     </dependencies>
 
 </project>

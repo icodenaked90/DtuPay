@@ -1,14 +1,13 @@
 package org.example;
 
-import dtu.ws.fastmoney.AccountInfo;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import org.acme.PaymentLogEntry;
-import org.acme.ResponseStatus;
-import org.acme.SimpleDTUPayAccount;
+import org.example.PaymentLogEntry;
+import org.example.ResponseStatus;
+import org.example.Account;
 
 public class MerchantAppService {
     WebTarget baseUrl;
@@ -19,7 +18,7 @@ public class MerchantAppService {
         baseUrl = client.target("http://localhost:8080/");
     }
 
-    private PaymentLogEntry[] getLog(String mediaType) {
+    public PaymentLogEntry[] getLog(String mediaType) {
 
         return baseUrl.path("merchant/report")
                 .request()
@@ -27,7 +26,7 @@ public class MerchantAppService {
                 .get(PaymentLogEntry[].class);
     }
 
-    private ResponseStatus setNewPayment(PaymentLogEntry payment, String mediaType) {
+    public ResponseStatus setNewPayment(PaymentLogEntry payment, String mediaType) {
         var response = baseUrl.path("merchant/payment")
                 .request()
                 .post(Entity.entity(payment, mediaType));
@@ -39,7 +38,7 @@ public class MerchantAppService {
         return new ResponseStatus(false, response.readEntity(String.class));
     }
 
-    private String registerNewMerchantAccount(Account account) {
+    public String registerNewMerchantAccount(Account account) {
 
         var response = baseUrl.path("merchant/account")
                 .request()
