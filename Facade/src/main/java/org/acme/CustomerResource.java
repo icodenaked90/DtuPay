@@ -16,15 +16,14 @@ public class CustomerResource {
     public ArrayList<PaymentLogEntry> getPaymentList() {
         return null;
     }
-/*
+
     @GET
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return dtuPay.getPaymentLog();
+    public ArrayList<String> getTokenList(String cid, int amount) {
+        return "asdfghjklzxcvbnmqwer";
     }
 
- */
         
     @POST
     @Path("/account")
@@ -33,9 +32,9 @@ public class CustomerResource {
     public Response registerAccount(Account account) {
 
         //TODO: Delete the account using service
-
+        String id = dtuPay.register(account);
         // Everything went well
-        return Response.ok("1010").build(); //TODO: Send correct message
+        return Response.ok(id).build(); //TODO: Send correct message
     }
     /*
     @DELETE
