@@ -8,10 +8,6 @@ pushd messaging-utilities-3.3
 ./build.sh
 popd 
 
-pushd Client_app
-./build.sh
-popd
-
 pushd messaging-utilities-3.3
 ./build.sh
 popd

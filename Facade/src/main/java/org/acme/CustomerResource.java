@@ -1,3 +1,8 @@
+/*
+@Author: Mila s223313
+...
+ */
+
 package org.acme;
 
 import javax.ws.rs.*;
@@ -41,6 +46,18 @@ public class CustomerResource {
         // Everything went well
         return Response.ok(id).build(); //TODO: Send correct message
     }
+
+    @DELETE
+    @Path("/account/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deregisterAccount(@PathParam("id")String id) {
+            String errorMessage = dtuPay.deregister(id);
+            if (errorMessage.equals(""))
+                return Response.ok(id).build();
+            else
+                return Response.status(404).entity(errorMessage).build();
+    }
+
     /*
     @DELETE
     @Path("/account")

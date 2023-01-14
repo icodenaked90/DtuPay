@@ -1,3 +1,8 @@
+/*
+@Author: Mila s223313
+...
+ */
+
 package clientApp;
 
 import clientApp.models.Account;
@@ -20,6 +25,11 @@ public class CustomerAppService {
         baseUrl = client.target("http://localhost:8080/");
     }
 
+    /** Registers a customer with DTUPay
+     *
+     * @param account Account describing the customers name, cpr and bank account
+     * @return DTUPay id for the customer if success, otherwise "fail".
+     */
     public String register(Account account) {
 
         // Send registration request to DTUPay
@@ -37,8 +47,25 @@ public class CustomerAppService {
         //throw new Exception(response.readEntity(String.class));
         return "fail";
     }
-    //////////
 
+    /** Deregisters a customer with DTUPay
+     *
+     * @param id DTUPay id of the customer
+     * @return "OK" if success, otherwise an error message describing the problem.
+     */
+    public String deregister(String id) {
+        // Send registration request to DTUPay
+        var response = baseUrl.path("customer/account/" + id)
+                .request()
+                .delete();
+        // Handle response
+        if (response.getStatus() == 200) {
+            return "OK"; // Success
+        }
+        else {
+            return response.readEntity(String.class); // Error message
+        }
+    }
 
     public ResponseStatus pay(int amount, String cid, String mid) {
         //Accept the payment and send the token to the merchatn
