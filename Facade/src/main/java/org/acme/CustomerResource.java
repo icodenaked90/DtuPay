@@ -36,7 +36,6 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAccount(Account account) {
-
         //TODO: Delete the account using service
         String id = dtuPay.register(account); //= dtuPay.register(account);
         // Everything went well

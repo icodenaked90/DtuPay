@@ -19,7 +19,6 @@ public class DTUPayService {
     public DTUPayService(MessageQueue q) {
         queue = q;
         queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIDAssigned);
-
     }
 
     public String register(Account a) {
@@ -31,8 +30,8 @@ public class DTUPayService {
     }
 
     public void handleAccountIDAssigned(Event e) {
-        var a = e.getArgument(0, String.class);
+        var id = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
-        correlations.get(correlationid).complete(a);
+        correlations.get(correlationid).complete(id);
     }
 }

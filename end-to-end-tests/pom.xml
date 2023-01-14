@@ -104,11 +104,5 @@
             <version>10.0.0</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>dk.dtu.compute</groupId>
-			<artifactId>client-app</artifactId>
-			<version>1.0.0</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>

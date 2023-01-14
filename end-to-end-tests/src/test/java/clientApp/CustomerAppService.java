@@ -1,5 +1,6 @@
 package clientApp;
 
+import clientApp.models.Account;
 import clientApp.models.ResponseStatus;
 import clientApp.models.TokenRequestCommand;
 
@@ -18,6 +19,26 @@ public class CustomerAppService {
         // baseUrl = client.target("http://host.docker.internal:8080/");
         baseUrl = client.target("http://localhost:8080/");
     }
+
+    public String register(Account account) {
+
+        // Send registration request to DTUPay
+        var response = baseUrl.path("customer/account")
+                .request()
+                .post(Entity.entity(account, MediaType.APPLICATION_JSON));
+        // Handle response
+        if (response.getStatus() == 200) {
+            // Success, payload = new customer id
+            String cid = response.readEntity(String.class);
+            return cid;
+        }
+
+        // Failure handling
+        //throw new Exception(response.readEntity(String.class));
+        return "fail";
+    }
+    //////////
+
 
     public ResponseStatus pay(int amount, String cid, String mid) {
         //Accept the payment and send the token to the merchatn

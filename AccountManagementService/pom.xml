@@ -111,7 +111,7 @@
 						<index>true</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>studentid.service.StartUp</mainClass>
+							<mainClass>AccountManagement.StartUp</mainClass>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 					</archive>
