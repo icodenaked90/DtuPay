@@ -1,5 +1,5 @@
 
-package fastmoney;
+package dtu.ws.fastmoney;
 
 import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;

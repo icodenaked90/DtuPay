@@ -1,5 +1,5 @@
 
-package fastmoney;
+package dtu.ws.fastmoney;
 
 import java.math.BigDecimal;
 import jakarta.xml.bind.annotation.XmlAccessType;

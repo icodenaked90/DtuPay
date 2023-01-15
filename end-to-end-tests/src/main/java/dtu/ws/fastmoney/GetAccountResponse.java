@@ -1,5 +1,5 @@
 
-package fastmoney;
+package dtu.ws.fastmoney;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -8,16 +8,16 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getAccount complex type.
+ * <p>Java class for getAccountResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getAccount"&gt;
+ * &lt;complexType name="getAccountResponse"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="account_id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="return" type="{http://fastmoney.ws.dtu/}account" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -27,36 +27,36 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getAccount", propOrder = {
-    "accountId"
+@XmlType(name = "getAccountResponse", propOrder = {
+    "_return"
 })
-public class GetAccount {
+public class GetAccountResponse {
 
-    @XmlElement(name = "account_id")
-    protected String accountId;
+    @XmlElement(name = "return")
+    protected Account _return;
 
     /**
-     * Gets the value of the accountId property.
+     * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Account }
      *     
      */
-    public String getAccountId() {
-        return accountId;
+    public Account getReturn() {
+        return _return;
     }
 
     /**
-     * Sets the value of the accountId property.
+     * Sets the value of the return property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Account }
      *     
      */
-    public void setAccountId(String value) {
-        this.accountId = value;
+    public void setReturn(Account value) {
+        this._return = value;
     }
 
 }
