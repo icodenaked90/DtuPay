@@ -1,3 +1,8 @@
+/*
+@Author: Emily s223122
+@Author: Simon s163595
+...
+ */
 package clientApp.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;

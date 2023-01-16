@@ -1,3 +1,9 @@
+/*
+@Author: Emily s223122
+@Author: Simon s163595
+...
+ */
+
 package behaviourtests;
 
 import clientApp.MerchantAppService;

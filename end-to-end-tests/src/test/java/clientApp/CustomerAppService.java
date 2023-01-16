@@ -1,5 +1,7 @@
 /*
 @Author: Mila s223313
+@Author: Emily s223122
+@Author: Simon s163595
 ...
  */
 
