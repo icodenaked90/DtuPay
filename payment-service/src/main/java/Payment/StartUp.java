@@ -5,7 +5,7 @@ Accessed on 2023-01-11
 And has been adjusted to the AccountManagementService
 */
 
-package AccountManagement;
+package Payment;
 
 import messaging.implementations.RabbitMqQueue;
 
@@ -16,7 +16,7 @@ public class StartUp {
 
     private void startUp() throws Exception {
         var mq = new RabbitMqQueue("rabbitMq");
-        new AccountIdService(mq);
+        new PaymentService(mq);
     }
 }
 

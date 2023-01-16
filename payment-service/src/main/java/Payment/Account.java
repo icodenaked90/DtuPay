@@ -1,4 +1,4 @@
-package AccountManagement;
+package Payment;
 
 import lombok.Data;
 

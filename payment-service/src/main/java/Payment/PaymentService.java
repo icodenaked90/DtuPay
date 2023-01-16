@@ -1,32 +1,50 @@
 package Payment;
 
-import java.util.UUID;
-
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class PaymentService {
+import java.util.ArrayList;
 
-	private static final String STUDENT_ID_ASSIGNED = "StudentIdAssigned";
-	private static final String STUDENT_REGISTRATION_REQUESTED = "StudentRegistrationRequested";
-	static int id = 0;
+public class PaymentService {
+//	@Author: Jonathan (s194134)
+	private static final String PAYMENT_COMPLETED = "PaymentCompleted";
+	private static final String PAYMENT_REQUESTED = "PaymentRequested";
+	private ArrayList<NewPayment> paymentList = new ArrayList<>();
 	MessageQueue queue;
 
 	public PaymentService(MessageQueue q) {
 		this.queue = q;
-		this.queue.addHandler(STUDENT_REGISTRATION_REQUESTED, this::handleStudentRegistrationRequested);
-	}
-	
-	private String nextId() {
-		id++;
-		return Integer.toString(id);
+		this.queue.addHandler(PAYMENT_REQUESTED, this::handlePaymentRequested);
 	}
 
-	public void handleStudentRegistrationRequested(Event ev) {
-		var s = ev.getArgument(0, Student.class);
+	private String getMerchantBankId(NewPayment payment) {
+		//		TODO: 1. get merchant bank account from account service
+		return "asdasd";
+	}
+	private String getCustomerBankId(NewPayment payment) {
+		//		TODO: 2. get customer bank account from token service
+		return "asdasd";
+	}
+
+	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
+		//		TODO: 3. send payment to bank
+
+		//		TODO: 4. return payment with success or error message
+		return payment;
+	}
+
+	public void handlePaymentRequested(Event ev) {
+		var payment = ev.getArgument(0, NewPayment.class);
 		var correlationId = ev.getArgument(1, CorrelationId.class);
-		s.setId(nextId());
-		Event event = new Event(STUDENT_ID_ASSIGNED, new Object[] { s, correlationId });
+
+		String merchantBankId = getMerchantBankId(payment);
+
+		String customerBankId = getCustomerBankId(payment);
+
+		payment = makeBankPayment(payment, merchantBankId, customerBankId);
+
+
+		Event event = new Event(PAYMENT_COMPLETED, new Object[] { payment, correlationId });
 		queue.publish(event);
 	}
 }
