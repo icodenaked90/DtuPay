@@ -28,7 +28,7 @@ public class StubAccountService {
         userAccounts.put(accountId, bankAccountId);
     }
 
-    private synchronized void handleBankAccountRequested(Event e) {
+    private void handleBankAccountRequested(Event e) {
         var id = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         Event event = new Event(BANK_ACCOUNT_RECEIVED, new Object[]{userAccounts.get(id), correlationid});

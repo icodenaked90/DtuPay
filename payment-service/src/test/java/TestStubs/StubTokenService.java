@@ -28,7 +28,7 @@ public class StubTokenService {
         tokens.put(token, cid);
     }
 
-    private synchronized void handleTokenValidationRequested(Event e) {
+    private void handleTokenValidationRequested(Event e) {
         var token = e.getArgument(0, Token.class);
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         if (tokens.containsKey(token)) {
