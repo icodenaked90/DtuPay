@@ -79,6 +79,7 @@ public class PaymentService {
 //		TODO: 5. return payment with success or error message
 		Event event = new Event(PAYMENT_COMPLETED, new Object[] { completedPayment, correlationId });
 		queue.publish(event);
+//		TODO: 6. Remember to make endpoint for getting payment logs
 	}
 
 	public void handleErrors(NewPayment payment, CorrelationId correlationId, String errorMessage) {
