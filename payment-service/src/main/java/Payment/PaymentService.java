@@ -4,25 +4,38 @@ import messaging.Event;
 import messaging.MessageQueue;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PaymentService {
 //	@Author: Jonathan (s194134)
+
+	// Incoming streams for directed this microservice domain
 	private static final String PAYMENT_REQUESTED = "PaymentRequested";
 	private static final String PAYMENT_COMPLETED = "PaymentCompleted";
+	public static final String PAYMENT_LOGS_REQUESTED = "PaymentLogsRequested";
+	public static final String PAYMENT_LOGS_COMPLETED = "PaymentLogsRecieved";
+
+	// For communicating with the Token Service
 	private static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
 	private static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
+
+	// For communicating with the Account Service
 	public static final String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
 	public static final String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
+
 	private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
+	private Map<String, ArrayList<NewPayment>> customerPaymentsReport = new HashMap<>();
 	MessageQueue queue;
 
 	public PaymentService(MessageQueue q) {
 		this.queue = q;
 		this.queue.addHandler(PAYMENT_REQUESTED, this::handlePaymentRequested);
+		this.queue.addHandler(PAYMENT_LOGS_REQUESTED, this::handlePaymentLogsRequested);
 		this.queue.addHandler(TOKEN_VALIDATION_COMPLETED, this::handleServiceCompleted);
 		this.queue.addHandler(BANK_ACCOUNT_RECEIVED, this::handleServiceCompleted);
 	}
@@ -38,6 +51,14 @@ public class PaymentService {
 		if (bankAccountId.isEmpty()) return "";
 		return bankAccountId;
 	}
+
+	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
+//		TODO: Establish payment at bank via library and complete transaction. Save status also
+		payment.setPaymentSuccesful(true);
+		payment.setErrorMessage("");
+		return payment;
+	}
+
 	private String getCustomerAccountIdFromToken(Token token) {
 		// Talk to token service at exchange the token for a customer id
 		// Fails if an empty string is returned
@@ -56,58 +77,70 @@ public class PaymentService {
 		correlations.get(correlationid).complete(s);
 	}
 
-	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
-//		TODO: Establish payment at bank via library and complete transaction. Save status also
-		payment.setPaymentSuccesful(true);
-		payment.setErrorMessage("");
-		return payment;
-	}
-
 	public void handlePaymentRequested(Event ev) {
 		NewPayment completedPayment;
 		var payment = ev.getArgument(0, NewPayment.class);
 		var correlationId = ev.getArgument(1, CorrelationId.class);
-		System.out.println("DEBUG: We are here 1");
-//		TODO: 1. get customer id from token service
+
+		//	1. get customer id from token service
 		String customerAccountId = getCustomerAccountIdFromToken(new Token(payment.getCustomerToken()));
 		if (customerAccountId.isEmpty()) {
 			handleErrors(payment, correlationId, "Customer does not have a valid token");
 			return;
 		}
-		System.out.println("DEBUG: We are here 2");
-//		TODO: 2. get merchant & customer bank account from account service
+
+
+		// 2. get merchant & customer bank account from account service
 		String customerBankId = getBankAccountId(customerAccountId);
 		if (customerBankId.isEmpty()) {
 			handleErrors(payment, correlationId, "Customer does not have a valid bank account");
 			return;
 		}
-		System.out.println("DEBUG: We are here 3");
 		String merchantBankId = getBankAccountId(payment.getMerchantId());
 		if (merchantBankId.isEmpty()) {
 			handleErrors(payment, correlationId, "Merchant does not have a valid bank account");
 			return;
 		}
-		System.out.println("DEBUG: We are here 4");
-//		TODO: 3. send payment to bank
+
+
+		// 3. send payment to bank
 		completedPayment = makeBankPayment(payment, customerBankId, merchantBankId);
-//		TODO: 4. Add payment to log
+
+		// 4. Add payment to log and reports
 		paymentList.add(completedPayment);
-		System.out.println("DEBUG: We are here 5");
-//		TODO: 5. return payment with success or error message
+		if (customerPaymentsReport.containsKey(customerAccountId)) {
+			customerPaymentsReport.get(customerAccountId).add(completedPayment);
+		} else {
+			ArrayList<NewPayment> tempList = new ArrayList<>();
+			tempList.add(completedPayment);
+			customerPaymentsReport.put(customerAccountId, tempList);
+		}
+
+		// 5. Return completed payment and info
 		Event event = new Event(PAYMENT_COMPLETED, new Object[] { completedPayment, correlationId });
 		queue.publish(event);
-		System.out.println("DEBUG: We are here 6");
-//		TODO: 6. Remember to make endpoint for getting payment logs
-
 	}
 
+	public void handlePaymentLogsRequested(Event ev) {
+		String accountId = ev.getArgument(0, String.class);
+		var correlationId = ev.getArgument(1, CorrelationId.class);
+
+		Event event = new Event(PAYMENT_LOGS_COMPLETED, new Object[] {
+				customerPaymentsReport.get(accountId), correlationId });
+		queue.publish(event);
+	}
+
+
+	// Used for testing
 	public ArrayList<NewPayment> getPaymentLogs() {
 		return paymentList;
 	}
+	// Used for testing
 	 public void resetPaymentLogs() {
 		paymentList.clear();
 	 }
 
+	// Used to easily tag and return faulty payments
 	public void handleErrors(NewPayment payment, CorrelationId correlationId, String errorMessage) {
 		payment.setPaymentSuccesful(false);
 		payment.setErrorMessage(errorMessage);

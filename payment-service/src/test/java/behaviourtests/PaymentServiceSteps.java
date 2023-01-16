@@ -83,8 +83,6 @@ public class PaymentServiceSteps {
 
     @And("the payment is successful")
     public void thePaymentIsSuccessful() {
-//      TODO: This doesnt make sense. How can we make it better?
-//        Or just remove maybe, it is checked above. It is always true
         NewPayment completedPayment = paymentService.getPaymentLogs().get(0);
         assertTrue(completedPayment.isPaymentSuccesful());
     }
