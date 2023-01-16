@@ -6,10 +6,17 @@ import lombok.Data;
 public class NewPayment {
 //    Payment information
     String customerToken;
-    String merchantID;
-    int Amount;
+    String merchantId;
+    int amount;
+
 //    Payment status information
-    boolean status;
+    boolean paymentSuccesful;
     String errorMessage;
 
+    public NewPayment(String customerToken, String merchantId, int amount) {
+        this.customerToken = customerToken;
+        this.merchantId = merchantId;
+        this.amount = amount;
+        paymentSuccesful = false;
+    }
 }
