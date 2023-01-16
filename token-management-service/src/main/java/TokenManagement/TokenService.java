@@ -32,24 +32,22 @@ SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = false
 public class TokenService {
     public static final String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";
     public static final String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
+    public static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
+    public static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
     // Map from Token to AccountId
     private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
     // Map from account id to unused tokens
     private Map<Token, String> unusedTokens = new ConcurrentHashMap<>();
     // Map from account id to used tokens (for reporting purposes)
     private Map<Token, String> usedTokens = new ConcurrentHashMap<>();
-    private Map<CorrelationId, CompletableFuture<TokenRequestCommand>> tokenGenerationCorrelation = new ConcurrentHashMap<>();
     private MessageQueue queue;
     public TokenService(MessageQueue q) {
         queue = q;
         queue.addHandler(TOKEN_GENERATION_REQUESTED, this::handleTokenGenerationRequested);
-        /*
-        queue.addHandler("CustomerValidationCompleted", this::handleCustomerValidationCompleted);
 
-        //queue.addHandler("TokenValidationRequested", this::handleTokenValidationRequested);
-         */
+        queue.addHandler(TOKEN_VALIDATION_REQUESTED, this::handleTokenValidationRequested);
+
     }
-
 
 
     /*
@@ -142,4 +140,21 @@ public class TokenService {
 
     return count;
     }
+    private void handleTokenValidationRequested(Event e) {
+        var token = e.getArgument(0, Token.class);
+        var eventCorrelationId = e.getArgument(2, CorrelationId.class);
+        if(unusedTokens.containsKey(token)){
+            String cid = unusedTokens.get(token);
+            unusedTokens.remove(token);
+            usedTokens.put(token,cid);
+            e = new Event(TOKEN_VALIDATION_COMPLETED, new Object[]{cid, eventCorrelationId});
+            queue.publish(e);
+
+        }
+        else{
+            e = new Event(TOKEN_VALIDATION_COMPLETED, new Object[]{"", eventCorrelationId});
+            queue.publish(e);
+        }
+    }
+
 }

@@ -30,7 +30,7 @@ public class CustomerResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTokenList(TokenRequestCommand tokenRequestCommand) {
         TokenList list = dtuPay.generateTokens(tokenRequestCommand);
-        return Response.ok(list).build(); //TODO: Send correct message
+        return Response.ok(list).build();
     }
 
         

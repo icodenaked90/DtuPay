@@ -22,16 +22,26 @@ public class AccountIdService {
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
     public static final String ACCOUNT_DEREGISTRATION_REQUESTED = "AccountDeregistrationRequested";
     public static final String ACCOUNT_DEREGISTRATION_COMPLETED = "AccountDeregistrationCompleted";
+    public static final String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
+    public static final String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
 
     private MessageQueue queue;
     private HashMap<String, String> userAccounts = new HashMap<String, String>();
-    private Map<CorrelationId, CompletableFuture<Account>> correlations = new ConcurrentHashMap<>();
 
 
     public AccountIdService(MessageQueue q) {
         queue = q;
         queue.addHandler(ACCOUNT_REGISTRATION_REQUESTED, this::handleAccountRegistrationRequested);
         queue.addHandler(ACCOUNT_DEREGISTRATION_REQUESTED, this::handleAccountDeregistrationRequested);
+        queue.addHandler(BANK_ACCOUNT_REQUESTED, this::handleBankAccountRequested);
+    }
+
+    private void handleBankAccountRequested(Event e) {
+        var id = e.getArgument(0, String.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+
+        Event event = new Event(BANK_ACCOUNT_RECEIVED, new Object[] { userAccounts.get(id), correlationid });
+        queue.publish(event);
     }
 
     public String register(Account a) {
