@@ -22,6 +22,7 @@ public class AccountIdService {
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
     public static final String ACCOUNT_DEREGISTRATION_REQUESTED = "AccountDeregistrationRequested";
     public static final String ACCOUNT_DEREGISTRATION_COMPLETED = "AccountDeregistrationCompleted";
+
     private MessageQueue queue;
     private HashMap<String, String> userAccounts = new HashMap<String, String>();
     private Map<CorrelationId, CompletableFuture<Account>> correlations = new ConcurrentHashMap<>();

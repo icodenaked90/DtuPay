@@ -43,21 +43,14 @@ public class MerchantResource {
         // Everything went well
         return Response.ok(mid).build(); //TODO: write correct response
     }
-    /*
     @DELETE
-    @Path("/account")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/account/{id}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response registerAccount(SimpleDTUPayAccount account) {
-        try {
-            TODO: Delete the account using service
-            String id = dtuPay.register(account.name, account.CPR, account.bankAccount);
-            // Everything went well
+    public Response deregisterAccount(@PathParam("id")String id) {
+        String errorMessage = dtuPay.deregister(id);
+        if (errorMessage.equals(""))
             return Response.ok(id).build();
-        } catch (NotFoundException e) {
-            // We have a cid or mid error
-            return Response.status(404).entity(e.getMessage()).build();
-        }
+        else
+            return Response.status(404).entity(errorMessage).build();
     }
-    */
 }
