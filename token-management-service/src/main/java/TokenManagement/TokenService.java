@@ -155,5 +155,24 @@ public class TokenService {
             queue.publish(e);
         }
     }
-
+    //Used for tests
+    public Map<Token, String> getUnused(){
+        return unusedTokens;
+    }
+    public void removeAccountFromTokenList(String id){
+        for (Token token : unusedTokens.keySet()) {
+            if(unusedTokens.get(token).equals(id)){
+                unusedTokens.remove(token);
+            }
+        }
+    }
+    public ArrayList<Token> addTokensToAccount(String id, int amount){
+        ArrayList<Token> temp = new ArrayList<>();
+        for(int i = 0; i<amount;i++){
+            Token token = Token.generateToken();
+            unusedTokens.put(token,id);
+            temp.add(token);
+        }
+        return temp;
+    }
 }
