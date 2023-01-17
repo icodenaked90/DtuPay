@@ -1,3 +1,5 @@
+# @Author Mila (s223313)
+
 Feature: Merchant Registration feature
 
   Scenario: Merchant Registration Success

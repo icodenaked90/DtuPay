@@ -1,3 +1,5 @@
+# @Author Mila (s223313)
+
 Feature: Customer Registration feature
 
   Scenario: Customer Registration Success
@@ -14,6 +16,7 @@ Feature: Customer Registration feature
 	Given a registered customer
     When the customer is being deregistered in DTUPay
 	Then the customer is deregistered
+
 
 #  Scenario: Student Registration Race Condition
 #  	Given an unregistered student with empty id

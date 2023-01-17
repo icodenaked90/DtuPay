@@ -16,7 +16,10 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+
+import java.util.List;
 
 
 public class CustomerAppService {
@@ -70,24 +73,22 @@ public class CustomerAppService {
         }
     }
 
-
-
     /** Requests tokens from DTUPay
      *
      * @param cid DTUPay id of the customer
      * @param numberOfTokens the number of tokens requested by the customer
-     * @return tokens if success, otherwise "fail".
+     * @return tokens if success, otherwise null.
      */
-    public String getTokens(String cid, Integer numberOfTokens) {
+    public List<String> getTokens(String cid, Integer numberOfTokens) {
         var response = baseUrl.path("customer/token")
                 .request()
                 .post(Entity.entity(new TokenRequestCommand(cid, numberOfTokens) , MediaType.APPLICATION_JSON));
         System.out.println(response.getStatus());
         if (response.getStatus() == 200) {
-            String output = response.readEntity(String.class);
-            return output;
+            List<String> tokens = response.readEntity(new GenericType<List<String>>(){});
+            return tokens;
         }
-        return "fail";
+        return null;
     }
 
     /** Requests all payments the customer is involved in from DTUPay

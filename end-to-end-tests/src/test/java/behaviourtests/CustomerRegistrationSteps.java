@@ -20,12 +20,12 @@ import jakarta.ws.rs.core.MediaType;
 
 public class CustomerRegistrationSteps {
     private Account customer;
-    User bankCustomer = new User();
+    private User bankCustomer = new User();
     private String cid = "not a valid cid";
     private String cAccount;
     private String deregisterReply = "";
     private CustomerAppService customerService = new CustomerAppService();
-    BankService bank = new BankServiceService().getBankServicePort();
+    private BankService bank = new BankServiceService().getBankServicePort();
 
     @Given("an unregistered customer")
     public void anUnregisteredCustomer() {
