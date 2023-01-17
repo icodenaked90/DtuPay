@@ -59,7 +59,7 @@ public class TokenService {
 
     public void handleTokenGenerationRequested(Event e) {
         var command = e.getArgument(0, TokenRequestCommand.class);
-        var eventCorrelationId = e.getArgument(2, CorrelationId.class);
+        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         String accountId = command.cid;
         int numberOfTokens = command.amount;
         // Send event CustomerValidationRequested to AccountManagementService with accountId and correlationid
@@ -143,7 +143,7 @@ public class TokenService {
 
     public void handleTokenValidationRequested(Event e) {
         var token = e.getArgument(0, Token.class);
-        var eventCorrelationId = e.getArgument(2, CorrelationId.class);
+        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         if(unusedTokens.containsKey(token)){
             String cid = unusedTokens.get(token);
             unusedTokens.remove(token);
