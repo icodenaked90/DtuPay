@@ -6,6 +6,7 @@
 
 package org.acme;
 
+import io.cucumber.gherkin.Token;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -22,7 +23,7 @@ public class DTUPayService {
     public static final String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
     private MessageQueue queue;
     private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
-    private Map<CorrelationId, CompletableFuture<ArrayList<Token>>> Tcorrelations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<TokenRequestResponse>> Tcorrelations = new ConcurrentHashMap<>();
 
     public DTUPayService(MessageQueue q) {
         queue = q;
@@ -58,7 +59,7 @@ public class DTUPayService {
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(errorMessage);
     }
-    public String generateTokens(TokenRequestCommand request) {
+    public TokenRequestResponse generateTokens(TokenRequestCommand request) {
         var correlationId = CorrelationId.randomId();
         Tcorrelations.put(correlationId, new CompletableFuture<>());
         Event event = new Event(TOKEN_GENERATION_REQUESTED, new Object[]{request, correlationId});
@@ -67,8 +68,8 @@ public class DTUPayService {
     }
 
     public void handleTokensGenerated(Event e) {
-        var list = e.getArgument(0, TokenList.class);
+        var response = e.getArgument(0, TokenRequestResponse.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
-        Tcorrelations.get(correlationid).complete(list);
+        Tcorrelations.get(correlationid).complete(response);
     }
 }

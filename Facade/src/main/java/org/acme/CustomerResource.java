@@ -29,10 +29,14 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTokenList(TokenRequestCommand tokenRequestCommand) {
-        TokenList list = dtuPay.generateTokens(tokenRequestCommand);
-        return Response.ok(list).build();
-    }
+        TokenRequestResponse response = dtuPay.generateTokens(tokenRequestCommand);
 
+        if (response.isError()) {
+            return Response.status(400).entity(response.getErrorMessage()).build();
+        } else {
+            return Response.ok(response.getTokens()).build();
+        }
+    }
         
     @POST
     @Path("/account")
