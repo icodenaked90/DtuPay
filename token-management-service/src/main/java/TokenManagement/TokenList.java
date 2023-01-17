@@ -2,7 +2,7 @@ package TokenManagement;
 
 import java.util.ArrayList;
 
-
+// @Author: Adin (s164432)
 public class TokenList {
     private ArrayList<Token> tokens;
     public TokenList(ArrayList<Token> tokens){

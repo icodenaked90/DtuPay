@@ -28,7 +28,7 @@ SELECT * from Tokens WHERE AccountId = "Bob"
 SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = true
 SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = false
 */
-
+// @Author: Adin (s164432)
 public class TokenService {
     public static final String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";
     public static final String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
@@ -62,7 +62,6 @@ public class TokenService {
         var eventCorrelationId = e.getArgument(2, CorrelationId.class);
         String accountId = command.cid;
         int numberOfTokens = command.amount;
-        // TODO Validate accountId against account management service
         // Send event CustomerValidationRequested to AccountManagementService with accountId and correlationid
         // Account management service responds with CustomerValidationCompleted event with bool whether account is ok (exists and is customer) and the correlationId
 /*
