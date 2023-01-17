@@ -78,14 +78,14 @@ public class TokenService {
 */
         // Validate token number
         if (numberOfTokens < 1 || numberOfTokens > 5) {
-            e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new ArrayList<Token>(), eventCorrelationId});
+            e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse("Invalid number of tokens requested."), eventCorrelationId});
             queue.publish(e);
             return;
         }
 
         // Validate generation request
         if (unusedAmount(accountId) > 1) {
-            e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new ArrayList<Token>(), eventCorrelationId});
+            e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse("User already owns more than one token."), eventCorrelationId});
             queue.publish(e);
             return;
         }
@@ -105,7 +105,7 @@ public class TokenService {
             }
         }
         // Return new tokens
-        e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenList(accountNewTokens), eventCorrelationId});
+        e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse(new TokenList(accountNewTokens)), eventCorrelationId});
         queue.publish(e);
     }
 
