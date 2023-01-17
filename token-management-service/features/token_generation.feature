@@ -1,5 +1,5 @@
-// @Author: Mila (s223313)
-// @Author: Adin (s164432)
+# @Author: Mila (s223313)
+# @Author: Adin (s164432)
 
 Feature: Token Generation Feature
   Scenario: Token Generation Success

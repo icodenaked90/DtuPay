@@ -1,4 +1,4 @@
-// @Author: Adin (s164432)
+# @Author: Adin (s164432)
 Feature: Token Validation Feature
   Scenario: Token Validation Success
     Given a customer

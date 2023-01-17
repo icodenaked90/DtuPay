@@ -1,5 +1,5 @@
 /* @Author: Mila (s223313)
-   @Author: ...
+   @Author: Adin (s164432)
    @Author: ...
    @Author: ...
  */
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-// @Author: Adin (s164432)
+
 public class TokenServiceSteps {
     MessageQueue queue = mock(MessageQueue.class);
 
@@ -39,13 +39,23 @@ public class TokenServiceSteps {
     String accountId;
     private String cid;
     CorrelationId correlationId;
+    private int amount;
+    private String response;
+    ArrayList<Token> preOwned;
+
+
+    @Before
+    public void StartUp(){
+        CleanUp();
+    }
 
 
     @Given("a customer")
     public void aCustomer() {
         cid = "cakebornmenace";
     }
-    private int amount;
+
+
     @When("a {string} event for generating {int} token is received")
     public void aEventForGeneratingTokenIsReceived(String eventName, int numberOfTokens) {
         correlationId = CorrelationId.randomId();
@@ -117,4 +127,5 @@ public class TokenServiceSteps {
         preOwned = new ArrayList<>();
         response = "";
     }
+
 }

@@ -35,7 +35,7 @@ public class TokenService {
     public static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
     public static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
     // Map from Token to AccountId
-    private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
+    //private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
     // Map from account id to unused tokens
     private Map<Token, String> unusedTokens = new ConcurrentHashMap<>();
     // Map from account id to used tokens (for reporting purposes)
@@ -89,6 +89,7 @@ public class TokenService {
             queue.publish(e);
             return;
         }
+
         // Create tokens for account
         ArrayList<Token> accountNewTokens = new ArrayList<Token>();
         for (int i = 0; i < numberOfTokens; i++) {
@@ -139,7 +140,8 @@ public class TokenService {
 
     return count;
     }
-    private void handleTokenValidationRequested(Event e) {
+
+    public void handleTokenValidationRequested(Event e) {
         var token = e.getArgument(0, Token.class);
         var eventCorrelationId = e.getArgument(2, CorrelationId.class);
         if(unusedTokens.containsKey(token)){
