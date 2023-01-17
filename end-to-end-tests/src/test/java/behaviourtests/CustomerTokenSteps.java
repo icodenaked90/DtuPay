@@ -7,6 +7,8 @@ package behaviourtests;
 import clientApp.CustomerAppService;
 import clientApp.models.Account;
 
+import clientApp.models.Token;
+import clientApp.models.TokenList;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
@@ -30,8 +32,9 @@ public class CustomerTokenSteps {
     private String cAccount;
     private CustomerAppService customerService = new CustomerAppService();
     private BankService bank = new BankServiceService().getBankServicePort();
-    private List<String> ownedTokens;
-    private List<String> receivedTokens;
+    private TokenList ownedTokens;
+    private TokenList receivedTokens;
+    private String errorMessage = "";
 
     @Given("the registered customer with {int} tokens")
     public void theRegisteredCustomerWithTokens(int arg0) {
@@ -51,29 +54,44 @@ public class CustomerTokenSteps {
         assertNotEquals("fail", cid);
 
         // Get initial tokens
-        ownedTokens = new ArrayList<String>();
+        ownedTokens = new TokenList(new ArrayList<Token>());
         if (arg0 > 0) {
-            List<String> tokens = customerService.getTokens(cid, arg0);
-            assertNotEquals(null, tokens);
-            ownedTokens.addAll(tokens);
+            try
+            {
+                ownedTokens = customerService.getTokens(cid, arg0);
+            }
+            catch (Exception e)
+            {
+                fail(e.getMessage());
+            }
         }
     }
 
     @When("the customer requests {int} tokens")
     public void theCustomerRequestsTokens(int arg0) {
-        receivedTokens = customerService.getTokens(cid, arg0);
-        if (receivedTokens != null)
-            ownedTokens.addAll(receivedTokens);
+        try {
+            receivedTokens = customerService.getTokens(cid, arg0);
+            ownedTokens.getTokens().addAll(receivedTokens.getTokens());
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.getMessage();
+        }
     }
 
     @Then("the customer receives {int} tokens")
     public void theCustomerReceivesTokens(int arg0) {
-        assertEquals(arg0, receivedTokens.size());
+        assertEquals(arg0, receivedTokens.getTokens().size());
+    }
+
+    @Then("the customer receives the error message {string}")
+    public void theCustomerReceivesTheErrorMessage(String arg0) {
+        assertEquals(arg0, errorMessage);
     }
 
     @Then("the customer owns {int} tokens")
     public void theCustomerOwnsTokens(int arg0) {
-        assertEquals(arg0, ownedTokens.size());
+        assertEquals(arg0, ownedTokens.getTokens().size());
     }
 
     @After()
@@ -88,4 +106,6 @@ public class CustomerTokenSteps {
             }
         }
     }
+
+
 }
