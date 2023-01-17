@@ -34,6 +34,7 @@ public class ReportService {
     }
 
     public void handleReportGenerated(Event e) {
+        //modtager array af payments ud fra det ID som blev sendt
         //if report is not null
         if (e.getArgument(0, CustomerReport.class) != null) {
             // Får Report fra Payment og sender tilbage til facaden

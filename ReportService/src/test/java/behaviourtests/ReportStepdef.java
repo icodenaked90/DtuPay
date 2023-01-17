@@ -54,6 +54,7 @@ public class ReportStepdef {
 
     }
 
+
     @Then("the event is handled")
     public void theEventIsHandled() {
         service.handleReportRequested(e);
