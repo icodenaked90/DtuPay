@@ -7,10 +7,7 @@
 
 package clientApp;
 
-import clientApp.models.Account;
-import clientApp.models.PaymentLogEntry;
-import clientApp.models.ResponseStatus;
-import clientApp.models.TokenRequestCommand;
+import clientApp.models.*;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -77,18 +74,18 @@ public class CustomerAppService {
      *
      * @param cid DTUPay id of the customer
      * @param numberOfTokens the number of tokens requested by the customer
-     * @return tokens if success, otherwise null.
+     * @return tokens if success
+     * @throws Exception if failed
      */
-    public List<String> getTokens(String cid, Integer numberOfTokens) {
+    public TokenList getTokens(String cid, Integer numberOfTokens) throws Exception {
         var response = baseUrl.path("customer/token")
                 .request()
-                .post(Entity.entity(new TokenRequestCommand(cid, numberOfTokens) , MediaType.APPLICATION_JSON));
+                .post(Entity.entity(new TokenRequestCommand(cid, numberOfTokens), MediaType.APPLICATION_JSON));
         System.out.println(response.getStatus());
-        if (response.getStatus() == 200) {
-            List<String> tokens = response.readEntity(new GenericType<List<String>>(){});
-            return tokens;
-        }
-        return null;
+        if (response.getStatus() == 200)
+            return response.readEntity(TokenList.class);
+        else
+            throw new Exception(response.readEntity(String.class));
     }
 
     /** Requests all payments the customer is involved in from DTUPay
