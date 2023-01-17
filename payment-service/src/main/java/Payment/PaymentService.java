@@ -29,8 +29,8 @@ public class PaymentService {
 	// For communicating with the Account Service
 	public static final String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
 	public static final String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
-
-	private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
+	private Map<CorrelationId, CompletableFuture<String>> correlationsToken = new ConcurrentHashMap<>();
+	private Map<CorrelationId, CompletableFuture<String>> correlationsBank = new ConcurrentHashMap<>();
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
 	private Map<String, ArrayList<NewPayment>> customerPaymentsReport = new HashMap<>();
 	private BankService bank;
@@ -41,8 +41,8 @@ public class PaymentService {
 		this.bank = b;
 		this.queue.addHandler(PAYMENT_REQUESTED, this::handlePaymentRequested);
 		this.queue.addHandler(PAYMENT_LOGS_REQUESTED, this::handlePaymentLogsRequested);
-		this.queue.addHandler(TOKEN_VALIDATION_COMPLETED, this::handleServiceCompleted);
-		this.queue.addHandler(BANK_ACCOUNT_RECEIVED, this::handleServiceCompleted);
+		this.queue.addHandler(TOKEN_VALIDATION_COMPLETED, this::handleTokenServiceCompleted);
+		this.queue.addHandler(BANK_ACCOUNT_RECEIVED, this::handleBankServiceCompleted);
 
 	}
 
@@ -50,10 +50,10 @@ public class PaymentService {
 		// Talks to account management service to get an bank account id
 		// Fails if an empty string is returned
 		var correlationId = CorrelationId.randomId();
-		correlations.put(correlationId,new CompletableFuture<>());
+		correlationsBank.put(correlationId,new CompletableFuture<>());
 		Event event = new Event(BANK_ACCOUNT_REQUESTED, new Object[] { accountId, correlationId });
 		queue.publish(event);
-		String bankAccountId = correlations.get(correlationId).join();
+		String bankAccountId = correlationsBank.get(correlationId).join();
 		if (bankAccountId.isEmpty()) return "";
 		return bankAccountId;
 	}
@@ -69,7 +69,6 @@ public class PaymentService {
 			payment.setPaymentSuccesful(false);
 			payment.setErrorMessage(e.getMessage());
 		}
-
 		return payment;
 	}
 
@@ -77,19 +76,27 @@ public class PaymentService {
 		// Talk to token service at exchange the token for a customer id
 		// Fails if an empty string is returned
 		var correlationId = CorrelationId.randomId();
-		correlations.put(correlationId,new CompletableFuture<>());
+		correlationsToken.put(correlationId,new CompletableFuture<>());
 		Event event = new Event(TOKEN_VALIDATION_REQUESTED, new Object[] { token, correlationId });
 		queue.publish(event);
-		String customerId = correlations.get(correlationId).join();
+		String customerId = correlationsToken.get(correlationId).join();
 		if (customerId.isEmpty()) return "";
 		return customerId;
 	}
 
-	public void handleServiceCompleted(Event e) {
+	public void handleTokenServiceCompleted(Event e) {
 		var s = e.getArgument(0, String.class);
 		var correlationid = e.getArgument(1, CorrelationId.class);
-		correlations.get(correlationid).complete(s);
+		correlationsToken.get(correlationid).complete(s);
 	}
+
+	public void handleBankServiceCompleted(Event e) {
+		var s = e.getArgument(0, String.class);
+		var correlationid = e.getArgument(1, CorrelationId.class);
+		correlationsBank.get(correlationid).complete(s);
+	}
+
+
 
 	public void handlePaymentRequested(Event ev) {
 		NewPayment completedPayment;
@@ -102,7 +109,6 @@ public class PaymentService {
 			handleErrors(payment, correlationId, "Customer does not have a valid token");
 			return;
 		}
-
 
 		// 2. get merchant & customer bank account from account service
 		String customerBankId = getBankAccountId(customerAccountId);

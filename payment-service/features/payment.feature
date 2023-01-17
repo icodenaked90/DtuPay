@@ -14,9 +14,9 @@
      And the payment is successful
 
    Scenario: Wrong Customer token
-     Given an existing customer with id "cid1" and token "wrongToken4321"
+     Given an existing customer with id "cidNew1" and token "wrongToken4321"
      And an existing merchant "mid1" bank id "abc123merchant"
-     And an existing customer "cid1" bankId with id "abc123customer"
+     And an existing customer "cidNew1" bankId with id "abc123customer"
 
      Given starting a payment from "testToken1234" to "mid1" for 1000 kr
 

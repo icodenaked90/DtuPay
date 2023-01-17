@@ -37,13 +37,13 @@ public class PaymentServiceSteps {
     StubAccountService accountService = new StubAccountService(queue);
 
     NewPayment payment, expectedPayment;
-    private CompletableFuture<NewPayment> completePayment = new CompletableFuture<>();
     private CorrelationId correlationId;
 
     @Given("an existing customer with id {string} and token {string}")
     public void anExisitingCustomerWithIdAndToken(String arg0, String arg1) {
         Token token = new Token(arg1);
         tokenService.addToken(token, arg0);
+
     }
     @And("an existing merchant {string} bank id {string}")
     public void anExistingMerchantBankId(String arg0, String arg1) {
@@ -63,6 +63,7 @@ public class PaymentServiceSteps {
         customerToken = arg0;
         merchantId = arg1;
         paymentAmount = arg2;
+        try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
     }
 
     @When("a {string} event is received")

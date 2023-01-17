@@ -34,11 +34,10 @@ public class StubTokenService {
         if (tokens.containsKey(token)) {
             String cid = tokens.get(token);
             e = new Event(TOKEN_VALIDATION_COMPLETED, new Object[]{cid, eventCorrelationId});
-            queue.publish(e);
         } else {
             e = new Event(TOKEN_VALIDATION_COMPLETED, new Object[]{"", eventCorrelationId});
-            queue.publish(e);
         }
+        queue.publish(e);
     }
 
 
