@@ -29,24 +29,24 @@ public class CustomerRegistrationSteps {
 
     @Given("an unregistered customer")
     public void anUnregisteredCustomer() {
-        bankCustomer.setFirstName("Johnny");
-        bankCustomer.setLastName("Doeluxe");
-        bankCustomer.setCprNumber("010170-1999");
+        bankCustomer.setFirstName("Abel");
+        bankCustomer.setLastName("Shawn");
+        bankCustomer.setCprNumber("121212-4444");
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid bank account.");
         }
-        customer = new Account("Johnny Doeluxe", "010170-1999", cAccount);
+        customer = new Account("Abel Shawn", "121212-4444", cAccount);
     }
 
     @Given("a registered customer")
     public void aRegisteredCustomer() {
         // Customer has valid bank account
-        bankCustomer.setFirstName("Johnny");
-        bankCustomer.setLastName("Doeluxe");
-        bankCustomer.setCprNumber("010170-1999");
+        bankCustomer.setFirstName("Abel");
+        bankCustomer.setLastName("Shawn");
+        bankCustomer.setCprNumber("121212-4444");
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
@@ -54,7 +54,7 @@ public class CustomerRegistrationSteps {
             fail("Invalid bank account.");
         }
         // Create registered customer on DTU Pay
-        customer = new Account("Johnny Doeluxe", "010170-1999", cAccount);
+        customer = new Account("Abel Shawn", "121212-4444", cAccount);
         cid = customerService.register(customer);
         assertNotEquals("fail", cid);
     }
@@ -65,8 +65,8 @@ public class CustomerRegistrationSteps {
         System.out.println("CID: " + cid);
     }
 
-    @Then("the customer receives an DTUPay id")
-    public void theCustomerReceivesAnDTUPayId() {
+    @Then("the customer receives a DTUPay id")
+    public void theCustomerReceivesADTUPayId() {
         assertNotEquals("fail", cid);
     }
 

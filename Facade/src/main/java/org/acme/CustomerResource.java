@@ -1,5 +1,6 @@
 /*
 @Author: Mila s223313
+@Author: Adin s164432
 ...
  */
 
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 
 import static org.eclipse.persistence.config.ResultType.Array;
 
-//Author: Adin s164432
 @Path("/customer")
 public class CustomerResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();

@@ -8,6 +8,7 @@
 package clientApp;
 
 import clientApp.models.Account;
+import clientApp.models.PaymentLogEntry;
 import clientApp.models.ResponseStatus;
 import clientApp.models.TokenRequestCommand;
 
@@ -69,22 +70,45 @@ public class CustomerAppService {
         }
     }
 
-    public ResponseStatus pay(int amount, String cid, String mid) {
-        //Accept the payment and send the token to the merchatn
-        return new ResponseStatus(true, "hej");
-    }
 
-    public String getToken(String cid, Integer amount) {
+
+    /** Requests tokens from DTUPay
+     *
+     * @param cid DTUPay id of the customer
+     * @param numberOfTokens the number of tokens requested by the customer
+     * @return tokens if success, otherwise "fail".
+     */
+    public String getTokens(String cid, Integer numberOfTokens) {
         var response = baseUrl.path("customer/token")
                 .request()
-                .post(Entity.entity(new TokenRequestCommand(cid, amount) , MediaType.APPLICATION_JSON));
+                .post(Entity.entity(new TokenRequestCommand(cid, numberOfTokens) , MediaType.APPLICATION_JSON));
         System.out.println(response.getStatus());
         if (response.getStatus() == 200) {
             String output = response.readEntity(String.class);
             return output;
         }
-
         return "fail";
     }
+
+    /** Requests all payments the customer is involved in from DTUPay
+     *
+     * @param amount payment amount of the customer
+     * @param token the token used for payment by the customer
+     * @param mid DTU Pay id of the merchant
+     * @return all payments if success, otherwise "fail".
+     */
+
+    /*
+    public String getReport(Integer amount, String token, String mid) {
+        var response = baseUrl.path("customer/reports")
+                .request()
+                .post(Entity.entity(new PaymentLogEntry(amount, token, mid) , MediaType.APPLICATION_JSON));
+        if (response.getStatus() == 200) {
+            String output = response.readEntity(String.class);
+            return output;
+        }
+        return "fail";
+    }
+    */
 }
 

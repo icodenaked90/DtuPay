@@ -12,7 +12,6 @@ public class CustomerTokenSteps {
     CustomerAppService c = new CustomerAppService();
     @Given("request token")
     public void requestToken() {
-        System.out.println(c.getToken("test cid", 5));
-
+        System.out.println(c.getTokens("test cid", 5));
     }
 }

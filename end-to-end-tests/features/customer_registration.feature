@@ -3,7 +3,7 @@ Feature: Customer Registration feature
   Scenario: Customer Registration Success
   	Given an unregistered customer
   	When the customer is being registered in DTUPay
-  	Then the customer receives an DTUPay id
+  	Then the customer receives a DTUPay id
 
   Scenario: Customer Deregistration Failed
 	Given an unregistered customer
