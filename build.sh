@@ -8,7 +8,7 @@ pushd messaging-utilities-3.3
 ./build.sh
 popd 
 
-pushd messaging-utilities-3.3
+pushd payment-service
 ./build.sh
 popd
 

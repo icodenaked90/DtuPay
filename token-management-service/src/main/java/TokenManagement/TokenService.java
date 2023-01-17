@@ -29,7 +29,7 @@ SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = true
 SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = false
 */
 
-public class TokenService {
+public class   TokenService {
     // Map from Token to AccountId
     private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
     // Map from account id to unused tokens
