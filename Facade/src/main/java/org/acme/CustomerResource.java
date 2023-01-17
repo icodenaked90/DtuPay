@@ -29,10 +29,8 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTokenList(TokenRequestCommand tokenRequestCommand) {
-        ArrayList<String> tokenList =new ArrayList<String>();
-        tokenList.add("hsauigjahgfjghsiufh");
-        System.out.println(tokenRequestCommand.cid);
-        return Response.ok(tokenList).build(); //TODO: Send correct message
+        TokenList list = dtuPay.generateTokens(tokenRequestCommand);
+        return Response.ok(list).build();
     }
 
         
@@ -57,22 +55,4 @@ public class CustomerResource {
             else
                 return Response.status(404).entity(errorMessage).build();
     }
-
-    /*
-    @DELETE
-    @Path("/account")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response registerAccount(SimpleDTUPayAccount account) {
-        try {
-            TODO: Delete the account using service
-            String id = dtuPay.register(account.name, account.CPR, account.bankAccount);
-            // Everything went well
-            return Response.ok(id).build();
-        } catch (NotFoundException e) {
-            // We have a cid or mid error
-            return Response.status(404).entity(e.getMessage()).build();
-        }
-    }
-    */
 }
