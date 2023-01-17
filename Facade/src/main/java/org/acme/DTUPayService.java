@@ -1,10 +1,10 @@
 /*
 @Author: Mila s223313
-...
+@Author: Adin s164432
+@Author: Jonathan s194134
  */
 
 package org.acme;
-
 
 import messaging.Event;
 import messaging.MessageQueue;
@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-//Author: Adin s164432
-//Author: Jonathan s194134
 public class DTUPayService {
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
