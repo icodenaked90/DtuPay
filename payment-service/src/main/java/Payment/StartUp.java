@@ -7,6 +7,8 @@ And has been adjusted to the AccountManagementService
 
 package Payment;
 
+import dtu.ws.fastmoney.BankService;
+import dtu.ws.fastmoney.BankServiceService;
 import messaging.implementations.RabbitMqQueue;
 
 public class StartUp {
@@ -16,7 +18,8 @@ public class StartUp {
 
     private void startUp() throws Exception {
         var mq = new RabbitMqQueue("rabbitMq");
-        new PaymentService(mq);
+        BankService b = new BankServiceService().getBankServicePort();
+        new PaymentService(mq, b);
     }
 }
 

@@ -33,15 +33,17 @@ public class PaymentService {
 	private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
 	private Map<String, ArrayList<NewPayment>> customerPaymentsReport = new HashMap<>();
-	private BankService bank = new BankServiceService().getBankServicePort();
+	private BankService bank;
 	MessageQueue queue;
 
-	public PaymentService(MessageQueue q) {
+	public PaymentService(MessageQueue q, BankService b) {
 		this.queue = q;
+		this.bank = b;
 		this.queue.addHandler(PAYMENT_REQUESTED, this::handlePaymentRequested);
 		this.queue.addHandler(PAYMENT_LOGS_REQUESTED, this::handlePaymentLogsRequested);
 		this.queue.addHandler(TOKEN_VALIDATION_COMPLETED, this::handleServiceCompleted);
 		this.queue.addHandler(BANK_ACCOUNT_RECEIVED, this::handleServiceCompleted);
+
 	}
 
 	private String getBankAccountId(String accountId) {

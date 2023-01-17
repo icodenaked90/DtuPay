@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 import Payment.PaymentService;
 import Payment.Token;
 import TestStubs.StubAccountService;
+import dtu.ws.fastmoney.BankService;
+import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
 import Payment.CorrelationId;
@@ -29,7 +31,8 @@ public class PaymentServiceSteps {
 
     //MessageQueue queue = mock(MessageQueue.class);
     MessageQueue queue = new RabbitMqQueue("localhost");
-    PaymentService paymentService = new PaymentService(queue);
+    BankService bank =  mock(BankService.class);
+    PaymentService paymentService = new PaymentService(queue, bank);
     StubTokenService tokenService = new StubTokenService(queue);
     StubAccountService accountService = new StubAccountService(queue);
 
