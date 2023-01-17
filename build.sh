@@ -19,3 +19,7 @@ popd
 pushd Facade
 ./build.sh
 popd 
+
+pushd token-management-service
+./build.sh
+popd
