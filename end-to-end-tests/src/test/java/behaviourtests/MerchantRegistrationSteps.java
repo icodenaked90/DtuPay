@@ -1,71 +1,102 @@
 /*
 @Author: Emily s223122
 @Author: Simon s163595
-...
+@Author: Mila s223313
  */
 
 package behaviourtests;
-
+import clientApp.CustomerAppService;
+import dtu.ws.fastmoney.*;
 import clientApp.MerchantAppService;
 import clientApp.models.Account;
+
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static org.wildfly.common.Assert.assertTrue;
+import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
 public class MerchantRegistrationSteps {
-    private clientApp.models.Account merchant;
-    private String mid = "";
-    private MerchantAppService merchantClient = new MerchantAppService();
+    private Account merchant;
+    User bankCustomer = new User();
+    private String mid = "not a valid mid";
+    private String mAccount;
+    private String deregisterReply = "";
+    private MerchantAppService merchantService = new MerchantAppService();
+    BankService bank = new BankServiceService().getBankServicePort();
 
-    @Given("an unregistered merchant with empty id")
-    public void anUnregisteredMerchantWithEmptyId() {
-        this.merchant = new Account("John", "123456-1234", "1234");
+    @Given("an unregistered merchant")
+    public void anUnregisteredMerchant() {
+        bankCustomer.setFirstName("Moobi");
+        bankCustomer.setLastName("Lee");
+        bankCustomer.setCprNumber("030303-3333");
+        System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
+        try {
+            mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(30000));
+        } catch (BankServiceException_Exception e) {
+            fail("Invalid bank account.");
+        }
+        merchant = new Account("Moobi Lee", "030303-3333", mAccount);
     }
 
-    @When("the merchant is being registered")
-    public void theMerchantIsBeingRegistered() {
-        this.mid = merchantClient.registerNewMerchantAccount(merchant);
-        System.out.println(mid);
+    @Given("a registered merchant")
+    public void aRegisteredMerchant() {
+        // Merchant has valid bank account
+        bankCustomer.setFirstName("Moobi");
+        bankCustomer.setLastName("Lee");
+        bankCustomer.setCprNumber("030303-3333");
+        System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
+        try {
+            mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(30000));
+        } catch (BankServiceException_Exception e) {
+            fail("Invalid bank account.");
+        }
+        // Create registered merchant on DTU Pay
+        merchant = new Account("Moobi Lee", "030303-3333", mAccount);
+        mid = merchantService.register(merchant);
+        assertNotEquals("fail", mid);
     }
 
-    @Then("the merchant is registered")
-    public void theMerchantIsRegistered() {
-        assertTrue(this.mid != "");
+    @When("the merchant is being registered in DTUPay")
+    public void theMerchantIsBeingRegisteredInDTUPay() {
+        mid = merchantService.register(merchant);
+        System.out.println("MID: " + mid);
     }
 
-    @And("has a non empty id")
-    public void hasANonEmptyId() {
-        assertTrue(this.mid != "");
+    @Then("the merchant receives a DTUPay id")
+    public void theMerchantReceivesADTUPayId() {
+        assertNotEquals("fail", mid);
     }
-/*
-    @After
+
+    @When("the merchant is being deregistered in DTUPay")
+    public void theMerchantIsBeingDeregisteredInDTUPay() {
+        deregisterReply = merchantService.deregister(mid);
+    }
+
+    @Then("the merchant receives an error message")
+    public void theMerchantReceivesAnErrorMessage() {
+        assertNotEquals("OK", deregisterReply);
+    }
+
+    @Then("the merchant is deregistered")
+    public void theMerchantIsDeregistered() {
+        assertEquals("OK", deregisterReply);
+    }
+
+    @After()
     public void Cleanup()
     {
-        if (cid != null) {
-            public void Cleanup() {
-                if(cAccount != null){
-                    try {
-                        bank.retireAccount(cid);
-                        bank.retireAccount(cAccount);
-                    } catch (BankServiceException_Exception e) {
+        if (mAccount != null) {
+            try {
+                bank.retireAccount(mAccount);
+                mAccount = null;
+            } catch (BankServiceException_Exception e) {
+                fail("Failed cleanup.");
+            }
+        }
+    }
 
-                        fail("Failed cleanup cAc):");
-                    }
-                }
-                if (mid != null) {
-                    if(mAccount != null){
-                        try {
-                            bank.retireAccount(mid);
-                            bank.retireAccount(mAccount);
-                        } catch (BankServiceException_Exception e) {
-
-                            fail("Failed cleanup ):");
-                        }
-                    }
-                }
-                */
 }

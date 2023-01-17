@@ -1,13 +1,16 @@
+/*
+@Author: Mila s223313
+@Author: Adin s164432
+...
+ */
+
 package org.acme;
-
-
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
-//Author: Adin s164432
 @Path("/merchant")
 public class MerchantResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
@@ -43,6 +46,18 @@ public class MerchantResource {
         // Everything went well
         return Response.ok(mid).build(); //TODO: write correct response
     }
+
+    @DELETE
+    @Path("/account/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deregisterAccount(@PathParam("id")String id) {
+        String errorMessage = dtuPay.deregister(id);
+        if (errorMessage.equals(""))
+            return Response.ok(id).build();
+        else
+            return Response.status(404).entity(errorMessage).build();
+    }
+
     /*
     @DELETE
     @Path("/account")

@@ -27,6 +27,54 @@ public class MerchantAppService {
         baseUrl = client.target("http://localhost:8080/");
     }
 
+    /** Registers a merchant with DTUPay
+     *
+     * @param account Account describing the merchant's name, cpr and bank account
+     * @return DTUPay id for the merchant if success, otherwise "fail".
+     */
+    public String register(Account account) {
+        // Send registration request to DTUPay
+        var response = baseUrl.path("merchant/account")
+                .request()
+                .post(Entity.entity(account, MediaType.APPLICATION_JSON));
+        // Handle request
+        if (response.getStatus() == 200) {
+            String mid = response.readEntity(String.class);
+            return mid;
+        }
+        // Failure handling
+        //throw new Exception(response.readEntity(String.class));
+        return "fail";
+    }
+
+    /** Deregisters a merchant with DTUPay
+     *
+     * @param id DTUPay id of the merchant
+     * @return "OK" if success, otherwise an error message describing the problem.
+     */
+    public String deregister(String id) {
+        // Send deregistration request to DTUPay
+        var response = baseUrl.path("merchant/account/" + id)
+                .request()
+                .delete();
+        // Handle response
+        if (response.getStatus() == 200) {
+            return "OK"; // Success
+        }
+        else {
+            return response.readEntity(String.class); // Error message
+        }
+    }
+
+    // TODO pay
+    /*
+    public ResponseStatus pay(int amount, String cid, String mid) {
+        //Accept the payment and send the token to the merchatn
+        return new ResponseStatus(true, "hej");
+    }
+    */
+
+    /*
     public PaymentLogEntry[] getLog(String mediaType) {
 
         return baseUrl.path("merchant/report")
@@ -34,9 +82,11 @@ public class MerchantAppService {
                 .accept(mediaType)
                 .get(PaymentLogEntry[].class);
     }
+     */
 
-    public ResponseStatus setNewPayment(PaymentLogEntry payment, String mediaType) {
-        var response = baseUrl.path("merchant/payment")
+    /*
+    public ResponseStatus getReports(PaymentLogEntry payment, String mediaType) {
+        var response = baseUrl.path("merchant/reports")
                 .request()
                 .post(Entity.entity(payment, mediaType));
 
@@ -46,18 +96,6 @@ public class MerchantAppService {
 
         return new ResponseStatus(false, response.readEntity(String.class));
     }
+*/
 
-    public String registerNewMerchantAccount(Account account) {
-
-        var response = baseUrl.path("merchant/account")
-                .request()
-                .post(Entity.entity(account, MediaType.APPLICATION_JSON));
-        System.out.println(response.getStatus());
-        if (response.getStatus() == 200) {
-            String output = response.readEntity(String.class);
-            return output;
-        }
-
-        return "fail";
-    }
 }
