@@ -1,8 +1,5 @@
 version: '3'
 services:
-  rabbitMq:
-    image: rabbitmq:3-management
-    container_name: rabbitMq_container
     
   facade-service:
     image: facade-service
@@ -14,3 +11,6 @@ services:
     image: account-management-service
     container_name: account-management-service
 
+  payment-service:
+    image: payment-service
+    container_name: payment-service
