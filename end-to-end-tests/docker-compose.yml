@@ -1,6 +1,12 @@
 version: '3'
 services:
-    
+  rabbitMq:
+    image: rabbitmq:3-management
+    container_name: rabbitMq_container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   facade-service:
     image: facade-service
     container_name: facade-service
@@ -14,3 +20,7 @@ services:
   payment-service:
     image: payment-service
     container_name: payment-service
+
+  token-management-service:
+    image: token-management-service
+    container_name: token-management-service
