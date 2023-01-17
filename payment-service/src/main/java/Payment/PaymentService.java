@@ -1,10 +1,13 @@
 package Payment;
 
+import dtu.ws.fastmoney.BankService;
+import dtu.ws.fastmoney.BankServiceException_Exception;
+import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +33,7 @@ public class PaymentService {
 	private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
 	private Map<String, ArrayList<NewPayment>> customerPaymentsReport = new HashMap<>();
+	private BankService bank = new BankServiceService().getBankServicePort();
 	MessageQueue queue;
 
 	public PaymentService(MessageQueue q) {
@@ -54,8 +58,16 @@ public class PaymentService {
 
 	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
 //		TODO: Establish payment at bank via library and complete transaction. Save status also
-		payment.setPaymentSuccesful(true);
-		payment.setErrorMessage("");
+
+		try {
+			bank.transferMoneyFromTo(customerBankId, merchantBankId, BigDecimal.valueOf(payment.getAmount()), "DTUPay");
+			payment.setPaymentSuccesful(true);
+			payment.setErrorMessage("");
+		} catch (BankServiceException_Exception e) {
+			payment.setPaymentSuccesful(false);
+			payment.setErrorMessage(e.getMessage());
+		}
+
 		return payment;
 	}
 
