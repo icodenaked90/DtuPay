@@ -1,12 +1,29 @@
+#/*
+#@Author: Emily s223122
+#*/
 Feature: Customer Token feature
 
-  Scenario: Customer Token
-  	Given request token
+  Scenario: Customer Token Request - One Token
+    Given a successfully registered customer
+    When request 1 tokens
+    Then then 1 tokens is received
 
-#  Scenario: Student Registration Race Condition
-#  	Given an unregistered student with empty id
-#  	And another unregistered student
-#  	When the two students are registered at the same time
-#  	Then the first student has a non empty id
-#  	And the second student has a non empty id different from the first student
-  	
+  Scenario: Customer Token Request - Some Tokens
+    Given a successfully registered customer
+  	When request 3 tokens
+    Then then 3 tokens is received
+
+  Scenario: Customer Token Request Failed - Too Many
+    Given a successfully registered customer
+    When request 7 tokens
+    Then the customer receives a token error message
+
+  Scenario: Customer Token Request Failed - Negative
+    Given a successfully registered customer
+    When request -1 tokens
+    Then the customer receives a token error message
+
+  Scenario: Customer Token Request - Unregistered Customer
+    Given a unregistered customer
+    When request 1 tokens
+    Then the customer receives a token error message

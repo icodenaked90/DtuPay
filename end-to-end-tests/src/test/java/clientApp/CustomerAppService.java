@@ -1,11 +1,12 @@
 /*
 @Author: Mila s223313
-...
- */
+@Author: Emily s223122
+*/
 
 package clientApp;
 
 import clientApp.models.Account;
+import clientApp.models.ReportRequestCommand;
 import clientApp.models.ResponseStatus;
 import clientApp.models.TokenRequestCommand;
 
@@ -14,6 +15,9 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class CustomerAppService {
@@ -60,28 +64,33 @@ public class CustomerAppService {
                 .delete();
         // Handle response
         if (response.getStatus() == 200) {
-            return "OK"; // Success
+            return "ok"; // Success
         }
         else {
-            return response.readEntity(String.class); // Error message
+            return "fail"; // Error message
         }
-    }
-
-    public ResponseStatus pay(int amount, String cid, String mid) {
-        //Accept the payment and send the token to the merchatn
-        return new ResponseStatus(true, "hej");
     }
 
     public String getToken(String cid, Integer amount) {
         var response = baseUrl.path("customer/token")
                 .request()
                 .post(Entity.entity(new TokenRequestCommand(cid, amount) , MediaType.APPLICATION_JSON));
-        System.out.println(response.getStatus());
+
         if (response.getStatus() == 200) {
-            String output = response.readEntity(String.class);
-            return output;
+            return response.readEntity(String.class);
+
         }
 
+        return "fail";
+    }
+
+    public String getReport(String cid) {
+        var response = baseUrl.path("customer/report")
+                .request()
+                .post(Entity.entity(new ReportRequestCommand(cid) , MediaType.APPLICATION_JSON));
+        if (response.getStatus() == 200) {
+            return response.readEntity(String.class);
+        }
         return "fail";
     }
 }

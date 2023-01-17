@@ -15,21 +15,20 @@ import io.cucumber.java.en.When;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-public class CustomerTokenSteps {
-    private CustomerAppService customerApp= new CustomerAppService();
-    private User bankCustomer = new User();
-    private String cid = "";
-    private String response = "";
-    private String tokens = "";
+public class CustomerReportSteps {
     private Account customer;
+    private User bankCustomer = new User();
+    private String report = "";
     private String cAccount;
+    private String response = "";
+    private CustomerAppService customerApp= new CustomerAppService();
     BankService bank = new BankServiceService().getBankServicePort();
+    private String cid = "";
 
-    @Given("a successfully registered customer")
-    public void aSuccessfullyRegisteredCustomer() {
+    @Given("a successfully registered report customer")
+    public void aSuccessfullyRegisteredReportCustomer() {
         bankCustomer.setFirstName("Decent");
         bankCustomer.setLastName("Customer");
         bankCustomer.setCprNumber("010170-1976");
@@ -42,25 +41,15 @@ public class CustomerTokenSteps {
         cid = customerApp.register(customer);
     }
 
-    @When("request {int} tokens")
-    public void requestTokens(int arg0) {
-        response = customerApp.getToken(cid, arg0);
-        tokens = response;
+    @When("customer request their report")
+    public void customerRequestTheirReport() {
+        response = customerApp.getReport(cid);
+        report = response;
     }
 
-    @Then("then {int} tokens is received")
-    public void thenTokensIsReceived(int arg0) {
-        assertEquals(tokens.split(",").length, arg0);
-    }
-
-    @Then("the customer receives a token error message")
-    public void theCustomerReceivesATokenErrorMessage() {
-        assertEquals("fail", response);
-    }
-
-    @Given("a unregistered customer")
-    public void aUnregisteredCustomer() {
-        cid = "randomId";
+    @Then("the report is received")
+    public void theReportIsReceived() {
+        assertNotEquals("fail", report);
     }
 
     @After()
@@ -76,5 +65,13 @@ public class CustomerTokenSteps {
         }
     }
 
+    @Given("an unregistered report customer")
+    public void anUnregisteredReportCustomer() {
+        cid = "randomId";
+    }
 
+    @Then("the customer receives a report error message")
+    public void theCustomerReceivesAReportErrorMessage() {
+        assertEquals("fail", response);
+    }
 }

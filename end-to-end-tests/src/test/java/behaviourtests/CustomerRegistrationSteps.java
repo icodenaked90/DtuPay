@@ -1,68 +1,65 @@
 /*
 @Author: Mila s223313
-...
+@Author: Emily s223122
  */
 
 package behaviourtests;
 import dtu.ws.fastmoney.*;
 import clientApp.CustomerAppService;
 import clientApp.models.Account;
-
 import io.cucumber.java.After;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
-import jakarta.ws.rs.core.MediaType;
 
 public class CustomerRegistrationSteps {
     private Account customer;
-    User bankCustomer = new User();
-    private String cid = "not a valid cid";
+    private User bankCustomer = new User();
+    private String cid = "";
     private String cAccount;
-    private String deregisterReply = "";
-    private CustomerAppService customerService = new CustomerAppService();
-    BankService bank = new BankServiceService().getBankServicePort();
+    private String response = "";
+    private CustomerAppService customerApp= new CustomerAppService();
+    private BankService bank = new BankServiceService().getBankServicePort();
 
     @Given("an unregistered customer")
     public void anUnregisteredCustomer() {
-        bankCustomer.setFirstName("Johnny");
-        bankCustomer.setLastName("Doeluxe");
-        bankCustomer.setCprNumber("010170-1999");
-        System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
+        // Customer has valid bank account
+        bankCustomer.setFirstName("Test");
+        bankCustomer.setLastName("Customer");
+        bankCustomer.setCprNumber("010170-1996");
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
-            fail("Invalid bank account.");
+            fail("Invalid customer bank account.");
         }
-        customer = new Account("Johnny Doeluxe", "010170-1999", cAccount);
+        customer = new Account("Test Customer", "010170-1996", cAccount);
     }
 
     @Given("a registered customer")
     public void aRegisteredCustomer() {
         // Customer has valid bank account
-        bankCustomer.setFirstName("Johnny");
-        bankCustomer.setLastName("Doeluxe");
-        bankCustomer.setCprNumber("010170-1999");
-        System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
+        bankCustomer.setFirstName("Test");
+        bankCustomer.setLastName("Customer");
+        bankCustomer.setCprNumber("010170-1996");
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
-            fail("Invalid bank account.");
+            fail("Invalid customer bank account.");
         }
         // Create registered customer on DTU Pay
-        customer = new Account("Johnny Doeluxe", "010170-1999", cAccount);
-        cid = customerService.register(customer);
-        assertNotEquals("fail", cid);
+        customer = new Account("Test Customer", "010170-1996", cAccount);
+        response = customerApp.register(customer);
+        cid = response;
+        assertNotEquals("fail", response);
     }
 
     @When("the customer is being registered in DTUPay")
     public void theCustomerIsBeingRegisteredInDTUPay() {
-        cid = customerService.register(customer);
-        System.out.println("CID: " + cid);
+        // Create registered customer on DTU Pay
+        response = customerApp.register(customer);
+        cid = response;
     }
 
     @Then("the customer receives an DTUPay id")
@@ -72,17 +69,38 @@ public class CustomerRegistrationSteps {
 
     @When("the customer is being deregistered in DTUPay")
     public void theCustomerIsBeingDeregisteredInDTUPay() {
-        deregisterReply = customerService.deregister(cid);
+        response = customerApp.deregister(cid);
     }
 
     @Then("the customer receives an error message")
     public void theCustomerReceivesAnErrorMessage() {
-        assertNotEquals("OK", deregisterReply);
+        assertEquals("fail", response);
     }
 
     @Then("the customer is deregistered")
     public void theCustomerIsDeregistered() {
-        assertEquals("OK", deregisterReply);
+        assertEquals("ok", response);
+    }
+
+    @Given("an unregistered customer with firstname {string}, lastname {string}, cpr {string}")
+    public void anUnregisteredCustomerWithFirstnameLastnameCpr(String arg0, String arg1, String arg2) {
+        bankCustomer.setFirstName(arg0);
+        bankCustomer.setLastName(arg1);
+        bankCustomer.setCprNumber(arg2);
+        try {
+            cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
+        } catch (BankServiceException_Exception e) {
+            fail("Invalid customer bank account.");
+        }
+        if (arg0 == "null" || arg1 == "null") {
+            customer = new Account(null, arg2, cAccount);
+            return;
+        }
+        if (arg2 == "null") {
+            customer = new Account(null, arg2, cAccount);
+            return;
+        }
+        customer = new Account(arg0 + " " + arg1, arg2, cAccount);
     }
 
     @After()

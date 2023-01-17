@@ -2,20 +2,18 @@
 @Author: Emily s223122
 */
 package clientApp.models;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @XmlRootElement // Needed for XML serialization and deserialization
 @Data // Automatic getter and setters and equals etc
 @NoArgsConstructor // Needed for JSON deserialization and XML serialization and deserialization@AllArgsCo
-public class TokenRequestCommand {
+public class ReportRequestCommand {
     public String cid;
-    public Integer amount;
 
-    public TokenRequestCommand(String _cid, Integer _amount){
+    public ReportRequestCommand(String _cid){
         cid = _cid;
-        amount = _amount;
     }
 }

@@ -1,10 +1,22 @@
+#/*
+#@Author: Emily s223122
+#*/
 Feature: Merchant Registration feature
 
-  Scenario: Merchant Registration
-  	Given an unregistered merchant with empty id
-  	When the merchant is being registered
-  	Then the merchant is registered
-  	And has a non empty id  	
+	Scenario: Merchant Registration Success
+		Given an unregistered merchant
+		When the merchant is being registered in DTUPay
+		Then the merchant receives an DTUPay id
+
+	Scenario: Merchant Deregistration Failed
+		Given an unregistered merchant
+		When the merchant is being deregistered in DTUPay
+		Then the merchant receives an error message
+
+	Scenario: Merchant Deregistration Success
+		Given a registered merchant
+		When the merchant is being deregistered in DTUPay
+		Then the merchant is deregistered
 
 #  Scenario: Student Registration Race Condition
 #  	Given an unregistered student with empty id

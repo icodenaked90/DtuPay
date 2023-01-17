@@ -1,3 +1,6 @@
+#/*
+#@Author: Emily s223122
+#*/
 Feature: Customer Registration feature
 
   Scenario: Customer Registration Success
@@ -15,10 +18,10 @@ Feature: Customer Registration feature
     When the customer is being deregistered in DTUPay
 	Then the customer is deregistered
 
-#  Scenario: Student Registration Race Condition
-#  	Given an unregistered student with empty id
-#  	And another unregistered student
-#  	When the two students are registered at the same time
-#  	Then the first student has a non empty id
-#  	And the second student has a non empty id different from the first student
+	#Scenario: Customer Registration Failed - two identical
+	#	Given an unregistered customer with firstname "Parker", lastname "Peter", cpr "091276-4322"
+	#	And an another unregistered customer with firstname "Nicolas", lastname "Cage", cpr "091276-4422"
+	#	When the two students are registered at the same time
+	#	Then the first customer has a non empty id
+	#	And the second student has a non empty id different from the first student
   	
