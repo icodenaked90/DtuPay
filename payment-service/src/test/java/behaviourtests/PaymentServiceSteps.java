@@ -29,8 +29,7 @@ public class PaymentServiceSteps {
     String customerToken, merchantId;
     int paymentAmount;
 
-    //MessageQueue queue = mock(MessageQueue.class);
-    MessageQueue queue = new RabbitMqQueue("localhost");
+    MessageQueue queue = new RabbitMqQueue();
     BankService bank =  mock(BankService.class);
     PaymentService paymentService = new PaymentService(queue, bank);
     StubTokenService tokenService = new StubTokenService(queue);

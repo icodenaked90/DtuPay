@@ -18,7 +18,7 @@
      And an existing merchant "mid1" bank id "abc123merchant"
      And an existing customer "cidNew1" bankId with id "abc123customer"
 
-     Given starting a payment from "testToken1234" to "mid1" for 1000 kr
+     Given starting a payment from "testToken341234" to "mid1" for 1000 kr
 
      When a "PaymentRequested" event is received
      Then a "PaymentCompleted" event is sent
