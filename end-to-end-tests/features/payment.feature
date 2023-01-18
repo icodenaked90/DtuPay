@@ -25,7 +25,7 @@ Feature: Payment feature
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 2200
     Then the merchant receives the error message "Insufficient Balance Payment Attempt"
-    And the customer owns 0 tokens
+    And the customer has 0 tokens
     And the customers bank balance  is 2000
     And the merchant bank balance is 30000
 
@@ -34,7 +34,7 @@ Feature: Payment feature
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
     Then the merchant receives the error message "Unregistered Customer Payment Attempt"
-    And the customer owns 0 tokens
+    And the customer has 0 tokens
     And the merchant bank balance is 30000
 
   Scenario: Payment Unregistered Merchant Failure
@@ -42,5 +42,5 @@ Feature: Payment feature
     And a unregistered merchant
     When the merchant requests a payment for 200
     Then the merchant receives the error message "Unregistered Merchant Payment Attempt"
-    And the customer owns 0 tokens
+    And the customer has 0 tokens
     And the customers bank balance  is 2000

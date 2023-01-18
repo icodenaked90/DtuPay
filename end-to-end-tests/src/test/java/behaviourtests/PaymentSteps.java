@@ -92,12 +92,10 @@ public class PaymentSteps {
         merchantService.pay(arg0,cid,mid);
     }
 
-
-    @Then("the customer owns {int} tokens")
-    public void theCustomerOwnsTokens(int arg0) {
+    @Then("the customer has {int} tokens")
+    public void theCustomerHasTokens(int arg0) {
         assertEquals(arg0, ownedTokens.getTokens().size());
     }
-
 
     @And("the customers bank balance  is {int}")
     public void theCustomersBankBalanceIs(int arg0) {
@@ -184,6 +182,7 @@ public class PaymentSteps {
             }
         }
     }
+
 
 
 }
