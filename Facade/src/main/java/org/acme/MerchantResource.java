@@ -1,6 +1,7 @@
 /*
 @Author: Mila s223313
 @Author: Adin s164432
+@Author: Jonathan s194134
 ...
  */
 
@@ -29,10 +30,15 @@ public class MerchantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response makePayment(PaymentLogEntry payment) {
-        NewPayment fullPayment = new NewPayment(payment.getToken(), payment.getMid(), payment.getAmount());
-        dtuPay.pay()
-        return Response.ok(payment).build();
 
+        // Convert to correct type and send payment
+        NewPayment fullPayment = new NewPayment(payment.getToken(), payment.getMid(), payment.getAmount());
+        NewPayment completePayment =  dtuPay.pay(fullPayment);
+
+        // Success scenario
+        if (completePayment.isPaymentSuccesful()) return Response.ok(payment).build();
+        // Failure scenario
+        return Response.status(404).entity(completePayment.getErrorMessage()).build();
     }
 
 
