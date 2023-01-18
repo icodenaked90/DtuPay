@@ -42,10 +42,10 @@ public class AccountIdService {
 
         //error checking
         if(a.getName().length() <= 0){
-            return "Navn har forkert format";
+            return "Name has a wrong format";
         }
         if(!a.getCPR().matches("^[0-9]*$")|| a.getCPR().length() != 10){
-            return "CRP nummer har forkert format";
+            return "CRP number has a wrong format";
         }
 
         String id = generateId();

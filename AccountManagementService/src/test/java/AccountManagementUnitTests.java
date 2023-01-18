@@ -23,7 +23,7 @@ public class AccountManagementUnitTests {
         wrongAccountInfo.setBankAccount("1234567890");
         String accountId = service.register(wrongAccountInfo);
 
-        assertEquals(accountId, "CRP nummer har forkert format");
+        assertEquals(accountId, "CRP number has a wrong format");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class AccountManagementUnitTests {
         wrongAccountInfo.setBankAccount("1234567890");
         String accountId = service.register(wrongAccountInfo);
 
-        assertEquals(accountId, "CRP nummer har forkert format");
+        assertEquals(accountId, "CRP number has a wrong format");
     }
     @Test
     public void checkCorrectCprNumber(){
@@ -64,6 +64,6 @@ public class AccountManagementUnitTests {
         wrongAccountInfo.setBankAccount("1234567890");
         String accountId = service.register(wrongAccountInfo);
 
-        assertEquals(accountId, "Navn har forkert format");
+        assertEquals(accountId, "Name has a wrong format");
     }
 }
