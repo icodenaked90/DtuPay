@@ -46,7 +46,8 @@ public class PaymentSteps {
     public void theRegisteredCustomerWithTokensWithBalance(int arg0, int arg1) {
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
-        bankCustomer.setCprNumber("121212-4444");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(arg1));
         } catch (BankServiceException_Exception e) {
@@ -54,7 +55,7 @@ public class PaymentSteps {
         }
 
         // Create registered customer on DTU Pay
-        customer = new Account("Abel Shawn", "121212-4444", cAccount);
+        customer = new Account("Abel Shawn", cpr, cAccount);
         cid = customerService.register(customer);
         assertNotEquals("fail", cid);
 
@@ -73,7 +74,8 @@ public class PaymentSteps {
     public void aRegisteredMerchantWithBalance(int arg0) {
         bankCustomer.setFirstName("Moobi");
         bankCustomer.setLastName("Lee");
-        bankCustomer.setCprNumber("030303-3333");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(arg0));
@@ -81,7 +83,7 @@ public class PaymentSteps {
             fail("Invalid bank account.");
         }
         // Create registered merchant on DTU Pay
-        merchant = new Account("Moobi Lee", "030303-3333", mAccount);
+        merchant = new Account("Moobi Lee", cpr, mAccount);
         mid = merchantService.register(merchant);
         assertNotEquals("fail", mid);
     }
@@ -126,7 +128,8 @@ public class PaymentSteps {
     public void theUnregisteredCustomerWithTokens(int arg0) {
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
-        bankCustomer.setCprNumber("121212-4444");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
@@ -134,7 +137,7 @@ public class PaymentSteps {
         }
 
         // Create registered customer on DTU Pay
-        customer = new Account("Abel Shawn", "121212-4444", cAccount);
+        customer = new Account("Abel Shawn", cpr, cAccount);
         cid ="faker";
 
         // Get initial tokens
@@ -151,7 +154,8 @@ public class PaymentSteps {
     public void aUnregisteredMerchant() {
         bankCustomer.setFirstName("Moobi");
         bankCustomer.setLastName("Lee");
-        bankCustomer.setCprNumber("030303-3333");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(30000));
@@ -159,7 +163,7 @@ public class PaymentSteps {
             fail("Invalid bank account.");
         }
         // Create registered merchant on DTU Pay
-        merchant = new Account("Moobi Lee", "030303-3333", mAccount);
+        merchant = new Account("Moobi Lee", cpr, mAccount);
         mid = "faker";
     }
     @After()

@@ -30,13 +30,14 @@ public class MerchantReportSteps {
     public void aSuccessfullyRegisteredReportCustomer() {
         bankCustomer.setFirstName("Decent");
         bankCustomer.setLastName("Merchant");
-        bankCustomer.setCprNumber("010170-1976");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         try {
             mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid customer bank account.");
         }
-        merchant = new Account("Good Customer", "010170-1986", mAccount);
+        merchant = new Account("Good Customer", cpr, mAccount);
         mid = merchantApp.register(merchant);
     }
 

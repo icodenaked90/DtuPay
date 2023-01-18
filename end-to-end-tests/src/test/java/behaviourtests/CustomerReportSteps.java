@@ -34,13 +34,14 @@ public class CustomerReportSteps {
     public void aSuccessfullyRegisteredReportCustomer() {
         bankCustomer.setFirstName("Decent");
         bankCustomer.setLastName("Customer");
-        bankCustomer.setCprNumber("010170-1976");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid customer bank account.");
         }
-        customer = new Account("Good Customer", "010170-1986", cAccount);
+        customer = new Account("Good Customer", cpr, cAccount);
         cid = customerApp.register(customer);
     }
 
