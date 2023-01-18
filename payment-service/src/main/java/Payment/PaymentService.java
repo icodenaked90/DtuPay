@@ -19,8 +19,8 @@ public class PaymentService {
 	// Incoming streams for directed this microservice domain
 	private static final String PAYMENT_REQUESTED = "PaymentRequested";
 	private static final String PAYMENT_COMPLETED = "PaymentCompleted";
-	public static final String PAYMENT_LOGS_REQUESTED = "PaymentLogsRequested";
-	public static final String PAYMENT_LOGS_COMPLETED = "PaymentLogsRecieved";
+	public static final String PAYMENT_LOGS_REQUESTED = "FullLogRequested";
+	public static final String PAYMENT_LOGS_COMPLETED = "FullLogGenerated";
 
 	// For communicating with the Token Service
 	private static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
