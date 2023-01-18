@@ -6,6 +6,8 @@
 
 package org.acme;
 
+import org.acme.models.NewPayment;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,9 +29,8 @@ public class MerchantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response makePayment(PaymentLogEntry payment) {
-
-            int todo=2;//TODO:
-            // Everything went well
+        NewPayment fullPayment = new NewPayment(payment.getToken(), payment.getMid(), payment.getAmount());
+        dtuPay.pay()
         return Response.ok(payment).build();
 
     }
