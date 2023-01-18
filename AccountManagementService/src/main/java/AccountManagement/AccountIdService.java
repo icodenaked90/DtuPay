@@ -45,6 +45,9 @@ public class AccountIdService {
             return "Name has a wrong format";
         }
         if(!a.getCPR().matches("^[0-9]*$")|| a.getCPR().length() != 10){
+            if(!a.getCPR().matches("^-*$")|| a.getCPR().length() != 11){
+
+            }
             return "CRP number has a wrong format";
         }
 
