@@ -67,12 +67,10 @@ public class MerchantAppService {
     }
 
     // TODO pay
-    /*
     public ResponseStatus pay(int amount, String cid, String mid) {
         //Accept the payment and send the token to the merchatn
         return new ResponseStatus(true, "hej");
     }
-    */
 
     /*
     public PaymentLogEntry[] getLog(String mediaType) {
