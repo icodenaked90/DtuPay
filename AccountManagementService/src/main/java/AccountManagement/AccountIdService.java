@@ -2,20 +2,14 @@
 @Author: Adin s164432
 @Author: Jonathan s194134
 @Author: Mila s223313
-...
+@Author Hildibjørg s164539
  */
-
 package AccountManagement;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-
 import messaging.Event;
 import messaging.MessageQueue;
 import java.util.UUID;
-// @Author: Adin (s164432)
 public class AccountIdService {
 
     public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
@@ -77,5 +71,10 @@ public class AccountIdService {
         }
         Event event = new Event(ACCOUNT_DEREGISTRATION_COMPLETED, new Object[] { errorMessage, correlationid });
         queue.publish(event);
+    }
+
+    // being used in tests to check if account is created
+    public HashMap<String, String> getUserAccounts(){
+        return userAccounts;
     }
 }
