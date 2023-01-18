@@ -6,3 +6,8 @@ Feature: Account Registration Feature
     Given there is an account with an empty id
     When a "AccountRegistrationRequested" for generating account is received
     And the account is registered
+
+  Scenario: Scenario Account Deregistration Success
+    Given there is an preexisting account with an id
+    When a "AccountDeregistrationRequested" for deleting an account is received
+    And the account is deregistered
