@@ -7,24 +7,19 @@
 package behaviourtests;
 
 import TokenManagement.*;
-import io.cucumber.core.gherkin.messages.internal.gherkin.TokenFormatter;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import jakarta.validation.constraints.AssertTrue;
 import messaging.Event;
 import messaging.MessageQueue;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.function.Consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -46,10 +41,7 @@ public class TokenServiceSteps {
     ArrayList<Token> preOwned = new ArrayList<>();
 
 
-    @Before
-    public void StartUp(){
-        CleanUp();
-    }
+
 
 
     @Given("a customer")
@@ -84,7 +76,6 @@ public class TokenServiceSteps {
             }
             /*
             var event = new Event(eventName, new Object[]{expectedgen, correlationId});
-
             verify(queue).publish(event);
             */
 
@@ -125,11 +116,6 @@ public class TokenServiceSteps {
     }
 
 
-    @After
-    public void CleanUp(){
-        ts.removeAccountFromTokenList(cid);
-        preOwned = new ArrayList<>();
-        response = "";
-    }
+
 
 }
