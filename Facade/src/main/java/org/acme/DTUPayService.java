@@ -20,13 +20,17 @@ public class DTUPayService {
     public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
     public static final String ACCOUNT_DEREGISTRATION_REQUESTED = "AccountDeregistrationRequested";
     public static final String ACCOUNT_DEREGISTRATION_COMPLETED = "AccountDeregistrationCompleted";
+    public static final String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";
+    public static final String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
     private MessageQueue queue;
     private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<ArrayList<Token>>> Tcorrelations = new ConcurrentHashMap<>();
 
     public DTUPayService(MessageQueue q) {
         queue = q;
         queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIDAssigned);
         queue.addHandler(ACCOUNT_DEREGISTRATION_COMPLETED, this::handleAccountDeregistrationCompleted);
+        queue.addHandler(TOKEN_GENERATION_COMPLETED, this::handleTokensGenerated);
     }
 
     public String register(Account a) {
@@ -55,5 +59,18 @@ public class DTUPayService {
         var errorMessage = e.getArgument(0, String.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(errorMessage);
+    }
+    public String generateTokens(TokenRequestCommand request) {
+        var correlationId = CorrelationId.randomId();
+        Tcorrelations.put(correlationId, new CompletableFuture<>());
+        Event event = new Event(TOKEN_GENERATION_REQUESTED, new Object[]{request, correlationId});
+        queue.publish(event);
+        return Tcorrelations.get(correlationId).join();
+    }
+
+    public void handleTokensGenerated(Event e) {
+        var list = e.getArgument(0, TokenList.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        Tcorrelations.get(correlationid).complete(list);
     }
 }
