@@ -1,7 +1,7 @@
 /*
 @Author: Mila s223313
 @Author: Adin s164432
-...
+@Author: Hildibjørg s164539
  */
 
 package org.acme;
@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
-import static org.eclipse.persistence.config.ResultType.Array;
 
 @Path("/customer")
 public class CustomerResource {
@@ -43,10 +42,24 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAccount(Account account) {
+
         //TODO: Delete the account using service
-        String id = dtuPay.register(account); //= dtuPay.register(account);
-        // Everything went well
-        return Response.ok(id).build(); //TODO: Send correct message
+
+        //the response can either be an error message or
+        //an id for the registered account
+        String response = dtuPay.register(account);
+
+        //check name
+        if (response.equals("Name has a wrong format")) {
+            return Response.status(400).entity(response).build();
+        }
+        //check cpr
+        else if (response.equals("CPR number has a wrong format")){
+            return Response.status(400).entity(response).build();
+        }
+        //everything went well
+        else {return Response.ok(response).build(); //TODO: Send correct message
+        }
     }
 
     @DELETE

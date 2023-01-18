@@ -2,12 +2,10 @@
 @Author: Mila s223313
 @Author: Adin s164432
 @Author: Jonathan s194134
-...
+@Author: Hildibjørg s164539
  */
 
 package org.acme;
-
-import org.acme.models.NewPayment;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -31,14 +29,10 @@ public class MerchantResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response makePayment(PaymentLogEntry payment) {
 
-        // Convert to correct type and send payment
-        NewPayment fullPayment = new NewPayment(payment.getToken(), payment.getMid(), payment.getAmount());
-        NewPayment completePayment =  dtuPay.pay(fullPayment);
+            int todo=2;//TODO:
+            // Everything went well
+        return Response.ok(payment).build();
 
-        // Success scenario
-        if (completePayment.isPaymentSuccesful()) return Response.ok(payment).build();
-        // Failure scenario
-        return Response.status(404).entity(completePayment.getErrorMessage()).build();
     }
 
 
