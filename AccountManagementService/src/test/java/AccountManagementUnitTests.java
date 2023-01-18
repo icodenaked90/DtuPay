@@ -54,6 +54,34 @@ public class AccountManagementUnitTests {
         assertNotNull(accountId);
     }
     @Test
+    public void checkWrongCprNumber2(){
+
+        MessageQueue queue = mock(MessageQueue.class);
+        AccountIdService service = new AccountIdService(queue);
+
+        Account correctAccountInfo = new Account();
+        correctAccountInfo.setCPR("012345-67891");
+        correctAccountInfo.setName("Peter Mikkelsen");
+        correctAccountInfo.setBankAccount("1234567890");
+        String accountId = service.register(correctAccountInfo);
+
+        assertEquals(accountId, "CRP number has a wrong format");
+    }
+    @Test
+    public void checkCorrectCprNumber2(){
+
+        MessageQueue queue = mock(MessageQueue.class);
+        AccountIdService service = new AccountIdService(queue);
+
+        Account correctAccountInfo = new Account();
+        correctAccountInfo.setCPR("012345-6789");
+        correctAccountInfo.setName("Peter Mikkelsen");
+        correctAccountInfo.setBankAccount("1234567890");
+        String accountId = service.register(correctAccountInfo);
+
+        assertNotNull(accountId);
+    }
+    @Test
     public void checkForEmptyName(){
         MessageQueue queue = mock(MessageQueue.class);
         AccountIdService service = new AccountIdService(queue);
