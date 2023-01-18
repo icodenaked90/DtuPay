@@ -41,7 +41,7 @@ public class CustomerTokenSteps {
         // Create valid bank account
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
-        bankCustomer.setCprNumber("121212-4444");
+        bankCustomer.setCprNumber("121212-4412");
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
@@ -49,7 +49,7 @@ public class CustomerTokenSteps {
         }
 
         // Create registered customer on DTU Pay
-        customer = new Account("Abel Shawn", "121212-4444", cAccount);
+        customer = new Account("Abel Shawn", "121212-4412", cAccount);
         cid = customerService.register(customer);
         assertNotEquals("fail", cid);
 
