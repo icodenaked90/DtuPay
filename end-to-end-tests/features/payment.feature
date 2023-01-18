@@ -3,12 +3,12 @@
 Feature: Payment feature
 
   Scenario: Payment Success
-  	Given the registered customer in DTUPay
-    And the registered merchant in DTUPay
+  	Given the registered customer with 1 tokens
+    And a registered merchant
     When the merchant requests a payment
     And the customer bank account gets validated
     And the merchant bank account gets validated
-    Then the customer's token gets accepted and consumed
+    Then the customer owns 0 tokens
     And the customer pays the amount
     And the merchant receives the amount
 
