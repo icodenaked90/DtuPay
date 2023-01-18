@@ -2,8 +2,7 @@ package ReportManagement.model;
 import lombok.Data;
 
 @Data
-public class CustomerReport {
+public class ManagerReport {
     Integer amount;
-    String token;
-    String mid;
+    String  token;
 }
