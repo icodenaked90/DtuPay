@@ -31,14 +31,14 @@ public class CustomerRegistrationSteps {
     public void anUnregisteredCustomer() {
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
-        bankCustomer.setCprNumber("121212-4444");
+        bankCustomer.setCprNumber("121212-4544");
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid bank account.");
         }
-        customer = new Account("Abel Shawn", "121212-4444", cAccount);
+        customer = new Account("Abel Shawn", "121212-4544", cAccount);
     }
 
     @Given("a registered customer")
@@ -46,7 +46,7 @@ public class CustomerRegistrationSteps {
         // Customer has valid bank account
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
-        bankCustomer.setCprNumber("121212-4444");
+        bankCustomer.setCprNumber("121212-4544");
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
@@ -54,7 +54,7 @@ public class CustomerRegistrationSteps {
             fail("Invalid bank account.");
         }
         // Create registered customer on DTU Pay
-        customer = new Account("Abel Shawn", "121212-4444", cAccount);
+        customer = new Account("Abel Shawn", "121212-4544", cAccount);
         cid = customerService.register(customer);
         assertNotEquals("fail", cid);
     }
