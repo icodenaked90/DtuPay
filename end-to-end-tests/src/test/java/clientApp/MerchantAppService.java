@@ -16,6 +16,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 public class MerchantAppService {
     WebTarget baseUrl;
@@ -66,7 +67,7 @@ public class MerchantAppService {
     }
 
 
-    public String pay(String token, String merchantId, int amount) {
+    public ResponseStatus pay(String token, String merchantId, int amount) {
         //Create payment object to package the payment info
         NewPayment completedPayment;
         NewPayment payment = new NewPayment(token, merchantId, amount);
@@ -98,13 +99,13 @@ public class MerchantAppService {
                 .accept(mediaType)
                 .get(PaymentLogEntry[].class);
     }
-     */
+      */
 
 
     public ResponseStatus getReports(String mid) {
         var response = baseUrl.path("merchant/reports")
                 .request()
-                .post(Entity.entity(mid, mediaType));
+                .post(Entity.entity(mid, MediaType.TEXT_PLAIN_TYPE));
 
         if (response.getStatus() == 200) {
             return new ResponseStatus(true, response.readEntity(String.class));
