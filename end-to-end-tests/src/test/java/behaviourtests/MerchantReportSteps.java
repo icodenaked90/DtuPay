@@ -1,11 +1,6 @@
-/*
-@Author: Mila (s223313)
-@Author: Adin (s164432)
-@Author: Emily s223122
- */
-
 package behaviourtests;
-import clientApp.CustomerAppService;
+
+import clientApp.MerchantAppService;
 import clientApp.models.Account;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
@@ -17,60 +12,62 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.math.BigDecimal;
+
 import static org.junit.Assert.*;
 
+public class MerchantReportSteps {
 
-public class CustomerReportSteps {
-    private Account customer;
+    private Account merchant;
     private User bankCustomer = new User();
     private String report = "";
-    private String cAccount;
+    private String mAccount;
     private String response = "";
-    private CustomerAppService customerApp= new CustomerAppService();
+    private MerchantAppService merchantApp= new MerchantAppService();
     BankService bank = new BankServiceService().getBankServicePort();
-    private String cid = "";
+    private String mid = "";
 
-    @Given("a successfully registered report customer")
+    @Given("a successfully registered report merchant")
     public void aSuccessfullyRegisteredReportCustomer() {
         bankCustomer.setFirstName("Decent");
-        bankCustomer.setLastName("Customer");
+        bankCustomer.setLastName("Merchant");
         bankCustomer.setCprNumber("010170-1976");
         try {
-            cAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
+            mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(2000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid customer bank account.");
         }
-        customer = new Account("Good Customer", "010170-1986", cAccount);
-        cid = customerApp.register(customer);
+        merchant = new Account("Good Customer", "010170-1986", mAccount);
+        mid = merchantApp.register(merchant);
     }
 
-    @When("customer request their report")
-    public void customerRequestTheirReport() {
-        response = customerApp.getReport(cid);
+    @When("merchant request their report")
+    public void merchantRequestTheirReport() {
+        response = merchantApp.getReports(mid);
         report = response;
     }
 
-    @Then("the report is received")
-    public void theReportIsReceived() {
+    @Then("the merchant report is received")
+    public void theMerchantReportIsReceived() {
         assertNotEquals("fail", report);
     }
 
-    @Given("an unregistered report customer")
-    public void anUnregisteredReportCustomer() {
-        cid = "randomId";
+    @Given("an unregistered report merchant")
+    public void anUnregisteredReportMerchant() {
+        mid = "randomId";
     }
 
-    @Then("the customer receives an empty report")
-    public void theCustomerReceivesAnEmptyReport() {
+    @Then("the merchant receives an empty report")
+    public void theMerchantReceivesAnEmptyReport() {
         assertEquals("", response);
     }
+
     @After()
     public void Cleanup()
     {
-        if (cAccount != null) {
+        if (mAccount != null) {
             try {
-                bank.retireAccount(cAccount);
-                cAccount = null;
+                bank.retireAccount(mAccount);
+                mAccount = null;
             } catch (BankServiceException_Exception e) {
                 fail("Failed cleanup.");
             }

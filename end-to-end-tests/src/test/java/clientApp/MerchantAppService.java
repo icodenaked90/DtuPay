@@ -66,7 +66,7 @@ public class MerchantAppService {
     }
 
 
-    public ResponseStatus pay(String token, String merchantId, int amount) {
+    public String pay(String token, String merchantId, int amount) {
         //Create payment object to package the payment info
         NewPayment completedPayment;
         NewPayment payment = new NewPayment(token, merchantId, amount);
@@ -100,11 +100,11 @@ public class MerchantAppService {
     }
      */
 
-    /*
-    public ResponseStatus getReports(PaymentLogEntry payment, String mediaType) {
+
+    public ResponseStatus getReports(String mid) {
         var response = baseUrl.path("merchant/reports")
                 .request()
-                .post(Entity.entity(payment, mediaType));
+                .post(Entity.entity(mid, mediaType));
 
         if (response.getStatus() == 200) {
             return new ResponseStatus(true, response.readEntity(String.class));
@@ -112,6 +112,6 @@ public class MerchantAppService {
 
         return new ResponseStatus(false, response.readEntity(String.class));
     }
-*/
+
 
 }

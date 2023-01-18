@@ -5,7 +5,7 @@
 
 Feature: Customer Report feature
 
-  Scenario: Customer Report Request Empty
+  Scenario: Customer Report Request
     Given a successfully registered report customer
     When customer request their report
     Then the report is received
@@ -13,4 +13,4 @@ Feature: Customer Report feature
   Scenario: Customer Report Request empty
     Given an unregistered report customer
     When customer request their report
-    Then the report is received
+    Then the customer receives an empty report
