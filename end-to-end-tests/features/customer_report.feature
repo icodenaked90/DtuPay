@@ -14,4 +14,3 @@ Feature: Customer Report feature
     Given an unregistered report customer
     When customer request their report
     Then the report is received
-    

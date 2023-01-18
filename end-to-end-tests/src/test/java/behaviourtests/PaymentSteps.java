@@ -89,7 +89,7 @@ public class PaymentSteps {
     @When("the merchant requests a payment for {int}")
     public void theMerchantRequestsAPaymentFor(int arg0) {
         //TODO: update errormessage
-        merchantService.pay(arg0,cid,mid);
+        merchantService.pay(ownedTokens.getTokens().get(0).getId(),mid,arg0);
     }
 
     @Then("the customer has {int} tokens")
