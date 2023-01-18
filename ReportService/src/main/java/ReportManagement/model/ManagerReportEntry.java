@@ -2,9 +2,7 @@ package ReportManagement.model;
 import lombok.Data;
 
 @Data
-public class MerchantReportEntry {
+public class ManagerReportEntry {
     Integer amount;
     String token;
-    String mid;
-    String cid;
 }

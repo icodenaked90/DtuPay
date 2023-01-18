@@ -1,4 +1,4 @@
-package ReportManagement.model;
+package clientApp.models;
 import lombok.Data;
 
 @Data
