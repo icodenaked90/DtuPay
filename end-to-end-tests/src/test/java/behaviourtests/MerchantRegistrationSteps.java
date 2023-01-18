@@ -32,14 +32,15 @@ public class MerchantRegistrationSteps {
     public void anUnregisteredMerchant() {
         bankCustomer.setFirstName("Moobi");
         bankCustomer.setLastName("Lee");
-        bankCustomer.setCprNumber("030303-3412");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(30000));
         } catch (BankServiceException_Exception e) {
             fail("Invalid bank account.");
         }
-        merchant = new Account("Moobi Lee", "030303-3412", mAccount);
+        merchant = new Account("Moobi Lee", cpr, mAccount);
     }
 
     @Given("a registered merchant")
@@ -47,7 +48,8 @@ public class MerchantRegistrationSteps {
         // Merchant has valid bank account
         bankCustomer.setFirstName("Moobi");
         bankCustomer.setLastName("Lee");
-        bankCustomer.setCprNumber("030303-3433");
+        String cpr = CprGenerator.generate();
+        bankCustomer.setCprNumber(cpr);
         System.out.println("BANK CUSTOMER:"+bankCustomer.toString());
         try {
             mAccount = bank.createAccountWithBalance(bankCustomer, BigDecimal.valueOf(30000));
@@ -55,7 +57,7 @@ public class MerchantRegistrationSteps {
             fail("Invalid bank account.");
         }
         // Create registered merchant on DTU Pay
-        merchant = new Account("Moobi Lee", "030303-3412", mAccount);
+        merchant = new Account("Moobi Lee", cpr, mAccount);
         mid = merchantService.register(merchant);
         assertNotEquals("fail", mid);
     }
