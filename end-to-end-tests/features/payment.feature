@@ -7,7 +7,7 @@ Feature: Payment feature
   	Given the registered customer with 1 tokens with 2000 balance
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
-    Then the customer owns 0 tokens
+    Then the customer has 0 tokens
     And the customers bank balance  is 1800
     And the merchant bank balance is 30200
 
@@ -16,7 +16,7 @@ Feature: Payment feature
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
     Then the customer receives the error message "Invalid Token Payment Attempt"
-    And the customer owns 0 tokens
+    And the customer has 0 tokens
     And the customers bank balance  is 2000
     And the merchant bank balance is 30000
 
