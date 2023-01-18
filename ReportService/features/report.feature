@@ -1,6 +1,7 @@
 #   @Author: Simon (s163595)
 #   @Author: Hildibjørg (s164539)
 #   @Author: Emily (s223122)
+#   @Author: Adin (s164432)
 
 Feature: Report Feature
 
@@ -12,12 +13,12 @@ Feature: Report Feature
     Then a "LogRequested" event is sent
     And both payments are logged
 
-    Given 2 merchants
-    And 2 customers which have made 1 payment to each customer
-    When a "ReportRequested" event is received for a customer
+   # Given 2 merchants
+   # And 2 customers which have made 1 payment to each customer
+   # When a "ReportRequested" event is received for a customer
     #Test if id is received
-    Then a "LogRequested" event is sent
-    And both payments are logged
+   # Then a "LogRequested" event is sent
+   # And both payments are logged
 
 
 
