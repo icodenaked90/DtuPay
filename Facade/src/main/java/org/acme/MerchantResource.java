@@ -29,11 +29,9 @@ public class MerchantResource {
     @Path("/payment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response makePayment(PaymentLogEntry payment) {
+    public Response makePayment(NewPayment payment) {
 
-        // Convert to correct type and send payment
-        NewPayment fullPayment = new NewPayment(payment.getToken(), payment.getMid(), payment.getAmount());
-        NewPayment completePayment =  dtuPay.pay(fullPayment);
+        NewPayment completePayment =  dtuPay.pay(payment);
 
         // Success scenario
         if (completePayment.isPaymentSuccesful()) return Response.ok(payment).build();
