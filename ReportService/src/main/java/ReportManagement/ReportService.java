@@ -12,50 +12,82 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ReportManagement.model.Account;
+import ReportManagement.model.AccountType;
 import ReportManagement.model.CustomerReport;
+import ReportManagement.model.ManagerReport;
+import ReportManagement.model.MerchantReport;
 import messaging.Event;
 import messaging.MessageQueue;
 
 public class ReportService {
 
-    public static final String REPORT_REQUESTED = "ReportRequested";
-    public static final String REPORT_GENERATED = "ReportGenerated";
-    public static final String LOG_REQUESTED = "LogRequested";
-    public static final String REPORT_FINAL = "ReportFinal";
+    public static final String FULL_LOG_REQUESTED = "FullLogRequested";
+    public static final String FULL_LOG_GENERATED = "FullLogGenerated";
+
+    public static final String CUSTOMER_LOG_REQUESTED = "CustomerLogRequested";
+    public static final String MERCHANT_LOG_REQUESTED = "MerchantLogRequested";
+    public static final String MANAGER_LOG_REQUESTED = "ManagerLogRequested";
+
+    public static final String CUSTOMER_LOG_GENERATED = "CustomerLogGenerated";
+    public static final String MERCHANT_LOG_GENERATED = "MerchantLogGenerated";
+    public static final String MANAGER_LOG_GENERATED = "ManagerLogGenerated";
+
     public MessageQueue queue;
-    private HashMap<String, String> userAccounts = new HashMap<String, String>();
-    private Map<CorrelationId, CompletableFuture<Account>> correlations = new ConcurrentHashMap<>();
+    private HashMap<String, AccountType> idToTypeMap = new HashMap<String, AccountType>();
+    private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 
 
     public ReportService(MessageQueue q) {
         queue = q;
-        queue.addHandler(REPORT_REQUESTED, this::handleReportRequested);
-        queue.addHandler(REPORT_GENERATED, this::handleReportGenerated);
+        queue.addHandler(CUSTOMER_LOG_REQUESTED, this::handleCustomerLogRequested);
+        queue.addHandler(MERCHANT_LOG_REQUESTED, this::handleMerchantLogRequested);
+        queue.addHandler(MANAGER_LOG_REQUESTED, this::handleManagerLogRequested);
+        queue.addHandler(FULL_LOG_GENERATED, this::handleFullLogGenerated);
     }
 
-    public void handleReportGenerated(Event e) {
-        //modtager array af payments ud fra det ID som blev sendt
-        //if report is not null
-        if (e.getArgument(0, CustomerReport.class) != null) {
-            // Får Report fra Payment og sender tilbage til facaden
-            var report = e.getArgument(0, CustomerReport.class);
-            var correlationid = e.getArgument(1, CorrelationId.class);
-
-            Event event = new Event(REPORT_FINAL, new Object[]{report, correlationid});
-            queue.publish(event);
-        }
-        // Error message here
-
+    public void handleCustomerLogRequested(Event e) {
+        String cid = e.getArgument(0, String.class);
+        CorrelationId corId = e.getArgument(0, CorrelationId.class);
+        idToTypeMap.put(cid, AccountType.CUSTOMER);
+        Event event = new Event(FULL_LOG_REQUESTED, new Object[]{cid, corId});
+        queue.publish(event);
     }
 
-    public void handleReportRequested(Event e) {
-        // får ID fra facade og sender ID til Payment
-        var id = e.getArgument(0, String.class);
-        var correlationid = e.getArgument(1, CorrelationId.class);
-        if (id != null) {
-            Event event = new Event(LOG_REQUESTED, new Object[]{id, correlationid});
+    public void handleMerchantLogRequested(Event e) {
+        String mid = e.getArgument(0, String.class);
+        CorrelationId corId = e.getArgument(1, CorrelationId.class);
+        idToTypeMap.put(mid, AccountType.MERCHANT);
+        Event event = new Event(FULL_LOG_REQUESTED, new Object[]{mid, corId});
+        queue.publish(event);
+    }
+
+    public void handleManagerLogRequested(Event e) {
+        String maid = e.getArgument(0, String.class);
+        CorrelationId corId = e.getArgument(1, CorrelationId.class);
+        idToTypeMap.put(maid, AccountType.MANAGER);
+        Event event = new Event(FULL_LOG_REQUESTED, new Object[]{maid, corId});
+        queue.publish(event);
+    }
+
+    public void handleFullLogGenerated(Event e) {
+        String id = e.getArgument(0, String.class);
+        CorrelationId corId = e.getArgument(1, CorrelationId.class);
+        AccountType type = idToTypeMap.get(id);
+
+        if (type == AccountType.CUSTOMER){
+            CustomerReport report = null;
+            Event event = new Event(CUSTOMER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }
-        //Error message
+        if (type == AccountType.MERCHANT){
+            MerchantReport report = null;
+            Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
+            queue.publish(event);
+        }
+        if (type == AccountType.MANAGER){
+            ManagerReport report = null;
+            Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
+            queue.publish(event);
+        }
     }
 }
