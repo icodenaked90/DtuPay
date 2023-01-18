@@ -1,8 +1,12 @@
 package clientApp.models;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@XmlRootElement
 @Data
+@NoArgsConstructor
 public class NewPayment {
 //    Payment information
     String customerToken;
