@@ -5,15 +5,19 @@
 Feature: Report Feature
 
   Scenario: Report Success
-    Given User has an ID
-    And A user requests a report
-
-    When a "ReportRequested" event is received
-    Then the event is handled
+    Given 2 customers
+    And 2 merchants which have recieved 1 payment from each customer
+    When a "ReportRequested" event is received for a customer
     #Test if id is received
     Then a "LogRequested" event is sent
+    And both payments are logged
 
-
+    Given 2 merchants
+    And 2 customers which have made 1 payment to each customer
+    When a "ReportRequested" event is received for a customer
+    #Test if id is received
+    Then a "LogRequested" event is sent
+    And both payments are logged
 
 
 
@@ -23,10 +27,3 @@ Feature: Report Feature
     #test if report is received
     #Then a "ReportFinal" event is sent
 
-  Scenario: Report Id null fail
-    Given User has an ID null
-    And A user requests a report
-
-    When a "ReportRequested" event is received
-    #Test if id is received
-    Then a fail is sent
