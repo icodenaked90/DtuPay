@@ -34,7 +34,7 @@ public class MerchantResource {
         NewPayment completePayment =  dtuPay.pay(payment);
 
         // Success scenario
-        if (completePayment.isPaymentSuccesful()) return Response.ok(payment).build();
+        if (completePayment.isPaymentSuccesful()) return Response.ok(completePayment).build();
         // Failure scenario
         return Response.status(404).entity(completePayment.getErrorMessage()).build();
     }
