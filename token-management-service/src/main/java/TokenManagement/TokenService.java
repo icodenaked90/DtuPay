@@ -29,11 +29,7 @@ SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = true
 SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = false
 */
 // @Author: Adin (s164432)
-public class TokenService {
-    public static final String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";
-    public static final String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
-    public static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
-    public static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
+public class TokenService implements ITokenService{
     // Map from Token to AccountId
     //private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
     // Map from account id to unused tokens
@@ -114,19 +110,6 @@ public class TokenService {
     /// TESTING ///
 
 
-/*
-    public void handleTokenGenerationFailed(Event e) {
-        var errorMessage = e.getArgument(0, String.class);
-        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
-        tokenGenerationCorrelation.get(eventCorrelationId).complete(null);
-    }
-
-    public void handleTokenGenerationSucceeded(Event e) {
-        var newTokens = e.getArgument(0, ArrayList.class);
-        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
-        tokenGenerationCorrelation.get(eventCorrelationId).complete(null);
-    }
-    */
 
 
     public int unusedAmount(String cid){
