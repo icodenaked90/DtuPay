@@ -1,7 +1,6 @@
 package TestStubs;
 
-import Payment.CorrelationId;
-import Payment.Token;
+import Payment.models.CorrelationId;
 import messaging.Event;
 import messaging.MessageQueue;
 

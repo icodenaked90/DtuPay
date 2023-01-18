@@ -5,14 +5,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import Payment.PaymentService;
-import Payment.Token;
+import Payment.models.Token;
 import TestStubs.StubAccountService;
 import dtu.ws.fastmoney.BankService;
-import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
-import Payment.CorrelationId;
-import Payment.NewPayment;
+import Payment.models.CorrelationId;
+import Payment.models.NewPayment;
 
 import TestStubs.StubTokenService;
 
@@ -21,8 +20,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import messaging.implementations.RabbitMqQueue;
-
-import java.util.concurrent.CompletableFuture;
 
 public class PaymentServiceSteps {
     // @Author: Jonathan (S194134)
@@ -57,7 +54,7 @@ public class PaymentServiceSteps {
     @Given("starting a payment from {string} to {string} for {int} kr")
     public void paymentFromToForKr(String arg0, String arg1, int arg2) {
         // Reset logs to easily find new payment in logs
-        paymentService.resetPaymentLogs();
+        paymentService.resetPaymentList();
 
         customerToken = arg0;
         merchantId = arg1;

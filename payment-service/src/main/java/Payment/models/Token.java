@@ -1,4 +1,4 @@
-package Payment;
+package Payment.models;
 
 import lombok.Data;
 

@@ -1,8 +1,8 @@
 package Payment;
 
+import Payment.models.*;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
-import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -32,7 +32,7 @@ public class PaymentService {
 	private Map<CorrelationId, CompletableFuture<String>> correlationsToken = new ConcurrentHashMap<>();
 	private Map<CorrelationId, CompletableFuture<String>> correlationsBank = new ConcurrentHashMap<>();
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
-	private Map<String, ArrayList<NewPayment>> customerPaymentsReport = new HashMap<>();
+	private TransactionLog transactionLog = new TransactionLog();
 	private BankService bank;
 	MessageQueue queue;
 
@@ -59,7 +59,6 @@ public class PaymentService {
 	}
 
 	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
-//		TODO: Establish payment at bank via library and complete transaction. Save status also
 
 		try {
 			bank.transferMoneyFromTo(customerBankId, merchantBankId, BigDecimal.valueOf(payment.getAmount()), "DTUPay");
@@ -128,13 +127,13 @@ public class PaymentService {
 
 		// 4. Add payment to log and reports
 		paymentList.add(completedPayment);
-		if (customerPaymentsReport.containsKey(customerAccountId)) {
-			customerPaymentsReport.get(customerAccountId).add(completedPayment);
-		} else {
-			ArrayList<NewPayment> tempList = new ArrayList<>();
-			tempList.add(completedPayment);
-			customerPaymentsReport.put(customerAccountId, tempList);
-		}
+
+		transactionLog.addToLog(new Transaction(
+				payment.getCustomerToken(),
+				customerAccountId,
+				payment.getMerchantId(),
+				payment.getAmount()
+		));
 
 		// 5. Return completed payment and info
 		Event event = new Event(PAYMENT_COMPLETED, new Object[] { completedPayment, correlationId });
@@ -145,8 +144,7 @@ public class PaymentService {
 		String accountId = ev.getArgument(0, String.class);
 		var correlationId = ev.getArgument(1, CorrelationId.class);
 
-		Event event = new Event(PAYMENT_LOGS_COMPLETED, new Object[] {
-				customerPaymentsReport.get(accountId), correlationId });
+		Event event = new Event(PAYMENT_LOGS_COMPLETED, new Object[] {transactionLog, correlationId });
 		queue.publish(event);
 	}
 
@@ -156,7 +154,7 @@ public class PaymentService {
 		return paymentList;
 	}
 	// Used for testing
-	 public void resetPaymentLogs() {
+	 public void resetPaymentList() {
 		paymentList.clear();
 	 }
 
