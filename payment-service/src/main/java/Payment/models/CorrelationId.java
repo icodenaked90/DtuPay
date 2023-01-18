@@ -5,7 +5,7 @@ Created by Hubert Baumeister.
 Accessed on 2023-01-11
  */
 
-package Payment;
+package Payment.models;
 
 import java.util.UUID;
 import lombok.Value;
