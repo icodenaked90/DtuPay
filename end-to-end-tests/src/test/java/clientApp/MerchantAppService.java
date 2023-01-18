@@ -8,7 +8,7 @@
 package clientApp;
 
 import clientApp.models.Account;
-import clientApp.models.PaymentLogEntry;
+import clientApp.models.NewPayment;
 import clientApp.models.ResponseStatus;
 
 import jakarta.ws.rs.client.Client;
@@ -16,7 +16,6 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 
 public class MerchantAppService {
     WebTarget baseUrl;
@@ -66,11 +65,30 @@ public class MerchantAppService {
         }
     }
 
-    // TODO pay
-    public ResponseStatus pay(int amount, String cid, String mid) {
-        //Accept the payment and send the token to the merchatn
-        return new ResponseStatus(true, "hej");
+
+    public ResponseStatus pay(String token, String merchantId, int amount) {
+        //Create payment object to package the payment info
+        NewPayment completedPayment;
+        NewPayment payment = new NewPayment(token, merchantId, amount);
+
+        // Send request
+        var response = baseUrl.path("merchant/payment")
+                .request()
+                .post(Entity.entity(payment, MediaType.APPLICATION_JSON));
+
+        // Handle request
+        if (response.getStatus() == 200) {
+            completedPayment = response.readEntity(NewPayment.class);
+            if (completedPayment.isPaymentSuccesful()) {
+                // valid payment
+                return new ResponseStatus(true, "");
+            }
+            // Payment failed with a known common error
+            return new ResponseStatus(false, completedPayment.getErrorMessage());
+        }
+        return new ResponseStatus(false, "unknown error");
     }
+
 
     /*
     public PaymentLogEntry[] getLog(String mediaType) {
