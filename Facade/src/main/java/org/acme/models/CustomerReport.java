@@ -1,4 +1,5 @@
-package ReportManagement.model;
+package org.acme.models;
+
 import lombok.Data;
 
 import java.util.ArrayList;

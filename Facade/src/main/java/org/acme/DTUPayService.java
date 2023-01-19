@@ -22,6 +22,9 @@ public class DTUPayService implements IDTUPayService{
     private MessageQueue queue;
     private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
     private Map<CorrelationId, CompletableFuture<TokenRequestResponse>> Tcorrelations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<ManagerReportRequestResponse>> Rcorrelations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<CustomerReportRequestResponse>> Ccorrelations = new ConcurrentHashMap<>();
+    private Map<CorrelationId, CompletableFuture<MerchantReportRequestResponse>> Mcorrelations = new ConcurrentHashMap<>();
     private Map<CorrelationId, CompletableFuture<NewPayment>> Pcorrelations = new ConcurrentHashMap<>();
 
     public DTUPayService(MessageQueue q) {
@@ -30,6 +33,9 @@ public class DTUPayService implements IDTUPayService{
         queue.addHandler(ACCOUNT_DEREGISTRATION_COMPLETED, this::handleAccountDeregistrationCompleted);
         queue.addHandler(TOKEN_GENERATION_COMPLETED, this::handleTokensGenerated);
         queue.addHandler(PAYMENT_COMPLETED, this::handlePaymentCompleted);
+        queue.addHandler(MANAGER_LOG_GENERATED, this::handleManagerLogGenerated);
+        queue.addHandler(CUSTOMER_LOG_GENERATED, this::handleCustomerLogGenerated);
+        queue.addHandler(MERCHANT_LOG_GENERATED, this::handleMerchantLogGenerated);
     }
 
     public String register(Account a) {
@@ -58,6 +64,47 @@ public class DTUPayService implements IDTUPayService{
         var errorMessage = e.getArgument(0, String.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(errorMessage);
+    }
+
+    public ManagerReportRequestResponse getManagerReport(String id) {
+        var correlationId = CorrelationId.randomId();
+        Rcorrelations.put(correlationId, new CompletableFuture<>());
+        Event event = new Event(MANAGER_LOG_REQUESTED, new Object[]{id, correlationId});
+        queue.publish(event);
+        return Rcorrelations.get(correlationId).join();
+    }
+
+    public void handleManagerLogGenerated(Event e) {
+        var response = e.getArgument(0, ManagerReportRequestResponse.class); // Empty if no error = Success
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        Rcorrelations.get(correlationid).complete(response);
+    }
+
+    public CustomerReportRequestResponse getCustomerReport(String id) {
+        var correlationId = CorrelationId.randomId();
+        Ccorrelations.put(correlationId, new CompletableFuture<>());
+        Event event = new Event(CUSTOMER_LOG_REQUESTED, new Object[]{id, correlationId});
+        queue.publish(event);
+        return Ccorrelations.get(correlationId).join();
+    }
+
+    public void handleCustomerLogGenerated(Event e) {
+        var response = e.getArgument(0, CustomerReportRequestResponse.class); // Empty if no error = Success
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        Ccorrelations.get(correlationid).complete(response);
+    }
+    public MerchantReportRequestResponse getMerchantReport(String id) {
+        var correlationId = CorrelationId.randomId();
+        Mcorrelations.put(correlationId, new CompletableFuture<>());
+        Event event = new Event(MERCHANT_LOG_REQUESTED, new Object[]{id, correlationId});
+        queue.publish(event);
+        return Mcorrelations.get(correlationId).join();
+    }
+
+    public void handleMerchantLogGenerated(Event e) {
+        var response = e.getArgument(0, MerchantReportRequestResponse.class); // Empty if no error = Success
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        Mcorrelations.get(correlationid).complete(response);
     }
     public TokenRequestResponse generateTokens(TokenRequestCommand request) {
         var correlationId = CorrelationId.randomId();

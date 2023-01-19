@@ -11,26 +11,11 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ReportManagement.model.Account;
-import ReportManagement.model.AccountType;
-import ReportManagement.model.CustomerReport;
-import ReportManagement.model.ManagerReport;
-import ReportManagement.model.MerchantReport;
+import ReportManagement.model.*;
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class ReportService {
-
-    public static final String FULL_LOG_REQUESTED = "FullLogRequested";
-    public static final String FULL_LOG_GENERATED = "FullLogGenerated";
-
-    public static final String CUSTOMER_LOG_REQUESTED = "CustomerLogRequested";
-    public static final String MERCHANT_LOG_REQUESTED = "MerchantLogRequested";
-    public static final String MANAGER_LOG_REQUESTED = "ManagerLogRequested";
-
-    public static final String CUSTOMER_LOG_GENERATED = "CustomerLogGenerated";
-    public static final String MERCHANT_LOG_GENERATED = "MerchantLogGenerated";
-    public static final String MANAGER_LOG_GENERATED = "ManagerLogGenerated";
+public class ReportService implements IReportService{
 
     public MessageQueue queue;
     private HashMap<String, AccountType> idToTypeMap = new HashMap<String, AccountType>();
@@ -70,9 +55,9 @@ public class ReportService {
     }
 
     public void handleFullLogGenerated(Event e) {
-        String id = e.getArgument(0, String.class);
+        TransactionLog log = e.getArgument(0, TransactionLog.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
-        AccountType type = idToTypeMap.get(id);
+        AccountType type = idToTypeMap.get(log.getId());
 
         if (type == AccountType.CUSTOMER){
             CustomerReport report = null;
@@ -85,7 +70,12 @@ public class ReportService {
             queue.publish(event);
         }
         if (type == AccountType.MANAGER){
-            ManagerReport report = null;
+            ManagerReport report = new ManagerReport();
+            var log = new ManagerReportEntry();
+            log.setAmount(10);
+            log.setToken("aaaa");
+            log.setCid("cad");
+            log.setMid("gfd");
             Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }

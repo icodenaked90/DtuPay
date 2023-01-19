@@ -17,7 +17,6 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 
 public class MerchantAppService {
     WebTarget baseUrl;
@@ -69,7 +68,7 @@ public class MerchantAppService {
     }
 
 
-    public ResponseStatus pay(String token, String merchantId, int amount) {
+    public String pay(String token, String merchantId, int amount) {
         //Create payment object to package the payment info
         NewPayment completedPayment;
         NewPayment payment = new NewPayment(token, merchantId, amount);
@@ -81,20 +80,21 @@ public class MerchantAppService {
 
         // Handle request
         if (response.getStatus() == 200) {
-            // valid payment
-            return new ResponseStatus(true, "");
-        } else if (response.getStatus() == 400) {
-            // Failed response, read the error returned
-            String errorMessage = response.readEntity(String.class);
-            return new ResponseStatus(false, errorMessage);
+            completedPayment = response.readEntity(NewPayment.class);
+            if (completedPayment.isPaymentSuccesful()) {
+                // valid payment
+                return new ResponseStatus(true, "").toString();
+            }
+            // Payment failed with a known common error
+            return new ResponseStatus(false, completedPayment.getErrorMessage()).toString();
         }
-        return new ResponseStatus(false, "unknown error");
+        return new ResponseStatus(false, "unknown error").toString();
     }
 
     public ResponseStatus getReports(String mid) {
         var response = baseUrl.path("merchant/reports")
                 .request()
-                .post(Entity.entity(mid, MediaType.TEXT_PLAIN_TYPE));
+                .post(Entity.entity(mid, MediaType.APPLICATION_JSON));
 
         if (response.getStatus() == 200) {
             return new ResponseStatus(true, response.readEntity(String.class));

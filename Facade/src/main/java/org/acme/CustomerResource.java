@@ -22,11 +22,16 @@ public class CustomerResource {
 
     @GET
     @Path("/report")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return null;
+    public Response getReport(String cid) {
+        CustomerReportRequestResponse a = dtuPay.getCustomerReport(cid);
+        //if (response.isError()) {
+        return Response.status(200).entity(a.getReport()).build();
+        //} else {
+        //  return Response.ok(response.getReport()).build();
+        //}
     }
-
     @POST
     @Path("/token")
     @Consumes(MediaType.APPLICATION_JSON)
