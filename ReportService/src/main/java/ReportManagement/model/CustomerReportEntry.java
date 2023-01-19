@@ -5,5 +5,5 @@ import lombok.Data;
 public class CustomerReportEntry {
     Integer amount;
     String token;
-    String cid;
+    String mid;
 }

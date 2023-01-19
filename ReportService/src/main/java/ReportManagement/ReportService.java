@@ -1,6 +1,7 @@
 /*
 @Author: Simon s163595
 @Author: Emily s223122
+@Author: Adin s164432
 ...
  */
 
@@ -55,12 +56,21 @@ public class ReportService implements IReportService{
     }
 
     public void handleFullLogGenerated(Event e) {
-        TransactionLog log = e.getArgument(0, TransactionLog.class);
+        TransactionLog full = e.getArgument(0, TransactionLog.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
-        AccountType type = idToTypeMap.get(log.getId());
+        AccountType type = idToTypeMap.get(full.getId());
 
         if (type == AccountType.CUSTOMER){
-            CustomerReport report = null;
+            CustomerReport report = new CustomerReport();
+            for (Transaction t: full.getLog()) {
+                if(full.getId().equals(t.getCustomerId())){
+                    CustomerReportEntry entry = new CustomerReportEntry();
+                    entry.setAmount(t.getAmount());
+                    entry.setToken(t.getCustomerToken());
+                    entry.setMid(t.getMerchantId());
+                    report.addToLog(entry);
+                }
+            }
             Event event = new Event(CUSTOMER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }
@@ -70,6 +80,18 @@ public class ReportService implements IReportService{
             queue.publish(event);
         }
         if (type == AccountType.MANAGER){
+            /*
+            ManagerReport report = new ManagerReport();
+            for (Transaction t: full.getLog()) {
+                ManagerReportEntry entry = new ManagerReportEntry();
+                entry.setAmount(t.getAmount());
+                entry.setToken(t.getCustomerToken());
+                entry.setMid(t.getMerchantId());
+                entry.setCid(t.getCustomerId())
+                report.addToLog(entry);
+            }
+             */
+
             ManagerReport report = new ManagerReport();
             var log = new ManagerReportEntry();
             log.setAmount(10);

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 @Data
 public class MerchantReport {
-    ArrayList<MerchantReport> log = new ArrayList<>();
-    public void addToLog(MerchantReport reportEntry) {
+    ArrayList<MerchantReportEntry> log = new ArrayList<>();
+    public void addToLog(MerchantReportEntry reportEntry) {
         log.add(reportEntry);
     }
 }

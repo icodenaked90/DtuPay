@@ -15,4 +15,8 @@ public class TransactionLog {
     public void setId(String id) {
         this.requesterId = id;
     }
+    public ArrayList<Transaction> getLog() {
+        return  log;
+    }
+
 }
