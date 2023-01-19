@@ -31,17 +31,9 @@ public class ManagerReportSteps {
     public void theManagerReportIsReceived() {
     }
 
-
     @After()
     public void Cleanup()
     {
-        if (cAccount != null) {
-            try {
-                bank.retireAccount(cAccount);
-                cAccount = null;
-            } catch (BankServiceException_Exception e) {
-                fail("Failed cleanup.");
-            }
-        }
+
     }
 }
