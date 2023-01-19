@@ -1,8 +1,9 @@
+// @Author: Jonathan (S194134)
+
 package behaviourtests;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import Payment.PaymentService;
 import Payment.models.Token;
@@ -22,18 +23,17 @@ import io.cucumber.java.en.When;
 import messaging.implementations.RabbitMqQueue;
 
 public class PaymentServiceSteps {
-    // @Author: Jonathan (S194134)
+
     String customerToken, merchantId;
     int paymentAmount;
+    private CorrelationId correlationId;
 
     MessageQueue queue = new RabbitMqQueue();
     BankService bank =  mock(BankService.class);
     PaymentService paymentService = new PaymentService(queue, bank);
     StubTokenService tokenService = new StubTokenService(queue);
     StubAccountService accountService = new StubAccountService(queue);
-
     NewPayment payment, expectedPayment;
-    private CorrelationId correlationId;
 
     @Given("an existing customer with id {string} and token {string}")
     public void anExisitingCustomerWithIdAndToken(String arg0, String arg1) {
@@ -59,6 +59,8 @@ public class PaymentServiceSteps {
         customerToken = arg0;
         merchantId = arg1;
         paymentAmount = arg2;
+
+        //  Wait for all services to catch up
         try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
     }
 

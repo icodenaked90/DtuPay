@@ -1,5 +1,8 @@
-package TokenManagement;
+//TODO: Authors missing
 
+package TokenManagement.models;
+
+import TokenManagement.models.TokenList;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +14,7 @@ public class TokenRequestResponse {
     private TokenList tokens;
     private String errorMessage;
 
+    //TODO: should be deleted?
     public TokenList getTokens() { return tokens; }
     public boolean isError() { return errorMessage != null; }
     public String getErrorMessage() { return errorMessage; }

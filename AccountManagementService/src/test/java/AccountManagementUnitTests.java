@@ -1,6 +1,6 @@
 //@Author Hildibjørg s164539
 
-import AccountManagement.Account;
+import AccountManagement.models.Account;
 import AccountManagement.AccountIdService;
 import messaging.MessageQueue;
 import org.junit.Test;

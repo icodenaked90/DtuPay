@@ -1,5 +1,3 @@
-/* @Author: Mila (s223313)
- */
 package behaviourtests;
 
 import org.junit.runner.RunWith;

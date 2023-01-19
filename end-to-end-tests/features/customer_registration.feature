@@ -1,4 +1,5 @@
 # @Author Mila (s223313)
+# @Author Hildibjørg (s164539)
 
 Feature: Customer Registration feature
 
@@ -6,6 +7,16 @@ Feature: Customer Registration feature
   	Given an unregistered customer
   	When the customer is being registered in DTUPay
   	Then the customer receives a DTUPay id
+
+  Scenario: Customer Registration Failure
+	Given an unregistered customer
+	When the customer has an invalid CPR when being registered in DTUPay
+	Then the customer receives an error message in registration
+
+	Scenario: Customer Registration Failure 2
+	Given an unregistered customer
+	When the customer has an invalid name when being registered in DTUPay
+	Then the customer receives an error message in registration
 
   Scenario: Customer Deregistration Failed
 	Given an unregistered customer
@@ -16,12 +27,3 @@ Feature: Customer Registration feature
 	Given a registered customer
     When the customer is being deregistered in DTUPay
 	Then the customer is deregistered
-
-
-#  Scenario: Student Registration Race Condition
-#  	Given an unregistered student with empty id
-#  	And another unregistered student
-#  	When the two students are registered at the same time
-#  	Then the first student has a non empty id
-#  	And the second student has a non empty id different from the first student
-  	

@@ -5,13 +5,12 @@
  */
 
 package behaviourtests;
-import clientApp.CustomerAppService;
+
 import dtu.ws.fastmoney.*;
 import clientApp.MerchantAppService;
 import clientApp.models.Account;
 
 import io.cucumber.java.After;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -25,6 +24,7 @@ public class MerchantRegistrationSteps {
     private String mid = "not a valid mid";
     private String mAccount;
     private String deregisterReply = "";
+    private String registrationReply = "";
     private MerchantAppService merchantService = new MerchantAppService();
     BankService bank = new BankServiceService().getBankServicePort();
 
@@ -62,6 +62,18 @@ public class MerchantRegistrationSteps {
         assertNotEquals("fail", mid);
     }
 
+    @When("the merchant has an invalid CPR when being registered in DTUPay")
+    public void theMerchantHasAnInvalidCPRWhenBeingRegisteredInDTUPay() {
+        merchant.setCPR("123");
+        registrationReply = merchantService.register(merchant);
+    }
+
+    @When("the merchant has an invalid name when being registered in DTUPay")
+    public void theMerchantHasAnInvalidNameWhenBeingRegisteredInDTUPay() {
+        merchant.setName("");
+        registrationReply = merchantService.register(merchant);
+    }
+
     @When("the merchant is being registered in DTUPay")
     public void theMerchantIsBeingRegisteredInDTUPay() {
         mid = merchantService.register(merchant);
@@ -81,6 +93,11 @@ public class MerchantRegistrationSteps {
     @Then("the merchant receives an error message")
     public void theMerchantReceivesAnErrorMessage() {
         assertNotEquals("OK", deregisterReply);
+    }
+
+    @Then("the merchant receives an error message in registration")
+    public void theMerchantReceivesAnErrorMessageInRegistration() {
+        assertNotEquals("OK", registrationReply);
     }
 
     @Then("the merchant is deregistered")

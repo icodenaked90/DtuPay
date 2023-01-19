@@ -1,4 +1,5 @@
 # @Author Mila (s223313)
+# @Author Hildibjørg (s164539)
 
 Feature: Merchant Registration feature
 
@@ -7,7 +8,17 @@ Feature: Merchant Registration feature
   	When the merchant is being registered in DTUPay
   	Then the merchant receives a DTUPay id
 
-  Scenario: Merchant Deregistration Failed
+	Scenario: Merchant Registration Failure
+		Given an unregistered merchant
+		When the merchant has an invalid CPR when being registered in DTUPay
+		Then the merchant receives an error message in registration
+
+	Scenario: Merchant Registration Failure 2
+		Given an unregistered merchant
+		When the merchant has an invalid name when being registered in DTUPay
+		Then the merchant receives an error message in registration
+
+	Scenario: Merchant Deregistration Failed
 	Given an unregistered merchant
 	When the merchant is being deregistered in DTUPay
 	Then the merchant receives an error message
@@ -16,11 +27,3 @@ Feature: Merchant Registration feature
 	Given a registered merchant
 	When the merchant is being deregistered in DTUPay
 	Then the merchant is deregistered
-
-#  Scenario: Student Registration Race Condition
-#  	Given an unregistered student with empty id
-#  	And another unregistered student
-#  	When the two students are registered at the same time
-#  	Then the first student has a non empty id
-#  	And the second student has a non empty id different from the first student
-  	

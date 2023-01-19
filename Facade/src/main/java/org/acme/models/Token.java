@@ -4,7 +4,7 @@
 // @Author: Adin (s164432)
 // @Author: Mila (s223313)
 // @Author: Simon Philipsen (S163595)
-package org.acme;
+package org.acme.models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;

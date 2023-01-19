@@ -2,6 +2,7 @@
 @Author: Emily s223122
 @Author: Simon s163595
 @Author: Mila s223313
+@Author: Jonathan s194134
 ...
  */
 
@@ -27,7 +28,8 @@ public class MerchantAppService {
         baseUrl = client.target("http://localhost:8080/");
     }
 
-    /** Registers a merchant with DTUPay
+    /**
+     * Registers a merchant with DTUPay
      *
      * @param account Account describing the merchant's name, cpr and bank account
      * @return DTUPay id for the merchant if success, otherwise "fail".
@@ -47,7 +49,8 @@ public class MerchantAppService {
         return "fail";
     }
 
-    /** Deregisters a merchant with DTUPay
+    /**
+     * Deregisters a merchant with DTUPay
      *
      * @param id DTUPay id of the merchant
      * @return "OK" if success, otherwise an error message describing the problem.
@@ -60,8 +63,7 @@ public class MerchantAppService {
         // Handle response
         if (response.getStatus() == 200) {
             return "OK"; // Success
-        }
-        else {
+        } else {
             return response.readEntity(String.class); // Error message
         }
     }
@@ -82,23 +84,12 @@ public class MerchantAppService {
             // valid payment
             return new ResponseStatus(true, "");
         } else if (response.getStatus() == 400) {
+            // Failed response, read the error returned
             String errorMessage = response.readEntity(String.class);
             return new ResponseStatus(false, errorMessage);
         }
         return new ResponseStatus(false, "unknown error");
     }
-
-
-    /*
-    public PaymentLogEntry[] getLog(String mediaType) {
-
-        return baseUrl.path("merchant/report")
-                .request()
-                .accept(mediaType)
-                .get(PaymentLogEntry[].class);
-    }
-      */
-
 
     public ResponseStatus getReports(String mid) {
         var response = baseUrl.path("merchant/reports")

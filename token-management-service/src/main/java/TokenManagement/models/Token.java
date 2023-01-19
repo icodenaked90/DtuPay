@@ -4,7 +4,8 @@
 // @Author: Adin (s164432)
 // @Author: Mila (s223313)
 // @Author: Simon Philipsen (S163595)
-package TokenManagement;
+
+package TokenManagement.models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
@@ -54,6 +55,7 @@ public class Token {
         return false;
     }
 
+    //TODO should be deleted?
     public boolean consumeToken(String token) {
         if (validateToken(token)) {
             currentValidTokens.remove(token);

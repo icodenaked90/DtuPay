@@ -4,20 +4,18 @@
 @Author: Mila s223313
 @Author Hildibjørg s164539
  */
+
 package AccountManagement;
 
 import java.util.HashMap;
+
+import AccountManagement.models.Account;
+import AccountManagement.models.CorrelationId;
 import messaging.Event;
 import messaging.MessageQueue;
 import java.util.UUID;
-public class AccountIdService {
 
-    public static final String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
-    public static final String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
-    public static final String ACCOUNT_DEREGISTRATION_REQUESTED = "AccountDeregistrationRequested";
-    public static final String ACCOUNT_DEREGISTRATION_COMPLETED = "AccountDeregistrationCompleted";
-    public static final String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
-    public static final String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
+public class AccountIdService implements IAccountIdService{
 
     private MessageQueue queue;
     private HashMap<String, String> userAccounts = new HashMap<>();
@@ -25,12 +23,13 @@ public class AccountIdService {
 
     public AccountIdService(MessageQueue q) {
         queue = q;
+
         queue.addHandler(ACCOUNT_REGISTRATION_REQUESTED, this::handleAccountRegistrationRequested);
         queue.addHandler(ACCOUNT_DEREGISTRATION_REQUESTED, this::handleAccountDeregistrationRequested);
         queue.addHandler(BANK_ACCOUNT_REQUESTED, this::handleBankAccountRequested);
     }
 
-    private void handleBankAccountRequested(Event e) {
+    public void handleBankAccountRequested(Event e) {
         var id = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
 
@@ -39,7 +38,6 @@ public class AccountIdService {
     }
 
     public String register(Account a) {
-
         //error checking
         if(a.getName().length() <= 0){
             return "Name has a wrong format";
@@ -49,7 +47,7 @@ public class AccountIdService {
         }
 
         String id = generateId();
-        userAccounts.put(id,a.bankAccount);
+        userAccounts.put(id,a.getBankAccount());
         return id;
     }
 

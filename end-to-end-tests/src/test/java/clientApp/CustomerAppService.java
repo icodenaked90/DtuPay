@@ -24,7 +24,6 @@ public class CustomerAppService {
 
     public CustomerAppService() {
         Client client = ClientBuilder.newClient();
-        // baseUrl = client.target("http://host.docker.internal:8080/");
         baseUrl = client.target("http://localhost:8080/");
     }
 
@@ -81,22 +80,18 @@ public class CustomerAppService {
         var response = baseUrl.path("customer/token")
                 .request()
                 .post(Entity.entity(new TokenRequestCommand(cid, numberOfTokens), MediaType.APPLICATION_JSON));
-        System.out.println(response.getStatus());
+
         if (response.getStatus() == 200)
             return response.readEntity(TokenList.class);
         else
             throw new Exception(response.readEntity(String.class));
     }
 
-    /** Requests all payments the customer is involved in from DTUPay
-     *
-     * @param amount payment amount of the customer
-     * @param token the token used for payment by the customer
-     * @param mid DTU Pay id of the merchant
-     * @return all payments if success, otherwise "fail".
+    /**
+     * Requests all payments the customer is involved in from DTUPay
+     * @param cid Id of the customer
+     * @return  all payments if success, otherwise "fail".
      */
-
-
     public String getReport(String cid) {
         var response = baseUrl.path("customer/reports")
                 .request()

@@ -1,36 +1,23 @@
-/*
-@Author: Mila s223313
-@Author: Adin s164432
-@Author: Jonathan s194134
- */
-
 package org.acme;
 
 import messaging.Event;
-import messaging.MessageQueue;
 import org.acme.models.Account;
 import org.acme.models.CorrelationId;
 import org.acme.models.NewPayment;
 import org.acme.models.TokenRequestCommand;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class DTUPayService implements IDTUPayService{
+public interface IDTUPayService {
+    String ACCOUNT_REGISTRATION_REQUESTED = "AccountRegistrationRequested";
+    String ACCOUNT_ID_ASSIGNED = "AccountIdAssigned";
+    String ACCOUNT_DEREGISTRATION_REQUESTED = "AccountDeregistrationRequested";
+    String ACCOUNT_DEREGISTRATION_COMPLETED = "AccountDeregistrationCompleted";
+    String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";
+    String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
+    String PAYMENT_REQUESTED = "PaymentRequested";
+    String PAYMENT_COMPLETED = "PaymentCompleted";
 
-    private MessageQueue queue;
-    private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
-    private Map<CorrelationId, CompletableFuture<TokenRequestResponse>> Tcorrelations = new ConcurrentHashMap<>();
-    private Map<CorrelationId, CompletableFuture<NewPayment>> Pcorrelations = new ConcurrentHashMap<>();
-
-    public DTUPayService(MessageQueue q) {
-        queue = q;
-        queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIDAssigned);
-        queue.addHandler(ACCOUNT_DEREGISTRATION_COMPLETED, this::handleAccountDeregistrationCompleted);
-        queue.addHandler(TOKEN_GENERATION_COMPLETED, this::handleTokensGenerated);
-        queue.addHandler(PAYMENT_COMPLETED, this::handlePaymentCompleted);
-    }
 
     public String register(Account a) {
         var correlationId = CorrelationId.randomId();

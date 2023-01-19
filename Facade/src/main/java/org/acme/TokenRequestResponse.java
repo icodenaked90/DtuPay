@@ -2,6 +2,7 @@ package org.acme;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.acme.models.TokenList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

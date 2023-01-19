@@ -5,7 +5,7 @@ Accessed on 2023-01-11
  */
 
 
-package TokenManagement;
+package TokenManagement.models;
 
 import java.util.UUID;
 

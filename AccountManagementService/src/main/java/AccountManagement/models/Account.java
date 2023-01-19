@@ -1,4 +1,4 @@
-package AccountManagement;
+package AccountManagement.models;
 
 import lombok.Data;
 

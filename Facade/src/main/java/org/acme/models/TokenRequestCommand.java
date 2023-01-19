@@ -1,4 +1,4 @@
-package org.acme;
+package org.acme.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,9 +11,5 @@ public class TokenRequestCommand {
     public String cid;
     public Integer amount;
 
-    public TokenRequestCommand(String _cid, Integer _amount){
-        cid = _cid;
-        amount = _amount;
-    }
 }
 

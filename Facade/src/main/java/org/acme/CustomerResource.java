@@ -6,6 +6,10 @@
 
 package org.acme;
 
+import org.acme.models.Account;
+import org.acme.models.PaymentLogEntry;
+import org.acme.models.TokenRequestCommand;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -43,8 +47,6 @@ public class CustomerResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAccount(Account account) {
 
-        //TODO: Delete the account using service
-
         //the response can either be an error message or
         //an id for the registered account
         String response = dtuPay.register(account);
@@ -58,7 +60,7 @@ public class CustomerResource {
             return Response.status(400).entity(response).build();
         }
         //everything went well
-        else {return Response.ok(response).build(); //TODO: Send correct message
+        else {return Response.ok(response).build();
         }
     }
 

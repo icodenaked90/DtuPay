@@ -1,6 +1,10 @@
-package org.acme;
+// @Author: Adin (s164432)
 
+package TokenManagement.models;
+
+import TokenManagement.models.Token;
 import jakarta.xml.bind.annotation.XmlRootElement;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +18,7 @@ public class TokenList {
     public TokenList(ArrayList<Token> tokens){
         this.tokens = tokens;
     }
+
     public ArrayList<Token> getTokens() {
         return tokens;
     }
