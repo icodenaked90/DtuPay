@@ -17,10 +17,6 @@ public class ReportResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReport(String maid) {
         ManagerReportRequestResponse a = dtuPay.getManagerReport(maid);
-        //if (response.isError()) {
         return Response.status(200).entity(a.getReport()).build();
-        //} else {
-          //  return Response.ok(response.getReport()).build();
-        //}
     }
 }

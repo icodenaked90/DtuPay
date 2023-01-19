@@ -11,10 +11,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ReportManagement.model.AccountType;
-import ReportManagement.model.CustomerReport;
-import ReportManagement.model.ManagerReport;
-import ReportManagement.model.MerchantReport;
+import ReportManagement.model.*;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -73,7 +70,12 @@ public class ReportService implements IReportService{
             queue.publish(event);
         }
         if (type == AccountType.MANAGER){
-            ManagerReport report = null;
+            ManagerReport report = new ManagerReport();
+            var log = new ManagerReportEntry();
+            log.setAmount(10);
+            log.setToken("aaaa");
+            log.setCid("cad");
+            log.setMid("gfd");
             Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }

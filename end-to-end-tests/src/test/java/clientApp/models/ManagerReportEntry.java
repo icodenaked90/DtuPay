@@ -9,4 +9,10 @@ import lombok.NoArgsConstructor;
 public class ManagerReportEntry {
     Integer amount;
     String token;
+    String cid;
+    String mid;
+    public ManagerReportEntry(int _amount, String _token) {
+        amount = _amount;
+        token = _token;
+    }
 }

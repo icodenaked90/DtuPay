@@ -37,6 +37,7 @@ public class ManagerReportSteps {
 
     @Then("the manager report is received")
     public void theManagerReportIsReceived() {
-
+        System.out.println(report.getLog().get(0).getCid());
+        System.out.println(report.getLog().get(0).getAmount());
     }
 }
