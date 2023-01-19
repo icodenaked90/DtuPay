@@ -17,6 +17,13 @@ public interface IDTUPayService {
     String TOKEN_GENERATION_COMPLETED = "TokenGenerationCompleted";
     String PAYMENT_REQUESTED = "PaymentRequested";
     String PAYMENT_COMPLETED = "PaymentCompleted";
+    String CUSTOMER_LOG_REQUESTED = "CustomerLogRequested";
+    String MERCHANT_LOG_REQUESTED = "MerchantLogRequested";
+    String MANAGER_LOG_REQUESTED = "ManagerLogRequested";
+
+    String CUSTOMER_LOG_GENERATED = "CustomerLogGenerated";
+    String MERCHANT_LOG_GENERATED = "MerchantLogGenerated";
+    String MANAGER_LOG_GENERATED = "ManagerLogGenerated";
 
 
     String register(Account a);
@@ -27,4 +34,10 @@ public interface IDTUPayService {
     void handleTokensGenerated(Event e);
     NewPayment pay(NewPayment payment);
     void handlePaymentCompleted(Event e);
+    ManagerReportRequestResponse getManagerReport(String id);
+    void handleManagerLogGenerated(Event e);
+    CustomerReportRequestResponse getCustomerReport(String id);
+    void handleCustomerLogGenerated(Event e);
+    MerchantReportRequestResponse getMerchantReport(String id);
+    void handleMerchantLogGenerated(Event e);
 }
