@@ -8,6 +8,7 @@ import clientApp.CustomerAppService;
 import clientApp.MerchantAppService;
 import clientApp.models.Account;
 
+import clientApp.models.ResponseStatus;
 import clientApp.models.Token;
 import clientApp.models.TokenList;
 import dtu.ws.fastmoney.BankService;
@@ -38,9 +39,9 @@ public class PaymentSteps {
     private MerchantAppService merchantService = new MerchantAppService();
     private BankService bank = new BankServiceService().getBankServicePort();
     private TokenList ownedTokens;
-    private TokenList receivedTokens;
-    private String errorMessage = "";
-
+    private ResponseStatus response;
+    private String paymentToken;
+    private int paymentAmount;
 
     @Given("the registered customer with {int} tokens with {int} balance")
     public void theRegisteredCustomerWithTokensWithBalance(int arg0, int arg1) {
@@ -61,13 +62,11 @@ public class PaymentSteps {
 
         // Get initial tokens
         ownedTokens = new TokenList(new ArrayList<Token>());
-
         try {
             ownedTokens = customerService.getTokens(cid, arg0);
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
     }
 
     @And("a registered merchant with {int} balance")
@@ -90,19 +89,35 @@ public class PaymentSteps {
 
     @When("the merchant requests a payment for {int}")
     public void theMerchantRequestsAPaymentFor(int arg0) {
-        //TODO: update errormessage
-        merchantService.pay(ownedTokens.getTokens().get(0).getId(),mid,arg0);
+        paymentAmount = arg0;
     }
 
-    @Then("the customer has {int} tokens")
-    public void theCustomerHasTokens(int arg0) {
-        assertEquals(arg0, ownedTokens.getTokens().size());
+    @And("customer pays with an unused token")
+    public void customerPaysWithAnUnusedToken() {
+        paymentToken = ownedTokens.getTokens().get(0).getId();
+        response = merchantService.pay(paymentToken, mid, paymentAmount);
     }
 
-    @And("the customers bank balance  is {int}")
+    @And("customer pays with the previous token")
+    public void customerPaysWithThePreviousToken() {
+        response = merchantService.pay(paymentToken, mid, paymentAmount);
+    }
+
+    @And("customer pays with a fake token")
+    public void customerPaysWithAFakeToken() {
+        response = merchantService.pay("fake token", mid, paymentAmount);
+    }
+
+    @Then("the payment succeeds")
+    public void thePaymentSucceeds() {
+        assertEquals(true, response.status);
+        ownedTokens.getTokens().remove(paymentToken);
+    }
+
+    @And("the customers bank balance is {int}")
     public void theCustomersBankBalanceIs(int arg0) {
         try {
-            assertEquals(arg0, bank.getAccount(cAccount).getBalance());
+            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(cAccount).getBalance());
         } catch (BankServiceException_Exception e) {
             fail("Invalid bank account.");
         }
@@ -111,21 +126,20 @@ public class PaymentSteps {
     @And("the merchant bank balance is {int}")
     public void theMerchantBankBalanceIs(int arg0) {
         try {
-            assertEquals(arg0, bank.getAccount(mAccount).getBalance());
+            assertEquals(BigDecimal.valueOf(arg0), bank.getAccount(mAccount).getBalance());
         } catch (BankServiceException_Exception e) {
             fail("Invalid bank account.");
         }
     }
 
-
     @Then("the merchant receives the error message {string}")
     public void theMerchantReceivesTheErrorMessage(String arg0)  {
-        assertEquals(arg0, errorMessage);
+        assertEquals(false, response.status);
+        assertEquals(arg0, response.errorMessage);
     }
 
-
-    @Given("the unregistered customer with {int} tokens")
-    public void theUnregisteredCustomerWithTokens(int arg0) {
+    @Given("the unregistered customer")
+    public void theUnregisteredCustomer() {
         bankCustomer.setFirstName("Abel");
         bankCustomer.setLastName("Shawn");
         String cpr = CprGenerator.generate();
@@ -140,14 +154,8 @@ public class PaymentSteps {
         customer = new Account("Abel Shawn", cpr, cAccount);
         cid ="faker";
 
-        // Get initial tokens
+        // No tokens since unregistered
         ownedTokens = new TokenList(new ArrayList<Token>());
-
-        try {
-            ownedTokens = customerService.getTokens(cid, arg0);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
     }
 
     @And("a unregistered merchant")
@@ -186,7 +194,4 @@ public class PaymentSteps {
             }
         }
     }
-
-
-
 }

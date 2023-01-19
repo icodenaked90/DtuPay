@@ -7,40 +7,46 @@ Feature: Payment feature
   	Given the registered customer with 1 tokens with 2000 balance
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
-    Then the customer has 0 tokens
-    And the customers bank balance  is 1800
+    And customer pays with an unused token
+    Then the payment succeeds
+    And the customers bank balance is 1800
     And the merchant bank balance is 30200
 
-  Scenario: Payment Invalid Token Failure
-    Given the registered customer with 0 tokens with 2000 balance
+  Scenario: Payment Reuse Token Failure
+    Given the registered customer with 1 tokens with 2000 balance
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
-    Then the customer receives the error message "Invalid Token Payment Attempt"
-    And the customer has 0 tokens
-    And the customers bank balance  is 2000
-    And the merchant bank balance is 30000
+    And customer pays with an unused token
+    Then the payment succeeds
+    And the customers bank balance is 1800
+    And the merchant bank balance is 30200
+    When the merchant requests a payment for 500
+    And customer pays with the previous token
+    Then the merchant receives the error message "Customer does not have a valid token"
+    And the customers bank balance is 1800
+    And the merchant bank balance is 30200
 
   Scenario: Payment Insufficient Balance Failure
     Given the registered customer with 1 tokens with 2000 balance
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 2200
-    Then the merchant receives the error message "Insufficient Balance Payment Attempt"
-    And the customer has 0 tokens
-    And the customers bank balance  is 2000
+    And customer pays with an unused token
+    Then the merchant receives the error message "Debtor balance will be negative"
+    And the customers bank balance is 2000
     And the merchant bank balance is 30000
 
   Scenario: Payment Unregistered Customer Failure
-    Given the unregistered customer with 1 tokens
+    Given the unregistered customer
     And a registered merchant with 30000 balance
     When the merchant requests a payment for 200
-    Then the merchant receives the error message "Unregistered Customer Payment Attempt"
-    And the customer has 0 tokens
+    And customer pays with a fake token
+    Then the merchant receives the error message "Customer does not have a valid token"
     And the merchant bank balance is 30000
 
   Scenario: Payment Unregistered Merchant Failure
     Given the registered customer with 1 tokens with 2000 balance
     And a unregistered merchant
     When the merchant requests a payment for 200
-    Then the merchant receives the error message "Unregistered Merchant Payment Attempt"
-    And the customer has 0 tokens
-    And the customers bank balance  is 2000
+    And customer pays with an unused token
+    Then the merchant receives the error message "Merchant does not have a valid bank account"
+    And the customers bank balance is 2000
