@@ -189,6 +189,7 @@ public class PaymentService implements IPaymentService {
      */
     public void handlePaymentLogsRequested(Event e) {
         String accountId = e.getArgument(0, String.class);
+        transactionLog.setId(accountId);
         var correlationId = e.getArgument(1, CorrelationId.class);
 
         Event event = new Event(PAYMENT_LOGS_COMPLETED, new Object[]{transactionLog, correlationId});
