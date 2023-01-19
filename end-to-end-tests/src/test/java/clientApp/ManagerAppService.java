@@ -31,8 +31,6 @@ public class ManagerAppService {
         var response = baseUrl.path("report")
                 .request()
                 .post(Entity.entity(maid, MediaType.APPLICATION_JSON));
-        System.out.println("Hej");
-        System.out.println(response.readEntity(ManagerReport.class).getLog().get(0).toString());
-        return new ManagerReport();
+        return response.readEntity(ManagerReport.class);
     }
 }
