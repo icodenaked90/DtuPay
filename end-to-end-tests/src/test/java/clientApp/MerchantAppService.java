@@ -8,9 +8,7 @@
 
 package clientApp;
 
-import clientApp.models.Account;
-import clientApp.models.NewPayment;
-import clientApp.models.ResponseStatus;
+import clientApp.models.*;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -91,17 +89,10 @@ public class MerchantAppService {
         return new ResponseStatus(false, "unknown error").toString();
     }
 
-    public ResponseStatus getReports(String mid) {
+    public MerchantReport getReports(String mid) {
         var response = baseUrl.path("merchant/reports")
                 .request()
                 .post(Entity.entity(mid, MediaType.APPLICATION_JSON));
-
-        if (response.getStatus() == 200) {
-            return new ResponseStatus(true, response.readEntity(String.class));
-        }
-
-        return new ResponseStatus(false, response.readEntity(String.class));
+        return response.readEntity(MerchantReport.class);
     }
-
-
 }

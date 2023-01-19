@@ -2,6 +2,7 @@ package behaviourtests;
 
 import clientApp.MerchantAppService;
 import clientApp.models.Account;
+import clientApp.models.MerchantReport;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
@@ -19,7 +20,7 @@ public class MerchantReportSteps {
 
     private Account merchant;
     private User bankCustomer = new User();
-    private String report = "";
+    private MerchantReport report;
     private String mAccount;
     private String response = "";
     private MerchantAppService merchantApp= new MerchantAppService();
@@ -43,8 +44,7 @@ public class MerchantReportSteps {
 
     @When("merchant request their report")
     public void merchantRequestTheirReport() {
-        response = merchantApp.getReports(mid);
-        report = response;
+        report = merchantApp.getReports(mid);
     }
 
     @Then("the merchant report is received")
