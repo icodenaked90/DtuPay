@@ -81,12 +81,11 @@ public class MerchantAppService {
             completedPayment = response.readEntity(NewPayment.class);
             if (completedPayment.isPaymentSuccesful()) {
                 // valid payment
-                return new ResponseStatus(true, "").toString();
+                return new ResponseStatus(true, "");
             }
-            // Payment failed with a known common error
-            return new ResponseStatus(false, completedPayment.getErrorMessage()).toString();
         }
-        return new ResponseStatus(false, "unknown error").toString();
+        //  Return failed reponse
+        return new ResponseStatus(false, response.readEntity(String.class));
     }
 
     public MerchantReport getReports(String mid) {
