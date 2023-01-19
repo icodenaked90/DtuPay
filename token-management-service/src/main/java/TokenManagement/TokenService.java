@@ -35,8 +35,6 @@ public class TokenService implements ITokenService{
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         String accountId = command.cid;
         int numberOfTokens = command.amount;
-        // Send event CustomerValidationRequested to AccountManagementService with accountId and correlationid
-        // Account management service responds with CustomerValidationCompleted event with bool whether account is ok (exists and is customer) and the correlationId
 
         // Validate token number
         if (numberOfTokens < 1 || numberOfTokens > 5) {
@@ -103,14 +101,6 @@ public class TokenService implements ITokenService{
         return unusedTokens;
     }
 
-    //TODO should be deleted?
-    public void removeAccountFromTokenList(String id){
-        for (Token token : unusedTokens.keySet()) {
-            if(unusedTokens.get(token).equals(id)){
-                unusedTokens.remove(token);
-            }
-        }
-    }
     public ArrayList<Token> addTokensToAccount(String id, int amount){
         ArrayList<Token> temp = new ArrayList<>();
         for(int i = 0; i<amount;i++){

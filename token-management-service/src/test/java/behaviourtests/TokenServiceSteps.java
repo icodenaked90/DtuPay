@@ -83,8 +83,6 @@ public class TokenServiceSteps {
         assertEquals(numberOfTokens, expectedgen.getTokens().size());
     }
 
-
-
     @And("the customer has {int} token")
     public void theCustomerHasToken(int amount) {
         preOwned =ts.addTokensToAccount(cid,amount);

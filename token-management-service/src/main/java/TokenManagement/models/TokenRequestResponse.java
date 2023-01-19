@@ -13,11 +13,6 @@ public class TokenRequestResponse {
     private TokenList tokens;
     private String errorMessage;
 
-    //TODO: should be deleted?
-    public TokenList getTokens() { return tokens; }
-    public boolean isError() { return errorMessage != null; }
-    public String getErrorMessage() { return errorMessage; }
-
     public TokenRequestResponse(String errorMessage){
         this.errorMessage = errorMessage;
     }
