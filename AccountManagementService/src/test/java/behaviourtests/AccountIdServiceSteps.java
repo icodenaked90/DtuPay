@@ -102,7 +102,7 @@ public class AccountIdServiceSteps {
     public void thereIsAnAccountWithAnInvalidCPRNumberAndNoId() {
         account = new Account();
         account.setName("Sharpay Evans");
-        account.setCPR("hello");
+        account.setCPR("hello-world");
         account.setBankAccount("1234567890");
     }
 

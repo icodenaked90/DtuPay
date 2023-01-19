@@ -13,9 +13,9 @@ Feature: Account Registration Feature
     And the account is deregistered
 
     Scenario: Account Registration name failure
-      Given there is an account with an empty name and no id
-      When a "AccountRegistrationRequested" for generating account is received
-      And the account is not registered
+    Given there is an account with an empty name and no id
+    When a "AccountRegistrationRequested" for generating account is received
+    And the account is not registered
 
   Scenario: Account Registration CPR failure
     Given there is an account with an invalid CPR number and no id

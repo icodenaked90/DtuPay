@@ -2,7 +2,6 @@
 
 package TokenManagement.models;
 
-import TokenManagement.models.TokenList;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
