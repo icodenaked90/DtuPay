@@ -66,7 +66,7 @@ public class MerchantAppService {
     }
 
 
-    public String pay(String token, String merchantId, int amount) {
+    public ResponseStatus pay(String token, String merchantId, int amount) {
         //Create payment object to package the payment info
         NewPayment completedPayment;
         NewPayment payment = new NewPayment(token, merchantId, amount);
