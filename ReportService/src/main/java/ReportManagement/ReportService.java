@@ -11,10 +11,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ReportManagement.model.AccountType;
-import ReportManagement.model.CustomerReport;
-import ReportManagement.model.ManagerReport;
-import ReportManagement.model.MerchantReport;
+import ReportManagement.model.*;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -58,9 +55,9 @@ public class ReportService implements IReportService{
     }
 
     public void handleFullLogGenerated(Event e) {
-        String id = e.getArgument(0, String.class);
+        TransactionLog log = e.getArgument(0, TransactionLog.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
-        AccountType type = idToTypeMap.get(id);
+        AccountType type = idToTypeMap.get(log.getId());
 
         if (type == AccountType.CUSTOMER){
             CustomerReport report = null;

@@ -18,11 +18,18 @@ import java.util.ArrayList;
 public class MerchantResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
 
+
     @GET
     @Path("/report")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return null;
+    public Response getReport(String mid) {
+        MerchantReportRequestResponse a = dtuPay.getMerchantReport(mid);
+        //if (response.isError()) {
+        return Response.status(200).entity(a.getReport()).build();
+        //} else {
+        //  return Response.ok(response.getReport()).build();
+        //}
     }
 
     @POST
