@@ -32,7 +32,7 @@ public class ManagerAppService {
                 .request()
                 .post(Entity.entity(maid, MediaType.APPLICATION_JSON));
         System.out.println("Hej");
-        System.out.println(response.readEntity(MerchantReport.class).getLog().get(0).toString());
+        System.out.println(response.readEntity(ManagerReport.class).getLog().get(0).toString());
         return new ManagerReport();
     }
 }
