@@ -1,9 +1,10 @@
-package ReportManagement.model;
+package org.acme.models;
 import lombok.Data;
 
 @Data
-public class ManagerEntry {
+public class MerchantReportEntry {
     Integer amount;
     String token;
     String mid;
+    String cid;
 }

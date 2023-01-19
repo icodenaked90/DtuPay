@@ -43,7 +43,7 @@ public class MerchantReportSteps {
 
     @When("merchant request their report")
     public void merchantRequestTheirReport() {
-        response = merchantApp.getReports(mid).errorMessage;
+        response = merchantApp.getReports(mid);
         report = response;
     }
 

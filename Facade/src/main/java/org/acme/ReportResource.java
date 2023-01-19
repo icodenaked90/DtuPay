@@ -1,21 +1,22 @@
 package org.acme;
 
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import org.acme.models.ManagerReport;
+import org.acme.models.ManagerReportEntry;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
+import javax.ws.rs.core.Response;
+
 //Author: Adin s164432
 @Path("/report")
 public class ReportResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
-    
-    @GET
-    @Path("/report")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return null;
+    public Response getReport(String maid) {
+        ManagerReportRequestResponse a = dtuPay.getManagerReport(maid);
+        return Response.status(200).entity(a.getReport()).build();
     }
-
 }
