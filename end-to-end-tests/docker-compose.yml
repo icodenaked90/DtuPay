@@ -24,3 +24,7 @@ services:
   token-management-service:
     image: token-management-service
     container_name: token-management-service
+
+  report-service:
+    image: report-service
+    container_name: report-service
