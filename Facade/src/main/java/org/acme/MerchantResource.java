@@ -36,7 +36,7 @@ public class MerchantResource {
         // Success scenario
         if (completePayment.isPaymentSuccesful()) return Response.ok(completePayment).build();
         // Failure scenario
-        return Response.status(404).entity(completePayment.getErrorMessage()).build();
+        return Response.status(400).entity(completePayment.getErrorMessage()).build();
     }
 
 

@@ -68,7 +68,7 @@ public class PaymentService {
 		Event event = new Event(BANK_ACCOUNT_REQUESTED, new Object[] { accountId, correlationId });
 		queue.publish(event);
 		String bankAccountId = correlationsBank.get(correlationId).join();
-		if (bankAccountId.isEmpty()) return "";
+		if (bankAccountId == null) return "";
 		return bankAccountId;
 	}
 
