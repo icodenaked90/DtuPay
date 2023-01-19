@@ -1,4 +1,4 @@
-package Payment.models;
+package clientApp.models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;

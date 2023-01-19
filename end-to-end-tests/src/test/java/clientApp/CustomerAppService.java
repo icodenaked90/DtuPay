@@ -96,17 +96,17 @@ public class CustomerAppService {
      * @return all payments if success, otherwise "fail".
      */
 
-    /*
-    public String getReport(Integer amount, String token, String mid) {
+
+    public String getReport(String cid) {
         var response = baseUrl.path("customer/reports")
                 .request()
-                .post(Entity.entity(new PaymentLogEntry(amount, token, mid) , MediaType.APPLICATION_JSON));
+                .post(Entity.entity( cid , MediaType.APPLICATION_JSON));
         if (response.getStatus() == 200) {
             String output = response.readEntity(String.class);
             return output;
         }
         return "fail";
     }
-    */
+
 }
 

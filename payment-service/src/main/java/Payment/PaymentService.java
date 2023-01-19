@@ -8,7 +8,6 @@ import messaging.MessageQueue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,25 +16,35 @@ public class PaymentService {
 //	@Author: Jonathan (s194134)
 
 	// Incoming streams for directed this microservice domain
-	private static final String PAYMENT_REQUESTED = "PaymentRequested";
-	private static final String PAYMENT_COMPLETED = "PaymentCompleted";
-	public static final String PAYMENT_LOGS_REQUESTED = "PaymentLogsRequested";
-	public static final String PAYMENT_LOGS_COMPLETED = "PaymentLogsRecieved";
+	public static final String PAYMENT_REQUESTED = "PaymentRequested";
+	public static final String PAYMENT_COMPLETED = "PaymentCompleted";
+	public static final String PAYMENT_LOGS_REQUESTED = "FullLogRequested";
+	public static final String PAYMENT_LOGS_COMPLETED = "FullLogGenerated";
 
 	// For communicating with the Token Service
-	private static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
-	private static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
+	public static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
+	public static final String TOKEN_VALIDATION_COMPLETED = "TokenValidationCompleted";
 
 	// For communicating with the Account Service
 	public static final String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
 	public static final String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
+
+	// Maps for keeping track of responses
 	private Map<CorrelationId, CompletableFuture<String>> correlationsToken = new ConcurrentHashMap<>();
 	private Map<CorrelationId, CompletableFuture<String>> correlationsBank = new ConcurrentHashMap<>();
+
+	// List for storing information used in testing
 	private ArrayList<NewPayment> paymentList = new ArrayList<>();
+
+	// Our log kept for report service
 	private TransactionLog transactionLog = new TransactionLog();
+
+
 	private BankService bank;
 	MessageQueue queue;
 
+	// Constructor to create bank and our message queue
+	// also attaches handlers to the queue.
 	public PaymentService(MessageQueue q, BankService b) {
 		this.queue = q;
 		this.bank = b;
@@ -46,18 +55,30 @@ public class PaymentService {
 
 	}
 
+	/**
+	 * Talks to account management service to get an bank account id
+	 * Fails if an empty string is returned
+	 * @param accountId
+	 * @return bankAccountId (String)
+	 */
 	private String getBankAccountId(String accountId) {
-		// Talks to account management service to get an bank account id
-		// Fails if an empty string is returned
+		//
 		var correlationId = CorrelationId.randomId();
 		correlationsBank.put(correlationId,new CompletableFuture<>());
 		Event event = new Event(BANK_ACCOUNT_REQUESTED, new Object[] { accountId, correlationId });
 		queue.publish(event);
 		String bankAccountId = correlationsBank.get(correlationId).join();
-		if (bankAccountId.isEmpty()) return "";
+		if (bankAccountId == null) return "";
 		return bankAccountId;
 	}
 
+	/**
+	 * Makes payment through fastmoney lib.
+	 * @param payment
+	 * @param customerBankId
+	 * @param merchantBankId
+	 * @return completed payment object with payment info updated
+	 */
 	private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
 
 		try {
@@ -71,9 +92,14 @@ public class PaymentService {
 		return payment;
 	}
 
+	/***
+	 * Talk to token service at exchange the token for a customer id
+	 * Fails if an empty string is returned
+	 * @param token
+	 * @return customerId
+	 */
 	private String getCustomerAccountIdFromToken(Token token) {
-		// Talk to token service at exchange the token for a customer id
-		// Fails if an empty string is returned
+
 		var correlationId = CorrelationId.randomId();
 		correlationsToken.put(correlationId,new CompletableFuture<>());
 		Event event = new Event(TOKEN_VALIDATION_REQUESTED, new Object[] { token, correlationId });
@@ -83,12 +109,20 @@ public class PaymentService {
 		return customerId;
 	}
 
+	/**
+	 * Handles event from token service communication
+	 * @param e
+	 */
 	public void handleTokenServiceCompleted(Event e) {
 		var s = e.getArgument(0, String.class);
 		var correlationid = e.getArgument(1, CorrelationId.class);
 		correlationsToken.get(correlationid).complete(s);
 	}
 
+	/**
+	 * Handles event from account service communication
+	 * @param e
+	 */
 	public void handleBankServiceCompleted(Event e) {
 		var s = e.getArgument(0, String.class);
 		var correlationid = e.getArgument(1, CorrelationId.class);
@@ -96,7 +130,16 @@ public class PaymentService {
 	}
 
 
-
+	/**
+	 * Handles events from the payment requested queue.
+	 * Does the following steps:
+	 * 1. get customer id from token service
+	 * 2. get merchant & customer bank account from account service
+	 * 3. send payment to bank
+	 * 4. Add payment to log and reports
+	 * 5. Return completed payment and info
+	 * @param ev
+	 */
 	public void handlePaymentRequested(Event ev) {
 		NewPayment completedPayment;
 		var payment = ev.getArgument(0, NewPayment.class);
@@ -110,11 +153,13 @@ public class PaymentService {
 		}
 
 		// 2. get merchant & customer bank account from account service
+		// Customer fetch
 		String customerBankId = getBankAccountId(customerAccountId);
 		if (customerBankId.isEmpty()) {
 			handleErrors(payment, correlationId, "Customer does not have a valid bank account");
 			return;
 		}
+		// Merchant fetch
 		String merchantBankId = getBankAccountId(payment.getMerchantId());
 		if (merchantBankId.isEmpty()) {
 			handleErrors(payment, correlationId, "Merchant does not have a valid bank account");
@@ -140,6 +185,10 @@ public class PaymentService {
 		queue.publish(event);
 	}
 
+	/**
+	 * Handles event from report service communication
+	 * @param ev
+	 */
 	public void handlePaymentLogsRequested(Event ev) {
 		String accountId = ev.getArgument(0, String.class);
 		var correlationId = ev.getArgument(1, CorrelationId.class);
@@ -158,7 +207,12 @@ public class PaymentService {
 		paymentList.clear();
 	 }
 
-	// Used to easily tag and return faulty payments
+	/**
+	 * Used to easily tag and return faulty payments
+	 * @param payment
+	 * @param correlationId
+	 * @param errorMessage
+	 */
 	public void handleErrors(NewPayment payment, CorrelationId correlationId, String errorMessage) {
 		payment.setPaymentSuccesful(false);
 		payment.setErrorMessage(errorMessage);

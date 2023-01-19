@@ -16,12 +16,12 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 public class Account {
     private String name;
-    private String cpr;
+    private String CPR;
     private String bankAccount;
 
     public Account(String _name, String _cpr, String _bankAccount){
         name = _name;
-        cpr = _cpr;
+        CPR = _cpr;
         bankAccount = _bankAccount;
     }
 

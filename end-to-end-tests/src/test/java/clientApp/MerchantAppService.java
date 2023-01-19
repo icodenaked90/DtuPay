@@ -8,7 +8,7 @@
 package clientApp;
 
 import clientApp.models.Account;
-import clientApp.models.PaymentLogEntry;
+import clientApp.models.NewPayment;
 import clientApp.models.ResponseStatus;
 
 import jakarta.ws.rs.client.Client;
@@ -66,13 +66,28 @@ public class MerchantAppService {
         }
     }
 
-    // TODO pay
-    /*
-    public ResponseStatus pay(int amount, String cid, String mid) {
-        //Accept the payment and send the token to the merchatn
-        return new ResponseStatus(true, "hej");
+
+    public ResponseStatus pay(String token, String merchantId, int amount) {
+        //Create payment object to package the payment info
+        NewPayment completedPayment;
+        NewPayment payment = new NewPayment(token, merchantId, amount);
+
+        // Send request
+        var response = baseUrl.path("merchant/payment")
+                .request()
+                .post(Entity.entity(payment, MediaType.APPLICATION_JSON));
+
+        // Handle request
+        if (response.getStatus() == 200) {
+            // valid payment
+            return new ResponseStatus(true, "");
+        } else if (response.getStatus() == 400) {
+            String errorMessage = response.readEntity(String.class);
+            return new ResponseStatus(false, errorMessage);
+        }
+        return new ResponseStatus(false, "unknown error");
     }
-    */
+
 
     /*
     public PaymentLogEntry[] getLog(String mediaType) {
@@ -82,13 +97,13 @@ public class MerchantAppService {
                 .accept(mediaType)
                 .get(PaymentLogEntry[].class);
     }
-     */
+      */
 
-    /*
-    public ResponseStatus getReports(PaymentLogEntry payment, String mediaType) {
+
+    public ResponseStatus getReports(String mid) {
         var response = baseUrl.path("merchant/reports")
                 .request()
-                .post(Entity.entity(payment, mediaType));
+                .post(Entity.entity(mid, MediaType.TEXT_PLAIN_TYPE));
 
         if (response.getStatus() == 200) {
             return new ResponseStatus(true, response.readEntity(String.class));
@@ -96,6 +111,6 @@ public class MerchantAppService {
 
         return new ResponseStatus(false, response.readEntity(String.class));
     }
-*/
+
 
 }

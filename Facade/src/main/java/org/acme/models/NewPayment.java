@@ -1,4 +1,4 @@
-package Payment.models;
+package org.acme.models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
