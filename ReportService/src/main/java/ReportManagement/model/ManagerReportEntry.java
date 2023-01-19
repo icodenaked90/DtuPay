@@ -5,4 +5,7 @@ import lombok.Data;
 public class ManagerReportEntry {
     Integer amount;
     String token;
+
+    String cid;
+    String mid;
 }

@@ -18,18 +18,7 @@ import ReportManagement.model.MerchantReport;
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class ReportService {
-
-    public static final String FULL_LOG_REQUESTED = "FullLogRequested";
-    public static final String FULL_LOG_GENERATED = "FullLogGenerated";
-
-    public static final String CUSTOMER_LOG_REQUESTED = "CustomerLogRequested";
-    public static final String MERCHANT_LOG_REQUESTED = "MerchantLogRequested";
-    public static final String MANAGER_LOG_REQUESTED = "ManagerLogRequested";
-
-    public static final String CUSTOMER_LOG_GENERATED = "CustomerLogGenerated";
-    public static final String MERCHANT_LOG_GENERATED = "MerchantLogGenerated";
-    public static final String MANAGER_LOG_GENERATED = "ManagerLogGenerated";
+public class ReportService implements IReportService{
 
     public MessageQueue queue;
     private HashMap<String, AccountType> idToTypeMap = new HashMap<String, AccountType>();
