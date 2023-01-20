@@ -89,7 +89,7 @@ public class MerchantAppService {
     }
 
     public MerchantReport getReports(String mid) {
-        var response = baseUrl.path("merchant/reports")
+        var response = baseUrl.path("merchant/report")
                 .request()
                 .post(Entity.entity(mid, MediaType.APPLICATION_JSON));
         return response.readEntity(MerchantReport.class);

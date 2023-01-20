@@ -21,7 +21,7 @@ public class MerchantResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
 
 
-    @GET
+    @POST
     @Path("/report")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
