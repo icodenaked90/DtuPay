@@ -5,6 +5,7 @@ package behaviourtests;
 import clientApp.CustomerAppService;
 import clientApp.ManagerAppService;
 import clientApp.models.Account;
+import clientApp.models.CustomerReport;
 import clientApp.models.ManagerReport;
 import clientApp.models.ManagerReportEntry;
 import dtu.ws.fastmoney.BankService;
@@ -42,15 +43,7 @@ public class ManagerReportSteps {
 
     @Then("the manager report is received")
     public void theManagerReportIsReceived() {
-        ManagerReport report1 = new ManagerReport();
-        var log = new ManagerReportEntry();
-        log.setAmount(10);
-        log.setToken("aaaa");
-        log.setCid("cad");
-        log.setMid("gfd");
-        report1.addToLog(log);
-        System.out.println(report.getLog().get(0).getCid());
-        System.out.println(report1.getLog().get(0).getCid());
-        Assert.assertTrue(report1.equals(report));
+        ManagerReport expectedReport = new ManagerReport();
+        assertEquals(report, expectedReport);
     }
 }
