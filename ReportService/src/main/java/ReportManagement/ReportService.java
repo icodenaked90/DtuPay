@@ -84,19 +84,23 @@ public class ReportService implements IReportService{
                     entry.setToken(t.getCustomerToken());
                     report.addToLog(entry);
                 }
-                Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
-                queue.publish(event);
-                return;
+            }
+            Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
+            queue.publish(event);
+            return;
+        }
+        ManagerReport report = new ManagerReport();
+        for (Transaction t : full.getLog()) {
+            if (full.getId().equals(t.getCustomerId())) {
+                ManagerReportEntry entry = new ManagerReportEntry();
+                entry.setAmount(t.getAmount());
+                entry.setToken(t.getCustomerToken());
+                entry.setMid(t.getMerchantId());
+                entry.setCid(t.getCustomerId());
+                report.addToLog(entry);
             }
         }
-        ManagerReport reportNew = new ManagerReport();
-        var log = new ManagerReportEntry();
-        log.setAmount(10);
-        log.setToken("aaaa");
-        log.setCid("cad");
-        log.setMid("gfd");
-        reportNew.addToLog(log);
-        Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{reportNew, corId});
+        Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
         queue.publish(event);
     }
 }
