@@ -23,7 +23,6 @@ public class ManagerAppService {
 
     public ManagerAppService() {
         Client client = ClientBuilder.newClient();
-        // baseUrl = client.target("http://host.docker.internal:8080/");
         baseUrl = client.target("http://localhost:8080/");
     }
 
@@ -31,6 +30,7 @@ public class ManagerAppService {
         var response = baseUrl.path("report")
                 .request()
                 .post(Entity.entity(maid, MediaType.APPLICATION_JSON));
+
         return response.readEntity(ManagerReport.class);
     }
 }

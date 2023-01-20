@@ -33,7 +33,7 @@ public class ReportService implements IReportService{
 
     public void handleCustomerLogRequested(Event e) {
         String cid = e.getArgument(0, String.class);
-        CorrelationId corId = e.getArgument(0, CorrelationId.class);
+        CorrelationId corId = e.getArgument(1, CorrelationId.class);
         idToTypeMap.put(cid, AccountType.CUSTOMER);
         Event event = new Event(FULL_LOG_REQUESTED, new Object[]{cid, corId});
         queue.publish(event);

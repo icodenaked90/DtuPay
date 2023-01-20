@@ -12,6 +12,7 @@ import org.acme.models.Account;
 import org.acme.models.CorrelationId;
 import org.acme.models.NewPayment;
 import org.acme.models.TokenRequestCommand;
+import org.acme.models.CustomerReport;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -85,13 +86,19 @@ public class DTUPayService implements IDTUPayService{
         Ccorrelations.put(correlationId, new CompletableFuture<>());
         Event event = new Event(CUSTOMER_LOG_REQUESTED, new Object[]{id, correlationId});
         queue.publish(event);
-        return Ccorrelations.get(correlationId).join();
+        CustomerReportRequestResponse response = Ccorrelations.get(correlationId).join();
+        return response;
     }
 
     public void handleCustomerLogGenerated(Event e) {
-        var response = e.getArgument(0, CustomerReportRequestResponse.class); // Empty if no error = Success
+        var response = e.getArgument(0, CustomerReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
-        Ccorrelations.get(correlationid).complete(response);
+
+        // convert to a full response we can handle later
+        CustomerReportRequestResponse fullResponse = new CustomerReportRequestResponse();
+        fullResponse.setReport(response);
+        // Set the report and complete the promise
+        Ccorrelations.get(correlationid).complete(fullResponse);
     }
     public MerchantReportRequestResponse getMerchantReport(String id) {
         var correlationId = CorrelationId.randomId();
