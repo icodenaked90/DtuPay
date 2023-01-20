@@ -30,7 +30,7 @@ public class ReportService implements IReportService{
         queue.addHandler(MANAGER_LOG_REQUESTED, this::handleManagerLogRequested);
         queue.addHandler(FULL_LOG_GENERATED, this::handleFullLogGenerated);
     }
-
+    //@Author: Emily s223122
     public void handleCustomerLogRequested(Event e) {
         String cid = e.getArgument(0, String.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);

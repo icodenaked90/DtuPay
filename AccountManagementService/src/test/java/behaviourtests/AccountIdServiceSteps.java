@@ -1,6 +1,3 @@
-// @Author: Hildibjørg (s164539)
-// @Author: Mila (s223313)
-
 package behaviourtests;
 
 import AccountManagement.AccountIdService;
@@ -19,6 +16,7 @@ import AccountManagement.models.Account;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+// @Author: Hildibjørg (s164539)
 public class AccountIdServiceSteps {
     MessageQueue queue = mock(MessageQueue.class);
     AccountIdService service = new AccountIdService(queue);

@@ -3,6 +3,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//@Author: Emily s223122
 @XmlRootElement // Needed for XML serialization and deserialization
 @Data // Automatic getter and setters and equals etc
 @NoArgsConstructor

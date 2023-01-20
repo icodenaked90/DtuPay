@@ -1,4 +1,4 @@
-//	@Author: Jonathan (s194134)
+
 
 package Payment;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-
+//	@Author: Jonathan (s194134)
 public class PaymentService implements IPaymentService {
 
     // Maps for keeping track of responses
@@ -47,6 +47,7 @@ public class PaymentService implements IPaymentService {
 
     }
 
+//	@Author: Jonathan (s194134)
     /**
      * Talks to account management service to get a bank account id
      * Fails if an empty string is returned

@@ -1,6 +1,5 @@
 /*
 @Author: Mila (s223313)
-@Author: Simon s163595
  */
 
 package behaviourtests;

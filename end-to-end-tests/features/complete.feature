@@ -1,5 +1,4 @@
-# @Author Mila (s223313)
-# @Author Hildibjørg (s164539)
+# @Author Emily (s223122)
 
 Feature: Complete System feature
 

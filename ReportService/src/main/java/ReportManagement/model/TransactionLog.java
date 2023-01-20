@@ -1,7 +1,7 @@
 package ReportManagement.model;
 
 import java.util.ArrayList;
-
+//@Author: jonathan 194134
 public class TransactionLog {
     String requesterId;
     ArrayList<Transaction> log = new ArrayList<>();

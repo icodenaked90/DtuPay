@@ -1,6 +1,4 @@
-#/*
 #@Author: Emily s223122
-#*/
 
 Feature: Manager Report feature
 

@@ -20,6 +20,7 @@ public class Token {
     String id;
     private static int tokenLength = 128;
 
+    //@Author: Simon (S163595)
     public static Token generateToken() {
         while (true) {
             String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -1,8 +1,3 @@
-/*
-@Author: Mila (s223313)
-@Author: Adin (s164432)
- */
-
 package behaviourtests;
 
 import TokenManagement.*;

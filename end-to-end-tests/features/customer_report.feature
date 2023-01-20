@@ -1,7 +1,4 @@
-
 # @Author: Emily s223122
-# @Author: Mila
-# @Author: Adin
 
 Feature: Customer Report feature
 

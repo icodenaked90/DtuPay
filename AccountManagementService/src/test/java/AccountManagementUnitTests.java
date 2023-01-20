@@ -1,5 +1,3 @@
-//@Author Hildibjørg s164539
-
 import AccountManagement.models.Account;
 import AccountManagement.AccountIdService;
 import messaging.MessageQueue;
@@ -9,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
+//@Author Hildibjørg s164539
 public class AccountManagementUnitTests {
 
     @Test

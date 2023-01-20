@@ -2,6 +2,7 @@ package Payment.models;
 
 import lombok.Data;
 
+//@Author: Jonathan s194134
 @Data
 public class Token {
     String id;

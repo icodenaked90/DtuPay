@@ -6,7 +6,7 @@ import org.acme.models.CustomerReport;
 import org.acme.models.ManagerReport;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+//@Author: Emily s2231322
 @XmlRootElement // Needed for XML serialization and deserialization
 @Data // Automatic getter and setters and equals etc
 @NoArgsConstructor // Needed for JSON deserialization and XML serialization and deserialization@AllArgsCo

@@ -2,7 +2,7 @@ package ReportManagement.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+//@Author: Emily s223122
 @Data // Automatic getter and setters and equals etc
 @NoArgsConstructor
 public class ManagerReportEntry {

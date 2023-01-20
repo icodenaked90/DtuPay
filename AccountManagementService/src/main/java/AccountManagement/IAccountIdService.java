@@ -11,6 +11,8 @@ public interface IAccountIdService {
     String BANK_ACCOUNT_REQUESTED = "BankAccountRequested";
     String BANK_ACCOUNT_RECEIVED = "BankAccountReceived";
 
+    //@Author Adin s166432
     void handleBankAccountRequested(Event e);
+    //@Author Adin s166432
     void handleAccountRegistrationRequested(Event e);
 }

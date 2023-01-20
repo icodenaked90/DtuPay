@@ -16,24 +16,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
+
 @Path("/merchant")
 public class MerchantResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
 
 
+    //@Author: Emily s223122
     @POST
     @Path("/report")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReport(String mid) {
         MerchantReportRequestResponse a = dtuPay.getMerchantReport(mid);
-        //if (response.isError()) {
         return Response.status(200).entity(a.getReport()).build();
-        //} else {
-        //  return Response.ok(response.getReport()).build();
-        //}
     }
 
+    //@Author: Jonathan s194134
     @POST
     @Path("/payment")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -49,6 +48,7 @@ public class MerchantResource {
     }
 
 
+    //@Author: Adin s164432
     @POST
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)

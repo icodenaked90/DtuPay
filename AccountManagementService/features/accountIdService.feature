@@ -1,5 +1,4 @@
-#   @Author: Mila (s223313)
-#   @Author: Hildibjørg (s164539)
+#@Author: Hildibjørg (s164539)
 
 Feature: Account Registration Feature
   Scenario: Scenario Account Registration Success

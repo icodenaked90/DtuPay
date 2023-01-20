@@ -15,23 +15,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
-
 @Path("/customer")
 public class CustomerResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
 
+    //@Author: Emily s223122
     @POST
     @Path("/report")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReport(String cid) {
         CustomerReportRequestResponse a = dtuPay.getCustomerReport(cid);
-        //if (response.isError()) {
         return Response.status(200).entity(a.getReport()).build();
-        //} else {
-        //  return Response.ok(response.getReport()).build();
-        //}
+
     }
+    //@Author: Mila s223313
     @POST
     @Path("/token")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -45,7 +43,8 @@ public class CustomerResource {
             return Response.ok(response.getTokens()).build();
         }
     }
-        
+
+    //@Author: Hildibjørg s164539
     @POST
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -69,6 +68,7 @@ public class CustomerResource {
         }
     }
 
+    //@Author: Mila s223313
     @DELETE
     @Path("/account/{id}")
     @Produces(MediaType.TEXT_PLAIN)

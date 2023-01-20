@@ -1,8 +1,3 @@
-/*
-@Author: Mila (s223313)
-@Author: Adin (s164432)
- */
-
 package TokenManagement;
 
 import java.util.Map;
@@ -79,7 +74,7 @@ public class TokenService implements ITokenService{
 
     return count;
     }
-
+    // @Author Mila s223313
     public void handleTokenValidationRequested(Event e) {
         var token = e.getArgument(0, Token.class);
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);
