@@ -60,10 +60,10 @@ public class ReportService implements IReportService{
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
         AccountType type = idToTypeMap.get(full.getId());
 
-        if (type == AccountType.CUSTOMER){
+        if (type == AccountType.CUSTOMER) {
             CustomerReport report = new CustomerReport();
-            for (Transaction t: full.getLog()) {
-                if(full.getId().equals(t.getCustomerId())){
+            for (Transaction t : full.getLog()) {
+                if (full.getId().equals(t.getCustomerId())) {
                     CustomerReportEntry entry = new CustomerReportEntry();
                     entry.setAmount(t.getAmount());
                     entry.setToken(t.getCustomerToken());
@@ -74,19 +74,19 @@ public class ReportService implements IReportService{
             Event event = new Event(CUSTOMER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }
-        if (type == AccountType.MERCHANT){
+        if (type == AccountType.MERCHANT) {
             MerchantReport report = new MerchantReport();
-            for (Transaction t: full.getLog()) {
-                if(full.getId().equals(t.getMerchantId())){
+            for (Transaction t : full.getLog()) {
+                if (full.getId().equals(t.getMerchantId())) {
                     MerchantReportEntry entry = new MerchantReportEntry();
                     entry.setAmount(t.getAmount());
                     entry.setToken(t.getCustomerToken());
                     report.addToLog(entry);
                 }
-            Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
-            queue.publish(event);
-        }
-        if (type == AccountType.MANAGER){
+                Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
+                queue.publish(event);
+            }
+            if (type == AccountType.MANAGER) {
             /*
             ManagerReport report = new ManagerReport();
             for (Transaction t: full.getLog()) {
@@ -99,14 +99,15 @@ public class ReportService implements IReportService{
             }
              */
 
-            ManagerReport report = new ManagerReport();
-            var log = new ManagerReportEntry();
-            log.setAmount(10);
-            log.setToken("aaaa");
-            log.setCid("cad");
-            log.setMid("gfd");
-            Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
-            queue.publish(event);
+                ManagerReport report = new ManagerReport();
+                var log = new ManagerReportEntry();
+                log.setAmount(10);
+                log.setToken("aaaa");
+                log.setCid("cad");
+                log.setMid("gfd");
+                Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
+                queue.publish(event);
+            }
         }
     }
 }
