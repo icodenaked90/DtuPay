@@ -96,7 +96,7 @@ public class CustomerAppService {
      * @return all payments if success, otherwise "fail".
      */
     public CustomerReport getReport(String cid) {
-        var response = baseUrl.path("customer/reports")
+        var response = baseUrl.path("customer/report")
                 .request()
                 .post(Entity.entity(cid, MediaType.APPLICATION_JSON));
         return response.readEntity(CustomerReport.class);
