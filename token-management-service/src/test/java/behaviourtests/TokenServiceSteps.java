@@ -1,12 +1,14 @@
-/* @Author: Mila (s223313)
-   @Author: Adin (s164432)
-   @Author: ...
-   @Author: ...
+/*
+@Author: Mila (s223313)
+@Author: Adin (s164432)
  */
 
 package behaviourtests;
 
 import TokenManagement.*;
+import TokenManagement.models.CorrelationId;
+import TokenManagement.models.Token;
+import TokenManagement.models.TokenList;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -17,10 +19,8 @@ import messaging.MessageQueue;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import static org.mockito.Mockito.mock;
@@ -29,19 +29,14 @@ import static org.mockito.Mockito.verify;
 
 public class TokenServiceSteps {
     MessageQueue queue = mock(MessageQueue.class);
-
-    TokenService ts = new TokenService(queue);
-    private TokenList expectedgen =new TokenList(new ArrayList<Token>());
-    private String expectedval;
-    String accountId;
-    private String cid;
     CorrelationId correlationId;
-    private int amount;
-    private String response;
+    TokenService ts = new TokenService(queue);
     ArrayList<Token> preOwned = new ArrayList<>();
 
-
-
+    private TokenList expectedgen =new TokenList(new ArrayList<>());
+    private String expectedval;
+    private String cid;
+    private int amount;
 
 
     @Given("a customer")
@@ -74,11 +69,6 @@ public class TokenServiceSteps {
                 }
                 expectedgen.setTokens(temp);
             }
-            /*
-            var event = new Event(eventName, new Object[]{expectedgen, correlationId});
-            verify(queue).publish(event);
-            */
-
         }
         else {
 
@@ -93,12 +83,9 @@ public class TokenServiceSteps {
         assertEquals(numberOfTokens, expectedgen.getTokens().size());
     }
 
-
-
     @And("the customer has {int} token")
     public void theCustomerHasToken(int amount) {
         preOwned =ts.addTokensToAccount(cid,amount);
-
     }
 
     @When("a {string} event is received with the existing token")
@@ -114,8 +101,4 @@ public class TokenServiceSteps {
         expectedval = "";
         ts.handleTokenValidationRequested(new Event(eventName, new Object[] {Token.generateToken(), correlationId}));
     }
-
-
-
-
 }

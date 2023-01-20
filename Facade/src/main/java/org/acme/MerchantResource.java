@@ -7,7 +7,9 @@
 
 package org.acme;
 
+import org.acme.models.Account;
 import org.acme.models.NewPayment;
+import org.acme.models.PaymentLogEntry;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,11 +20,18 @@ import java.util.ArrayList;
 public class MerchantResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();
 
-    @GET
+
+    @POST
     @Path("/report")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<PaymentLogEntry> getPaymentList() {
-        return null;
+    public Response getReport(String mid) {
+        MerchantReportRequestResponse a = dtuPay.getMerchantReport(mid);
+        //if (response.isError()) {
+        return Response.status(200).entity(a.getReport()).build();
+        //} else {
+        //  return Response.ok(response.getReport()).build();
+        //}
     }
 
     @POST
@@ -46,10 +55,18 @@ public class MerchantResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAccount(Account account) {
 
-        //TODO: Delete the account using service
-        String mid = dtuPay.register(account);
+        String response = dtuPay.register(account);
         // Everything went well
-        return Response.ok(mid).build(); //TODO: write correct response
+        if (response.equals("Name has a wrong format")) {
+            return Response.status(400).entity(response).build();
+        }
+        //check cpr
+        else if (response.equals("CPR number has a wrong format")){
+            return Response.status(400).entity(response).build();
+        }
+        //everything went well
+        else {return Response.ok(response).build();
+        }
     }
     @DELETE
     @Path("/account/{id}")

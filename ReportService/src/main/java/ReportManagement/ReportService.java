@@ -1,6 +1,7 @@
 /*
 @Author: Simon s163595
 @Author: Emily s223122
+@Author: Adin s164432
 ...
  */
 
@@ -11,26 +12,11 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ReportManagement.model.Account;
-import ReportManagement.model.AccountType;
-import ReportManagement.model.CustomerReport;
-import ReportManagement.model.ManagerReport;
-import ReportManagement.model.MerchantReport;
+import ReportManagement.model.*;
 import messaging.Event;
 import messaging.MessageQueue;
 
-public class ReportService {
-
-    public static final String FULL_LOG_REQUESTED = "FullLogRequested";
-    public static final String FULL_LOG_GENERATED = "FullLogGenerated";
-
-    public static final String CUSTOMER_LOG_REQUESTED = "CustomerLogRequested";
-    public static final String MERCHANT_LOG_REQUESTED = "MerchantLogRequested";
-    public static final String MANAGER_LOG_REQUESTED = "ManagerLogRequested";
-
-    public static final String CUSTOMER_LOG_GENERATED = "CustomerLogGenerated";
-    public static final String MERCHANT_LOG_GENERATED = "MerchantLogGenerated";
-    public static final String MANAGER_LOG_GENERATED = "ManagerLogGenerated";
+public class ReportService implements IReportService{
 
     public MessageQueue queue;
     private HashMap<String, AccountType> idToTypeMap = new HashMap<String, AccountType>();
@@ -47,7 +33,7 @@ public class ReportService {
 
     public void handleCustomerLogRequested(Event e) {
         String cid = e.getArgument(0, String.class);
-        CorrelationId corId = e.getArgument(0, CorrelationId.class);
+        CorrelationId corId = e.getArgument(1, CorrelationId.class);
         idToTypeMap.put(cid, AccountType.CUSTOMER);
         Event event = new Event(FULL_LOG_REQUESTED, new Object[]{cid, corId});
         queue.publish(event);
@@ -70,24 +56,51 @@ public class ReportService {
     }
 
     public void handleFullLogGenerated(Event e) {
-        String id = e.getArgument(0, String.class);
+        TransactionLog full = e.getArgument(0, TransactionLog.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
-        AccountType type = idToTypeMap.get(id);
+        AccountType type = idToTypeMap.get(full.getId());
 
-        if (type == AccountType.CUSTOMER){
-            CustomerReport report = null;
+        if (type == AccountType.CUSTOMER) {
+            CustomerReport report = new CustomerReport();
+            for (Transaction t : full.getLog()) {
+                if (full.getId().equals(t.getCustomerId())) {
+                    CustomerReportEntry entry = new CustomerReportEntry();
+                    entry.setAmount(t.getAmount());
+                    entry.setToken(t.getCustomerToken());
+                    entry.setMid(t.getMerchantId());
+                    report.addToLog(entry);
+                }
+            }
             Event event = new Event(CUSTOMER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
+            return;
         }
-        if (type == AccountType.MERCHANT){
-            MerchantReport report = null;
+        if (type == AccountType.MERCHANT) {
+            MerchantReport report = new MerchantReport();
+            for (Transaction t : full.getLog()) {
+                if (full.getId().equals(t.getMerchantId())) {
+                    MerchantReportEntry entry = new MerchantReportEntry();
+                    entry.setAmount(t.getAmount());
+                    entry.setToken(t.getCustomerToken());
+                    report.addToLog(entry);
+                }
+            }
             Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
+            return;
         }
-        if (type == AccountType.MANAGER){
-            ManagerReport report = null;
-            Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
-            queue.publish(event);
+        ManagerReport report = new ManagerReport();
+        for (Transaction t : full.getLog()) {
+            if (full.getId().equals(t.getCustomerId())) {
+                ManagerReportEntry entry = new ManagerReportEntry();
+                entry.setAmount(t.getAmount());
+                entry.setToken(t.getCustomerToken());
+                entry.setMid(t.getMerchantId());
+                entry.setCid(t.getCustomerId());
+                report.addToLog(entry);
+            }
         }
+        Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
+        queue.publish(event);
     }
 }

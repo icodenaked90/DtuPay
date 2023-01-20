@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class NewPayment {
-//    Payment information
+    //    Payment information
     String customerToken;
     String merchantId;
     int amount;
 
-//    Payment status information
+    //    Payment status information
     boolean paymentSuccesful;
     String errorMessage;
 

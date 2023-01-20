@@ -1,9 +1,12 @@
 package ReportManagement.model;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 @Data
 public class CustomerReport {
-    Integer amount;
-    String token;
-    String mid;
+    ArrayList<CustomerReportEntry> log = new ArrayList<>();
+    public void addToLog(CustomerReportEntry reportEntry) {
+        log.add(reportEntry);
+    }
 }

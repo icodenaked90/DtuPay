@@ -4,19 +4,18 @@
  */
 
 package behaviourtests;
+
 import dtu.ws.fastmoney.*;
 import clientApp.CustomerAppService;
 import clientApp.models.Account;
 
 import io.cucumber.java.After;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
-import jakarta.ws.rs.core.MediaType;
 
 public class CustomerRegistrationSteps {
     private Account customer;
@@ -24,6 +23,7 @@ public class CustomerRegistrationSteps {
     private String cid = "not a valid cid";
     private String cAccount;
     private String deregisterReply = "";
+    private String registrationReply = "";
     private CustomerAppService customerService = new CustomerAppService();
     private BankService bank = new BankServiceService().getBankServicePort();
 
@@ -41,6 +41,19 @@ public class CustomerRegistrationSteps {
         }
         customer = new Account("Abel Shawn", cpr, cAccount);
     }
+
+    @When("the customer has an invalid CPR when being registered in DTUPay")
+    public void theCustomerHasAnInvalidCPRWhenBeingRegisteredInDTUPay() {
+        customer.setCPR("123");
+        registrationReply = customerService.register(customer);
+    }
+
+    @When("the customer has an invalid name when being registered in DTUPay")
+    public void theCustomerHasAnInvalidNameWhenBeingRegisteredInDTUPay() {
+        customer.setName("");
+        registrationReply = customerService.register(customer);
+    }
+
 
     @Given("a registered customer")
     public void aRegisteredCustomer() {
@@ -80,6 +93,11 @@ public class CustomerRegistrationSteps {
     @Then("the customer receives an error message")
     public void theCustomerReceivesAnErrorMessage() {
         assertNotEquals("OK", deregisterReply);
+    }
+
+    @Then("the customer receives an error message in registration")
+    public void theCustomerReceivesAnErrorMessageInRegistration() {
+        assertNotEquals("OK", registrationReply);
     }
 
     @Then("the customer is deregistered")

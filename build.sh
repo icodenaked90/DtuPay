@@ -23,3 +23,8 @@ popd
 pushd token-management-service
 ./build.sh
 popd
+
+pushd ReportService
+./build.sh
+popd
+

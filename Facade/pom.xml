@@ -165,26 +165,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>4.0.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <wsdlUrls>
-                        <wsdlUrl>http://fm-00.compute.dtu.dk/BankService.wsdl.xml</wsdlUrl>
-                    </wsdlUrls>
-                    <keep>true</keep>
-                    <packageName>dtu.ws.fastmoney</packageName>
-                    <sourceDestDir>src/main/java</sourceDestDir>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <profiles>

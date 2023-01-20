@@ -1,77 +1,41 @@
-/* @Author: Mila (s223313)
-   @Author: ...
-   @Author: ...
-   @Author: ...
+/*
+@Author: Mila (s223313)
+@Author: Adin (s164432)
  */
 
 package TokenManagement;
 
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+import TokenManagement.models.CorrelationId;
+import TokenManagement.models.Token;
+import TokenManagement.models.TokenList;
+import TokenManagement.models.TokenRequestResponse;
 import messaging.Event;
 import messaging.MessageQueue;
 
-/*
-Image SQL table
-
-Tokens
-ID      Valid   AccountId
-2       True    Bob
-3       False   Bob
-4       False   Mike
-6       True    Mike
-
-SELECT * from Tokens WHERE AccountId = "Bob"
-SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = true
-SELECT * from Tokens WHERE AccountId = "Bob" AND Valid = false
-*/
-// @Author: Adin (s164432)
 public class TokenService implements ITokenService{
-    // Map from Token to AccountId
-    //private Map<Token, String> tokens = new ConcurrentHashMap<>();  // SQL database table mapping Token to Account ID
-    // Map from account id to unused tokens
     private Map<Token, String> unusedTokens = new ConcurrentHashMap<>();
-    // Map from account id to used tokens (for reporting purposes)
     private Map<Token, String> usedTokens = new ConcurrentHashMap<>();
     private MessageQueue queue;
+
     public TokenService(MessageQueue q) {
         queue = q;
-        queue.addHandler(TOKEN_GENERATION_REQUESTED, this::handleTokenGenerationRequested);
 
+        queue.addHandler(TOKEN_GENERATION_REQUESTED, this::handleTokenGenerationRequested);
         queue.addHandler(TOKEN_VALIDATION_REQUESTED, this::handleTokenValidationRequested);
 
     }
 
-
-    /*
-    public void handleCustomerValidationCompleted(Event e) {
-        var customerOk = e.getArgument(0, Boolean.class);
-        var eventCorrelationId = e.getArgument(1, CorrelationId.class);
-        customerValidationRequested.get(eventCorrelationId).complete(customerOk);
-    }*/
 
     public void handleTokenGenerationRequested(Event e) {
         var command = e.getArgument(0, TokenRequestCommand.class);
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         String accountId = command.cid;
         int numberOfTokens = command.amount;
-        // Send event CustomerValidationRequested to AccountManagementService with accountId and correlationid
-        // Account management service responds with CustomerValidationCompleted event with bool whether account is ok (exists and is customer) and the correlationId
-/*
-        var correlationId = CorrelationId.randomId();
-        customerValidationRequested.put(correlationId, new CompletableFuture<>());
-        e = new Event("CustomerValidationRequested", new Object[]{accountId, correlationId});
-        queue.publish(e);
-        Boolean customerOk = customerValidationRequested.get(correlationId).join();
-        if (!customerOk) {
-            e = new Event("TokenGenerationFailed", new Object[]{"Invalid account id", eventCorrelationId});
-            queue.publish(e);
-            return;
-        }
-*/
+
         // Validate token number
         if (numberOfTokens < 1 || numberOfTokens > 5) {
             e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse("Invalid number of tokens requested."), eventCorrelationId});
@@ -87,14 +51,12 @@ public class TokenService implements ITokenService{
         }
 
         // Create tokens for account
-        ArrayList<Token> accountNewTokens = new ArrayList<Token>();
+        ArrayList<Token> accountNewTokens = new ArrayList<>();
         for (int i = 0; i < numberOfTokens; i++) {
             while(true) {
                 Token token = Token.generateToken();
-                if (unusedTokens.containsValue(token) && usedTokens.containsValue(token))
-                    continue;
-                else {
-                    unusedTokens.put(token,accountId);
+                if (!unusedTokens.containsValue(token) && !usedTokens.containsValue(token)) {
+                    unusedTokens.put(token, accountId);
                     accountNewTokens.add(token);
                     break;
                 }
@@ -104,12 +66,6 @@ public class TokenService implements ITokenService{
         e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse(new TokenList(accountNewTokens)), eventCorrelationId});
         queue.publish(e);
     }
-
-
-
-    /// TESTING ///
-
-
 
 
     public int unusedAmount(String cid){
@@ -144,13 +100,7 @@ public class TokenService implements ITokenService{
     public Map<Token, String> getUnused(){
         return unusedTokens;
     }
-    public void removeAccountFromTokenList(String id){
-        for (Token token : unusedTokens.keySet()) {
-            if(unusedTokens.get(token).equals(id)){
-                unusedTokens.remove(token);
-            }
-        }
-    }
+
     public ArrayList<Token> addTokensToAccount(String id, int amount){
         ArrayList<Token> temp = new ArrayList<>();
         for(int i = 0; i<amount;i++){

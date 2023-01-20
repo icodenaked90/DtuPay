@@ -2,6 +2,7 @@ package behaviourtests;
 
 import clientApp.MerchantAppService;
 import clientApp.models.Account;
+import clientApp.models.MerchantReport;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
@@ -19,7 +20,7 @@ public class MerchantReportSteps {
 
     private Account merchant;
     private User bankCustomer = new User();
-    private String report = "";
+    private MerchantReport report;
     private String mAccount;
     private String response = "";
     private MerchantAppService merchantApp= new MerchantAppService();
@@ -43,13 +44,7 @@ public class MerchantReportSteps {
 
     @When("merchant request their report")
     public void merchantRequestTheirReport() {
-        response = merchantApp.getReports(mid).errorMessage;
-        report = response;
-    }
-
-    @Then("the merchant report is received")
-    public void theMerchantReportIsReceived() {
-        assertNotEquals("fail", report);
+        report = merchantApp.getReports(mid);
     }
 
     @Given("an unregistered report merchant")
@@ -59,7 +54,8 @@ public class MerchantReportSteps {
 
     @Then("the merchant receives an empty report")
     public void theMerchantReceivesAnEmptyReport() {
-        assertEquals("", response);
+        MerchantReport expectedReport = new MerchantReport();
+        assertEquals(report, expectedReport);
     }
 
     @After()

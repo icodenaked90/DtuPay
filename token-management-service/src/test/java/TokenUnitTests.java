@@ -1,4 +1,6 @@
-import TokenManagement.Token;
+// @Author: Adin (s164432)
+
+import TokenManagement.models.Token;
 import TokenManagement.TokenService;
 import messaging.MessageQueue;
 import org.junit.Test;
