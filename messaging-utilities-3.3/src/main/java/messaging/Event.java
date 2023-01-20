@@ -8,6 +8,11 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
+/*
+This file is copied from the "Correlation Student Registration Example" zip file.
+Created by Hubert Baumeister.
+Accessed on 2023-01-11
+ */
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = 4986172999588690076L;

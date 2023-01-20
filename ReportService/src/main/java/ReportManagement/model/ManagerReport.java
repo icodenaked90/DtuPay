@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 
-
+//@Author: Emily s223122
 @Data // Automatic getter and setters and equals etc
 @NoArgsConstructor
 public class ManagerReport {

@@ -1,9 +1,3 @@
-/*
-@Author: Mila s223313
-@Author: Adin s164432
-@Author: Jonathan s194134
- */
-
 package org.acme;
 
 import messaging.Event;
@@ -23,7 +17,7 @@ public class DTUPayService implements IDTUPayService{
     private Map<CorrelationId, CompletableFuture<CustomerReportRequestResponse>> Ccorrelations = new ConcurrentHashMap<>();
     private Map<CorrelationId, CompletableFuture<MerchantReportRequestResponse>> Mcorrelations = new ConcurrentHashMap<>();
     private Map<CorrelationId, CompletableFuture<NewPayment>> Pcorrelations = new ConcurrentHashMap<>();
-
+    //@Author: Adin s164432
     public DTUPayService(MessageQueue q) {
         queue = q;
         queue.addHandler(ACCOUNT_ID_ASSIGNED, this::handleAccountIDAssigned);
@@ -34,7 +28,7 @@ public class DTUPayService implements IDTUPayService{
         queue.addHandler(CUSTOMER_LOG_GENERATED, this::handleCustomerLogGenerated);
         queue.addHandler(MERCHANT_LOG_GENERATED, this::handleMerchantLogGenerated);
     }
-
+    //@Author: Mila s223313
     public String register(Account a) {
         var correlationId = CorrelationId.randomId();
         correlations.put(correlationId, new CompletableFuture<>());
@@ -42,13 +36,13 @@ public class DTUPayService implements IDTUPayService{
         queue.publish(event);
         return correlations.get(correlationId).join();
     }
-
+    //@Author: Adin s164432
     public void handleAccountIDAssigned(Event e) {
         var id = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(id);
     }
-
+    //@Author: Mila s223313
     public String deregister(String id) {
         var correlationId = CorrelationId.randomId();
         correlations.put(correlationId, new CompletableFuture<>());
@@ -56,13 +50,13 @@ public class DTUPayService implements IDTUPayService{
         queue.publish(event);
         return correlations.get(correlationId).join();
     }
-
+    //@Author: Adin s164432
     public void handleAccountDeregistrationCompleted(Event e) {
         var errorMessage = e.getArgument(0, String.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlations.get(correlationid).complete(errorMessage);
     }
-
+    //@Author: Emily 223122
     public ManagerReportRequestResponse getManagerReport(String id) {
         var correlationId = CorrelationId.randomId();
         Rcorrelations.put(correlationId, new CompletableFuture<>());
@@ -71,7 +65,7 @@ public class DTUPayService implements IDTUPayService{
         ManagerReportRequestResponse response = Rcorrelations.get(correlationId).join();
         return response;
     }
-
+    //@Author: Emily 223122
     public void handleManagerLogGenerated(Event e) {
         var response = e.getArgument(0, ManagerReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
@@ -79,7 +73,7 @@ public class DTUPayService implements IDTUPayService{
         fullResponse.setReport(response);
         Rcorrelations.get(correlationid).complete(fullResponse);
     }
-
+    //@Author: Emily 223122
     public CustomerReportRequestResponse getCustomerReport(String id) {
         var correlationId = CorrelationId.randomId();
         Ccorrelations.put(correlationId, new CompletableFuture<>());
@@ -88,7 +82,7 @@ public class DTUPayService implements IDTUPayService{
         CustomerReportRequestResponse response = Ccorrelations.get(correlationId).join();
         return response;
     }
-
+    //@Author: Emily 223122
     public void handleCustomerLogGenerated(Event e) {
         var response = e.getArgument(0, CustomerReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
@@ -99,6 +93,7 @@ public class DTUPayService implements IDTUPayService{
         // Set the report and complete the promise
         Ccorrelations.get(correlationid).complete(fullResponse);
     }
+    //@Author: Emily 223122
     public MerchantReportRequestResponse getMerchantReport(String id) {
         var correlationId = CorrelationId.randomId();
         Mcorrelations.put(correlationId, new CompletableFuture<>());
@@ -106,7 +101,7 @@ public class DTUPayService implements IDTUPayService{
         queue.publish(event);
         return Mcorrelations.get(correlationId).join();
     }
-
+    //@Author: Emily 223122
     public void handleMerchantLogGenerated(Event e) {
         var response = e.getArgument(0, MerchantReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
@@ -114,6 +109,7 @@ public class DTUPayService implements IDTUPayService{
         fullResponse.setReport(response);
         Mcorrelations.get(correlationid).complete(fullResponse);
     }
+    //@Author: Adin s164432
     public TokenRequestResponse generateTokens(TokenRequestCommand request) {
         var correlationId = CorrelationId.randomId();
         Tcorrelations.put(correlationId, new CompletableFuture<>());
@@ -121,13 +117,13 @@ public class DTUPayService implements IDTUPayService{
         queue.publish(event);
         return Tcorrelations.get(correlationId).join();
     }
-
+    //@Author: Adin s164432
     public void handleTokensGenerated(Event e) {
         var response = e.getArgument(0, TokenRequestResponse.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         Tcorrelations.get(correlationid).complete(response);
     }
-
+    //@Author: Adin s164432
     public NewPayment pay(NewPayment payment) {
         var correlationId = CorrelationId.randomId();
         Pcorrelations.put(correlationId, new CompletableFuture<>());
@@ -135,7 +131,7 @@ public class DTUPayService implements IDTUPayService{
         queue.publish(event);
         return Pcorrelations.get(correlationId).join();
     }
-
+    //@Author: Adin s164432
     public void handlePaymentCompleted(Event e) {
         var response = e.getArgument(0, NewPayment.class);
         var correlationid = e.getArgument(1, CorrelationId.class);

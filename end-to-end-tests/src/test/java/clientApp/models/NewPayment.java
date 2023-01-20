@@ -3,7 +3,9 @@ package clientApp.models;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+/*
+@Author: Jonathan s194134
+ */
 @XmlRootElement
 @Data
 @NoArgsConstructor

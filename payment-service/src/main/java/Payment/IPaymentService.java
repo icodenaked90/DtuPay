@@ -1,7 +1,7 @@
 package Payment;
 
 import messaging.Event;
-
+//@Author Adin s164432
 public interface IPaymentService {
     // Incoming streams for directed this microservice domain
     String PAYMENT_REQUESTED = "PaymentRequested";

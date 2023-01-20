@@ -13,6 +13,11 @@ import com.rabbitmq.client.DeliverCallback;
 import messaging.Event;
 import messaging.MessageQueue;
 
+/*
+This file is copied from the "Correlation Student Registration Example" zip file.
+Created by Hubert Baumeister.
+Accessed on 2023-01-11
+ */
 public class RabbitMqQueue implements MessageQueue {
 
 	private static final String TOPIC = "events";

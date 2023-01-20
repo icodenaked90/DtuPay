@@ -1,7 +1,7 @@
 package TokenManagement;
 
 import messaging.Event;
-
+//Author Adin s164432
 public interface ITokenService {
 
     String TOKEN_GENERATION_REQUESTED = "TokenGenerationRequested";

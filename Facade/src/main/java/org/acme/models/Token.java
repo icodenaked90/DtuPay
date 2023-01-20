@@ -1,9 +1,7 @@
 // Token class for generating tokens and validating them
 // Built when mob programming
-// @Author: Jonathan Zørn (S194134)
 // @Author: Adin (s164432)
-// @Author: Mila (s223313)
-// @Author: Simon Philipsen (S163595)
+
 package org.acme.models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;

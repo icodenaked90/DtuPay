@@ -8,7 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-//Author: Adin s164432
+//Author: Emily (s16223122)
 @Path("/report")
 public class ReportResource {
     DTUPayService dtuPay = new DTUPayFactory().getService();

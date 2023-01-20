@@ -1,9 +1,4 @@
-/*
-@Author: Simon s163595
-@Author: Emily s223122
-@Author: Adin s164432
-...
- */
+
 
 package ReportManagement;
 
@@ -54,7 +49,7 @@ public class ReportService implements IReportService{
         Event event = new Event(FULL_LOG_REQUESTED, new Object[]{maid, corId});
         queue.publish(event);
     }
-
+    //@Author: Adin s164432
     public void handleFullLogGenerated(Event e) {
         TransactionLog full = e.getArgument(0, TransactionLog.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);

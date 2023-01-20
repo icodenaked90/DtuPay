@@ -1,5 +1,10 @@
 package behaviourtests;
 
+/*
+This file is copied from the "Correlation Student Registration Example" zip file.
+Created by Hubert Baumeister.
+Accessed on 2023-01-11
+ */
 import org.junit.runner.RunWith;
 
 import io.cucumber.junit.Cucumber;
