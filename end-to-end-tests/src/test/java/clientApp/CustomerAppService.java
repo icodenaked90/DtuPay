@@ -27,7 +27,8 @@ public class CustomerAppService {
         baseUrl = client.target("http://localhost:8080/");
     }
 
-    /** Registers a customer with DTUPay
+    /**
+     * Registers a customer with DTUPay
      *
      * @param account Account describing the customers name, cpr and bank account
      * @return DTUPay id for the customer if success, otherwise "fail".
@@ -50,7 +51,8 @@ public class CustomerAppService {
         return "fail";
     }
 
-    /** Deregisters a customer with DTUPay
+    /**
+     * Deregisters a customer with DTUPay
      *
      * @param id DTUPay id of the customer
      * @return "OK" if success, otherwise an error message describing the problem.
@@ -63,15 +65,15 @@ public class CustomerAppService {
         // Handle response
         if (response.getStatus() == 200) {
             return "OK"; // Success
-        }
-        else {
+        } else {
             return response.readEntity(String.class); // Error message
         }
     }
 
-    /** Requests tokens from DTUPay
+    /**
+     * Requests tokens from DTUPay
      *
-     * @param cid DTUPay id of the customer
+     * @param cid            DTUPay id of the customer
      * @param numberOfTokens the number of tokens requested by the customer
      * @return tokens if success
      * @throws Exception if failed
@@ -89,16 +91,15 @@ public class CustomerAppService {
 
     /**
      * Requests all payments the customer is involved in from DTUPay
+     *
      * @param cid Id of the customer
-     * @return  all payments if success, otherwise "fail".
+     * @return all payments if success, otherwise "fail".
      */
     public CustomerReport getReport(String cid) {
         var response = baseUrl.path("customer/reports")
                 .request()
-                .post(Entity.entity( cid , MediaType.APPLICATION_JSON));
-            return response.readEntity(CustomerReport.class);
-        }
+                .post(Entity.entity(cid, MediaType.APPLICATION_JSON));
+        return response.readEntity(CustomerReport.class);
     }
-
 }
 
