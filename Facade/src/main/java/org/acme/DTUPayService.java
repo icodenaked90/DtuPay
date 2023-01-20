@@ -68,7 +68,8 @@ public class DTUPayService implements IDTUPayService{
         Rcorrelations.put(correlationId, new CompletableFuture<>());
         Event event = new Event(MANAGER_LOG_REQUESTED, new Object[]{id, correlationId});
         queue.publish(event);
-        return Rcorrelations.get(correlationId).join();
+        ManagerReportRequestResponse response = Rcorrelations.get(correlationId).join();
+        return response;
     }
 
     public void handleManagerLogGenerated(Event e) {
