@@ -99,12 +99,13 @@ public class ReportService implements IReportService{
             }
              */
 
-                ManagerReport report = new ManagerReport();
+                ManagerReport reportNew = new ManagerReport();
                 var log = new ManagerReportEntry();
                 log.setAmount(10);
                 log.setToken("aaaa");
                 log.setCid("cad");
                 log.setMid("gfd");
+                reportNew.addToLog(log);
                 Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
                 queue.publish(event);
             }
