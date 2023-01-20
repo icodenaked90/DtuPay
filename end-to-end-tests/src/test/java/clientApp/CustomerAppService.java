@@ -92,15 +92,12 @@ public class CustomerAppService {
      * @param cid Id of the customer
      * @return  all payments if success, otherwise "fail".
      */
-    public String getReport(String cid) {
+    public CustomerReport getReport(String cid) {
         var response = baseUrl.path("customer/reports")
                 .request()
                 .post(Entity.entity( cid , MediaType.APPLICATION_JSON));
-        if (response.getStatus() == 200) {
-            String output = response.readEntity(String.class);
-            return output;
+            return response.readEntity(CustomerReport.class);
         }
-        return "fail";
     }
 
 }

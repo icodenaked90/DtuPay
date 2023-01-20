@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 public class CustomerReportSteps {
     private Account customer;
     private User bankCustomer = new User();
-    private String report = "";
+    private CustomerReport report;
     private String cAccount;
     private CustomerAppService customerApp= new CustomerAppService();
     BankService bank = new BankServiceService().getBankServicePort();
