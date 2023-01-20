@@ -48,6 +48,7 @@ public class ManagerReportSteps {
         log.setToken("aaaa");
         log.setCid("cad");
         log.setMid("gfd");
+        report1.addToLog(log);
         System.out.println(report.getLog().get(0).getCid());
         System.out.println(report1.getLog().get(0).getCid());
         Assert.assertTrue(report1.equals(report));

@@ -73,6 +73,7 @@ public class ReportService implements IReportService{
             }
             Event event = new Event(CUSTOMER_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
+            return;
         }
         if (type == AccountType.MERCHANT) {
             MerchantReport report = new MerchantReport();
@@ -85,30 +86,17 @@ public class ReportService implements IReportService{
                 }
                 Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
                 queue.publish(event);
-            }
-            if (type == AccountType.MANAGER) {
-            /*
-            ManagerReport report = new ManagerReport();
-            for (Transaction t: full.getLog()) {
-                ManagerReportEntry entry = new ManagerReportEntry();
-                entry.setAmount(t.getAmount());
-                entry.setToken(t.getCustomerToken());
-                entry.setMid(t.getMerchantId());
-                entry.setCid(t.getCustomerId())
-                report.addToLog(entry);
-            }
-             */
-
-                ManagerReport reportNew = new ManagerReport();
-                var log = new ManagerReportEntry();
-                log.setAmount(10);
-                log.setToken("aaaa");
-                log.setCid("cad");
-                log.setMid("gfd");
-                reportNew.addToLog(log);
-                Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
-                queue.publish(event);
+                return;
             }
         }
+        ManagerReport reportNew = new ManagerReport();
+        var log = new ManagerReportEntry();
+        log.setAmount(10);
+        log.setToken("aaaa");
+        log.setCid("cad");
+        log.setMid("gfd");
+        reportNew.addToLog(log);
+        Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{reportNew, corId});
+        queue.publish(event);
     }
 }
