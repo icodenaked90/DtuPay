@@ -1,8 +1,3 @@
-/*
-@Author: Mila s223313
-@Author: Adin s164432
-@Author: Hildibjørg s164539
- */
 
 package org.acme;
 

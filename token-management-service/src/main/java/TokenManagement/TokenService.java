@@ -24,14 +24,14 @@ public class TokenService implements ITokenService{
 
     }
 
-
+    // @Author Mila s223313
     public void handleTokenGenerationRequested(Event e) {
         var command = e.getArgument(0, TokenRequestCommand.class);
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);
         String accountId = command.cid;
         int numberOfTokens = command.amount;
 
-        // Validate token number
+        // Validate token nnumber
         if (numberOfTokens < 1 || numberOfTokens > 5) {
             e = new Event(TOKEN_GENERATION_COMPLETED, new Object[]{new TokenRequestResponse("Invalid number of tokens requested."), eventCorrelationId});
             queue.publish(e);
@@ -62,7 +62,7 @@ public class TokenService implements ITokenService{
         queue.publish(e);
     }
 
-
+    // Author: Adin s164432
     public int unusedAmount(String cid){
         int count = 0;
         for (String a: unusedTokens.values())
@@ -91,11 +91,13 @@ public class TokenService implements ITokenService{
             queue.publish(e);
         }
     }
+
+    // @Author: Adin s164432
     //Used for tests
     public Map<Token, String> getUnused(){
         return unusedTokens;
     }
-
+    // @Author: Adin s164432
     public ArrayList<Token> addTokensToAccount(String id, int amount){
         ArrayList<Token> temp = new ArrayList<>();
         for(int i = 0; i<amount;i++){

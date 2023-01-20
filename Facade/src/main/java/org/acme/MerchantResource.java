@@ -68,6 +68,8 @@ public class MerchantResource {
         else {return Response.ok(response).build();
         }
     }
+
+    // @Author: Mila s223313
     @DELETE
     @Path("/account/{id}")
     @Produces(MediaType.TEXT_PLAIN)

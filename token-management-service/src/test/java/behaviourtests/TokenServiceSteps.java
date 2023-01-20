@@ -33,13 +33,13 @@ public class TokenServiceSteps {
     private String cid;
     private int amount;
 
-
+    // @Author: Adin s164432
     @Given("a customer")
     public void aCustomer() {
         cid = "cakebornmenace";
     }
 
-
+    // @Mila: s223313
     @When("a {string} event for generating {int} token is received")
     public void aEventForGeneratingTokenIsReceived(String eventName, int numberOfTokens) {
         correlationId = CorrelationId.randomId();
@@ -47,7 +47,7 @@ public class TokenServiceSteps {
         ts.handleTokenGenerationRequested(new Event(eventName, new Object[] {new TokenRequestCommand(cid, numberOfTokens), correlationId}));
     }
 
-
+    // @Author: Adin s164432
     @Then("a {string} event is sent")
     public void aEventIsSent(String eventName) {
         if(eventName.equals("TokenGenerationCompleted")) {
@@ -72,24 +72,26 @@ public class TokenServiceSteps {
             verify(queue).publish(event);
         }
     }
-
+    // @Author: Mila s223313
     @And("the customer receives {int} token")
     public void theCustomerReceivesToken(int numberOfTokens) {
         assertEquals(numberOfTokens, expectedgen.getTokens().size());
     }
 
+    // @Author: Adin s164432
     @And("the customer has {int} token")
     public void theCustomerHasToken(int amount) {
         preOwned =ts.addTokensToAccount(cid,amount);
     }
 
+    // @Author: Mila s223313
     @When("a {string} event is received with the existing token")
     public void aEventIsReceivedWithTheExistingToken(String eventName) {
         correlationId = CorrelationId.randomId();
         expectedval = cid;
         ts.handleTokenValidationRequested(new Event(eventName, new Object[] { preOwned.get(0), correlationId}));
     }
-
+    //@Author: Adin (s164432)
     @When("a {string} event is received with a fake token")
     public void aEventIsReceivedWithAFakeToken(String eventName) {
         correlationId = CorrelationId.randomId();
