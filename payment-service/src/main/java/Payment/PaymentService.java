@@ -38,6 +38,7 @@ public class PaymentService implements IPaymentService {
      * @param b BankService
      */
     public PaymentService(MessageQueue q, BankService b) {
+        // @Author: Jonathan (s194134)
         this.queue = q;
         this.bank = b;
         this.queue.addHandler(PAYMENT_REQUESTED, this::handlePaymentRequested);
@@ -56,7 +57,7 @@ public class PaymentService implements IPaymentService {
      * @return bankAccountId (String)
      */
     private String getBankAccountId(String accountId) {
-        //
+        // @Author: Jonathan (s194134)
         var correlationId = CorrelationId.randomId();
         correlationsBank.put(correlationId, new CompletableFuture<>());
         Event event = new Event(BANK_ACCOUNT_REQUESTED, new Object[]{accountId, correlationId});
@@ -75,7 +76,7 @@ public class PaymentService implements IPaymentService {
      * @return completed payment object with payment info updated
      */
     private NewPayment makeBankPayment(NewPayment payment, String customerBankId, String merchantBankId) {
-
+        // @Author: Jonathan (s194134)
         try {
             bank.transferMoneyFromTo(customerBankId, merchantBankId, BigDecimal.valueOf(payment.getAmount()), "DTUPay");
             payment.setPaymentSuccesful(true);
@@ -94,7 +95,7 @@ public class PaymentService implements IPaymentService {
      * @return customerId
      */
     private String getCustomerAccountIdFromToken(Token token) {
-
+        // @Author: Jonathan (s194134)
         var correlationId = CorrelationId.randomId();
         correlationsToken.put(correlationId, new CompletableFuture<>());
         Event event = new Event(TOKEN_VALIDATION_REQUESTED, new Object[]{token, correlationId});
@@ -110,6 +111,7 @@ public class PaymentService implements IPaymentService {
      * @param e
      */
     public void handleTokenServiceCompleted(Event e) {
+        // @Author: Jonathan (s194134)
         var s = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlationsToken.get(correlationid).complete(s);
@@ -121,6 +123,7 @@ public class PaymentService implements IPaymentService {
      * @param e
      */
     public void handleBankServiceCompleted(Event e) {
+        // @Author: Jonathan (s194134)
         var s = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         correlationsBank.get(correlationid).complete(s);
@@ -139,6 +142,7 @@ public class PaymentService implements IPaymentService {
      * @param e
      */
     public void handlePaymentRequested(Event e) {
+        // @Author: Jonathan (s194134)
         NewPayment completedPayment;
         var payment = e.getArgument(0, NewPayment.class);
         var correlationId = e.getArgument(1, CorrelationId.class);
@@ -189,6 +193,7 @@ public class PaymentService implements IPaymentService {
      * @param e
      */
     public void handlePaymentLogsRequested(Event e) {
+        // @Author: Jonathan (s194134)
         String accountId = e.getArgument(0, String.class);
         transactionLog.setId(accountId);
         var correlationId = e.getArgument(1, CorrelationId.class);
@@ -216,6 +221,7 @@ public class PaymentService implements IPaymentService {
      * @param errorMessage
      */
     public void handleErrors(NewPayment payment, CorrelationId correlationId, String errorMessage) {
+        // @Author: Jonathan (s194134)
         payment.setPaymentSuccesful(false);
         payment.setErrorMessage(errorMessage);
         paymentList.add(payment);

@@ -17,7 +17,6 @@ public class MerchantAppService {
 
     public MerchantAppService() {
         Client client = ClientBuilder.newClient();
-        // baseUrl = client.target("http://host.docker.internal:8080/");
         baseUrl = client.target("http://localhost:8080/");
     }
 
@@ -61,7 +60,13 @@ public class MerchantAppService {
         }
     }
 
-
+    /** Sends a payment request to the facade
+     * @Author: Jonathan (s194134)
+     * @param token
+     * @param merchantId
+     * @param amount
+     * @return ResponseStatus(PassFail, possible error message)
+     */
     public ResponseStatus pay(String token, String merchantId, int amount) {
         //Create payment object to package the payment info
         NewPayment completedPayment;

@@ -1,11 +1,11 @@
 package Payment.models;
 
 import java.util.ArrayList;
-
+// @Author: Jonathan (s194134)
 public class TransactionLog {
     String requesterId;
     ArrayList<Transaction> log = new ArrayList<>();
-
+    // @Author: Jonathan (s194134)
     public void addToLog(Transaction transaction) {
         log.add(transaction);
     }

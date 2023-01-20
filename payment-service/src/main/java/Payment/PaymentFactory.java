@@ -8,6 +8,7 @@ import dtu.ws.fastmoney.BankServiceService;
 import messaging.implementations.RabbitMqQueue;
 
 public class PaymentFactory {
+    // @Author: Jonathan (s194134)
     static PaymentService service = null;
 
     public synchronized PaymentService getService() {

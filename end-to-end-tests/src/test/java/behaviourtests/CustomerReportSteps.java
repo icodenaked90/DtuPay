@@ -49,6 +49,7 @@ public class CustomerReportSteps {
         report = customerApp.getReport(cid);
     }
 
+    // @Author: Jonathan (s194134)
     @Then("the customer receives an empty report")
     public void theCustomerReceivesAnEmptyReport() {
         CustomerReport expectedReport = new CustomerReport();

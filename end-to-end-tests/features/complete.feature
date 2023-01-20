@@ -2,7 +2,7 @@
 
 Feature: Complete System feature
 
-  Scenario: Customer Registration Success
+  Scenario: Complete System
   	Given an registered complete customer
   	And an registered complete merchant
   	Then complete customer request a token

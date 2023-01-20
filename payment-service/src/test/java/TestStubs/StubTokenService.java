@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StubTokenService {
+    // @Author: Jonathan (s194134)
     // This test stub simulates a very simple version of token service.
     // It only contains the things we need Payment service
     public static final String TOKEN_VALIDATION_REQUESTED = "TokenValidationRequested";
@@ -28,6 +29,7 @@ public class StubTokenService {
         tokens.put(token, cid);
     }
 
+    // @Author: Jonathan (s194134)
     private void handleTokenValidationRequested(Event e) {
         var token = e.getArgument(0, Token.class);
         var eventCorrelationId = e.getArgument(1, CorrelationId.class);

@@ -1,5 +1,4 @@
 package org.acme.models;
-
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;

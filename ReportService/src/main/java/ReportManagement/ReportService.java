@@ -15,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import ReportManagement.model.*;
 import messaging.Event;
 import messaging.MessageQueue;
-
+//@Author: Emily 223122
 public class ReportService implements IReportService{
 
     public MessageQueue queue;
     private HashMap<String, AccountType> idToTypeMap = new HashMap<String, AccountType>();
     private Map<CorrelationId, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 
-
+    //@Author: Emily 223122
     public ReportService(MessageQueue q) {
         queue = q;
         queue.addHandler(CUSTOMER_LOG_REQUESTED, this::handleCustomerLogRequested);
@@ -38,7 +38,7 @@ public class ReportService implements IReportService{
         Event event = new Event(FULL_LOG_REQUESTED, new Object[]{cid, corId});
         queue.publish(event);
     }
-
+    //@Author: Emily 223122
     public void handleMerchantLogRequested(Event e) {
         String mid = e.getArgument(0, String.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
@@ -46,7 +46,7 @@ public class ReportService implements IReportService{
         Event event = new Event(FULL_LOG_REQUESTED, new Object[]{mid, corId});
         queue.publish(event);
     }
-
+    //@Author: Emily 223122
     public void handleManagerLogRequested(Event e) {
         String maid = e.getArgument(0, String.class);
         CorrelationId corId = e.getArgument(1, CorrelationId.class);
