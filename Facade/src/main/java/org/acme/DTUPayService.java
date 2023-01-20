@@ -8,11 +8,7 @@ package org.acme;
 
 import messaging.Event;
 import messaging.MessageQueue;
-import org.acme.models.Account;
-import org.acme.models.CorrelationId;
-import org.acme.models.NewPayment;
-import org.acme.models.TokenRequestCommand;
-import org.acme.models.CustomerReport;
+import org.acme.models.*;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -76,9 +72,11 @@ public class DTUPayService implements IDTUPayService{
     }
 
     public void handleManagerLogGenerated(Event e) {
-        var response = e.getArgument(0, ManagerReportRequestResponse.class); // Empty if no error = Success
+        var response = e.getArgument(0, ManagerReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
-        Rcorrelations.get(correlationid).complete(response);
+        ManagerReportRequestResponse fullResponse = new ManagerReportRequestResponse();
+        fullResponse.setReport(response);
+        Rcorrelations.get(correlationid).complete(fullResponse);
     }
 
     public CustomerReportRequestResponse getCustomerReport(String id) {
@@ -109,9 +107,11 @@ public class DTUPayService implements IDTUPayService{
     }
 
     public void handleMerchantLogGenerated(Event e) {
-        var response = e.getArgument(0, MerchantReportRequestResponse.class); // Empty if no error = Success
+        var response = e.getArgument(0, MerchantReport.class); // Empty if no error = Success
         var correlationid = e.getArgument(1, CorrelationId.class);
-        Mcorrelations.get(correlationid).complete(response);
+        MerchantReportRequestResponse fullResponse = new MerchantReportRequestResponse();
+        fullResponse.setReport(response);
+        Mcorrelations.get(correlationid).complete(fullResponse);
     }
     public TokenRequestResponse generateTokens(TokenRequestCommand request) {
         var correlationId = CorrelationId.randomId();

@@ -7,6 +7,7 @@
 package behaviourtests;
 import clientApp.CustomerAppService;
 import clientApp.models.Account;
+import clientApp.models.MerchantReport;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
@@ -25,7 +26,6 @@ public class CustomerReportSteps {
     private User bankCustomer = new User();
     private String report = "";
     private String cAccount;
-    private String response = "";
     private CustomerAppService customerApp= new CustomerAppService();
     BankService bank = new BankServiceService().getBankServicePort();
     private String cid = "";
@@ -33,7 +33,7 @@ public class CustomerReportSteps {
     @Given("a successfully registered report customer")
     public void aSuccessfullyRegisteredReportCustomer() {
         bankCustomer.setFirstName("Decent");
-        bankCustomer.setLastName("Customer");
+        bankCustomer.setLastName("Merchant");
         String cpr = CprGenerator.generate();
         bankCustomer.setCprNumber(cpr);
         try {
@@ -47,24 +47,20 @@ public class CustomerReportSteps {
 
     @When("customer request their report")
     public void customerRequestTheirReport() {
-        response = customerApp.getReport(cid);
-        report = response;
-    }
-
-    @Then("the report is received")
-    public void theReportIsReceived() {
-        assertNotEquals("fail", report);
-    }
-
-    @Given("an unregistered report customer")
-    public void anUnregisteredReportCustomer() {
-        cid = "randomId";
+        report = customerApp.getReport(cid);
     }
 
     @Then("the customer receives an empty report")
     public void theCustomerReceivesAnEmptyReport() {
-        assertEquals("", response);
+        MerchantReport expectedReport = new MerchantReport();
+        assertEquals(report, expectedReport);
     }
+
+    @Given("an unregistered report customer")
+    public void anUnregisteredReportCustomer() {
+        cid = "unregisteredCustomer";
+    }
+
     @After()
     public void Cleanup()
     {
@@ -77,5 +73,4 @@ public class CustomerReportSteps {
             }
         }
     }
-
 }

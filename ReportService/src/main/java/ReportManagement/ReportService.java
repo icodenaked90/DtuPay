@@ -75,7 +75,14 @@ public class ReportService implements IReportService{
             queue.publish(event);
         }
         if (type == AccountType.MERCHANT){
-            MerchantReport report = null;
+            MerchantReport report = new MerchantReport();
+            for (Transaction t: full.getLog()) {
+                if(full.getId().equals(t.getMerchantId())){
+                    MerchantReportEntry entry = new MerchantReportEntry();
+                    entry.setAmount(t.getAmount());
+                    entry.setToken(t.getCustomerToken());
+                    report.addToLog(entry);
+                }
             Event event = new Event(MERCHANT_LOG_GENERATED, new Object[]{report, corId});
             queue.publish(event);
         }

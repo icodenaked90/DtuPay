@@ -47,11 +47,6 @@ public class MerchantReportSteps {
         report = merchantApp.getReports(mid);
     }
 
-    @Then("the merchant report is received")
-    public void theMerchantReportIsReceived() {
-        assertNotEquals("fail", report);
-    }
-
     @Given("an unregistered report merchant")
     public void anUnregisteredReportMerchant() {
         mid = "randomId";
@@ -59,7 +54,8 @@ public class MerchantReportSteps {
 
     @Then("the merchant receives an empty report")
     public void theMerchantReceivesAnEmptyReport() {
-        assertEquals("", response);
+        MerchantReport expectedReport = new MerchantReport();
+        assertEquals(report, expectedReport);
     }
 
     @After()
