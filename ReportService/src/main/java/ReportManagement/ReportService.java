@@ -106,7 +106,7 @@ public class ReportService implements IReportService{
                 log.setCid("cad");
                 log.setMid("gfd");
                 reportNew.addToLog(log);
-                Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{report, corId});
+                Event event = new Event(MANAGER_LOG_GENERATED, new Object[]{reportNew, corId});
                 queue.publish(event);
             }
         }
