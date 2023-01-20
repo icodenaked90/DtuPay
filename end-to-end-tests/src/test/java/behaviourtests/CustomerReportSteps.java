@@ -7,6 +7,7 @@
 package behaviourtests;
 import clientApp.CustomerAppService;
 import clientApp.models.Account;
+import clientApp.models.CustomerReport;
 import clientApp.models.MerchantReport;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
@@ -52,7 +53,7 @@ public class CustomerReportSteps {
 
     @Then("the customer receives an empty report")
     public void theCustomerReceivesAnEmptyReport() {
-        MerchantReport expectedReport = new MerchantReport();
+        CustomerReport expectedReport = new CustomerReport();
         assertEquals(report, expectedReport);
     }
 
